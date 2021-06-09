@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          i like turtles React
+          Welcome React
         </a>
       </header>
     </div>
