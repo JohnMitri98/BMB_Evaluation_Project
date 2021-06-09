@@ -5,7 +5,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
         <h1>Hello World!</h1>
       </div>
     );
