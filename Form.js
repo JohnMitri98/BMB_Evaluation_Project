@@ -36,8 +36,9 @@ export default class Form extends React.Component {
         )
     }
 
-    handleSubmit(event) {
-        alert('Username: ' + this.state.Username + '\nPassword: ' + this.state.Password);
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.onSubmit(this.state.Username, this.state.Password);
     }
 
     handleUsernameChange(event) {
