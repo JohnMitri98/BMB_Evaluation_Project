@@ -27,7 +27,7 @@ export default class Form extends React.Component {
                             <input type = "text" name = "Password" />
                         </label>
                     </div>
-                    <input type = "submit" value = "Submit" />
+                    <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>
                 </div>
             </form>
         )
