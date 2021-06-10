@@ -36,7 +36,7 @@ class LoginChecker {
             // make sure that any items are correctly URL encoded in the connection string
             this.state.sql.connect(this.state.sqlConfig, function (err) {
                 if (err) console.log(err);
-                
+
                 const ps = new sql.PreparedStatement();
         
                 ps.input('Username', sql.VarChar);
@@ -54,7 +54,7 @@ class LoginChecker {
                     });
                 });
             });
-            return (tempPassword === Password);
+            return (tempPassword == Password);
         } catch (err) {
             // ... error checks
             console.dir(err);
