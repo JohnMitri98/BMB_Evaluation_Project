@@ -36,9 +36,7 @@ class LoginChecker {
             // make sure that any items are correctly URL encoded in the connection string
             this.state.sql.connect(this.state.sqlConfig, function (err) {
                 if (err) console.log(err);
-        
-                console.dir('Yo');
-        
+                
                 const ps = new sql.PreparedStatement();
         
                 ps.input('Username', sql.VarChar);
