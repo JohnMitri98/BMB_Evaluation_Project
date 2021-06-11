@@ -2,9 +2,9 @@ import './App.css';
 import React from 'react';
 import Form from './Form';
 import ReactDOM from 'react-dom';
+import LoginChecker from './LoginChecker.js';
 
-const LoginChecker = require('./LoginChecker.js');
-const lc = new LoginChecker.Check();
+const lc = new LoginChecker();
 
 export default class App extends React.Component {
 
@@ -32,6 +32,10 @@ export default class App extends React.Component {
     this.state = {
       correct: temp
     };
+  }
+
+  componentDidMount() {
+    lc.setup();
   }
 
 }

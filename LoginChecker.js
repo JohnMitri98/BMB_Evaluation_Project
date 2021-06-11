@@ -1,6 +1,20 @@
-class LoginChecker {
+export default class LoginChecker {
 
     constructor() {
+
+        this.pool = null;
+        this.poolConnection = null;
+        /*this.state = {
+            sql: null,
+            sqlConfig: null,
+            pool: null,
+            pooConnection: null
+        };*/
+
+        //this.checkCredentials = this.CheckCredentials.bind(this);
+    }
+    
+    setup() {
         const sql = require('mssql');
 
         //const Username = "JMitri";
@@ -21,20 +35,28 @@ class LoginChecker {
             }
         };
 
-        this.state = {
-            sql: sql,
-            sqlConfig: sqlConfig
-        };
+        const pool1 = new sql.ConnectionPool(sqlConfig);
+        const pool1Connect = pool1.connect();
+        pool1.on('error', err =>{
 
-        //this.checkCredentials = this.CheckCredentials.bind(this);
+        });
+
+        this.pool = pool1;
+        this.poolConnection = pool1Connect;
+
+        /*this.setState({
+            pool: pool1,
+            ConnectionPool: pool1Connect
+        })*/
     };
 
-    checkCredentials(Username, Password) {
-        let sql = this.state.sql;
+    async checkCredentials(Username, Password) {
+        //let sql = this.state.sql;
         var tempPassword = "";
-        try {
+        /*try {
             // make sure that any items are correctly URL encoded in the connection string
             this.state.sql.connect(this.state.sqlConfig, function (err) {
+                while(this.state.sql.connection == null) {};
                 if (err) console.log(err);
 
                 const ps = new sql.PreparedStatement();
@@ -58,11 +80,22 @@ class LoginChecker {
         } catch (err) {
             // ... error checks
             console.dir(err);
+        }*/
+
+        await this.poolConnection;
+        try {
+            const request = this.pool.request();
+            const result = await request.query(`select * from dbo.Users where Username_Email = ${Username}`);
+            if(result.size() > 0) {
+                tempPassword = result.recordset[0].password;
+                return (tempPassword == Password);
+            } else {
+                return false;
+            }
+        } catch (err) {
+            console.dir(err);
         }
+
     };
 
 }
-
-module.exports = {
-    Check: LoginChecker
-};
