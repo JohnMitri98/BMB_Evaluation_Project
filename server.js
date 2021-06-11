@@ -1,4 +1,7 @@
 const sql = require('mssql');
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
 
 const Username = "JMitri";
 
@@ -18,7 +21,7 @@ const sqlConfig = {
   }
 };
 
-try {
+/*try {
     // make sure that any items are correctly URL encoded in the connection string
     sql.connect(sqlConfig, function (err) {
         if (err) console.log(err);
@@ -45,4 +48,10 @@ try {
 } catch (err) {
     // ... error checks
     console.dir(err);
-}
+}*/
+
+app.listen(port, () => console.log(`Listening on Port ${port}`));
+
+app.get('/express_backend', (req, res) => {
+  res.send({express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT'});
+});

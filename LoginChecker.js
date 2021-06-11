@@ -4,20 +4,11 @@ export default class LoginChecker {
 
         this.pool = null;
         this.poolConnection = null;
-        /*this.state = {
-            sql: null,
-            sqlConfig: null,
-            pool: null,
-            pooConnection: null
-        };*/
 
-        //this.checkCredentials = this.CheckCredentials.bind(this);
     }
     
     setup() {
         const sql = require('mssql');
-
-        //const Username = "JMitri";
 
         const sqlConfig = {
             user: 'sa',
@@ -51,7 +42,6 @@ export default class LoginChecker {
     };
 
     async checkCredentials(Username, Password) {
-        //let sql = this.state.sql;
         var tempPassword = "";
         /*try {
             // make sure that any items are correctly URL encoded in the connection string
