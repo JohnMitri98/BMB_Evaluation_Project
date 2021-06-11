@@ -1,15 +1,13 @@
-import './App.css';
-import React from 'react';
+import React ,{ Component } from 'react';
+import Login from './Components/Login';
 
-export default class App extends React.Component {
+class App extends Component {
+  render(){ return(
+    <div className="App">
+<Login /> 
 
-  render() {
-    return (
-      <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-        <h1>Hello World!</h1>
-        <h2>This is text.</h2>
-      </div>
-    );
+    </div>
+    )
   }
-
 }
+export default App 
