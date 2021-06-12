@@ -22,20 +22,20 @@ export default class App extends React.Component {
       <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
         <h1>Hello</h1>
         <Form onSubmit = {this.handleSubmit}/>
-        <h1>{this.state.correct}</h1>
+        <h1>Yo {this.state.correct + ""}</h1>
       </div>
     );
   }
 
-  handleSubmit(Username, Password) {
-    var temp = null;//lc.checkCredentials(Username, Password);
-    alert(temp);
-    this.setState({
-      correct: temp
-    });
+  handleSubmit(Correct) {
+    if(Correct) {
+      this.setState({correct: true});
+    } else {
+      this.setState({correct: "Turtles"});
+    }
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     this.callBackendAPI().then(res => this.setState({data: res.express})).catch(err => console.log(err));
   }
 
@@ -48,7 +48,7 @@ export default class App extends React.Component {
     }
     console.log(body);
     return body;
-  }
+  }*/
 
 }
 

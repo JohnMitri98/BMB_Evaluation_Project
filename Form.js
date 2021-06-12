@@ -36,9 +36,11 @@ export default class Form extends React.Component {
         )
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
-        this.props.onSubmit(this.state.Username, this.state.Password);
+        const response = await fetch(`/testAPI/checkLogin-${this.state.Username}-${this.state.Password}`);
+        const body = await response.json();
+        this.props.onSubmit(body);
     }
 
     handleUsernameChange(event) {

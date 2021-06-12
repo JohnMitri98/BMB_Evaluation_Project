@@ -27,7 +27,6 @@ async function checkLogin(Username, Password) {
         const request = pool.request();
         const result = await request.query(`select * from dbo.Users where Username_Email = \'${Username}\'`);
         tempPassword = result.recordset[0].Password;
-        //console.dir(tempPassword == Password);
     } catch(err) {
         console.error('SQL error', err);
     }
