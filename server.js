@@ -1,9 +1,12 @@
-const sql = require('mssql');
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
+var express = require('express');
+//var bodyParser = require('body-parser');
+var sql = require('mssql');
+//var cors = require('cors');
+var app = express();
+var testAPIRouter = require('./routes/test');
 
-const Username = "JMitri";
+const port = process.env.PORT || 5000;
+app.set('port', port);
 
 const sqlConfig = {
   user: 'sa',
@@ -20,6 +23,10 @@ const sqlConfig = {
     trustServerCertificate: true // change to true for local dev / self-signed certs
   }
 };
+
+app.use("/testAPI", testAPIRouter)
+//app.use(bodyParser.json());
+//app.use(cors());
 
 /*try {
     // make sure that any items are correctly URL encoded in the connection string
@@ -52,6 +59,27 @@ const sqlConfig = {
 
 app.listen(port, () => console.log(`Listening on Port ${port}`));
 
-app.get('/express_backend', (req, res) => {
+/*app.get('/express_backend', (req, res) => {
   res.send({express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT'});
-});
+});*/
+
+/*app.listen(port, function() {
+  
+});*/
+
+function checkLogin(Username, Password) {
+  var tempPassword = null;
+  var dbConn = new sql.Connection(sqlConfig);
+  dbConn.connect().then(function() {
+    var request = new sql.Request(dbConn);
+    request.query(`select * from dbo.Users where Username_Email = ${Username}`).then(function(resp) {
+      tempPassword = resp.recordset[0].Password;
+      dbConn.close();
+    }).catch(function(err) {
+      console.log(err);
+    });
+  }).catch(function(err) {
+    console.log(err);
+  });
+  return (tempPassword == Password);
+}

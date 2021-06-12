@@ -2,16 +2,17 @@ import './App.css';
 import React from 'react';
 import Form from './Form';
 import ReactDOM from 'react-dom';
-import LoginChecker from './LoginChecker.js';
+//import LoginChecker from './LoginChecker.js';
 
-const lc = new LoginChecker();
+//const lc = new LoginChecker();
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      correct: false
+      correct: false,
+      data: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -27,15 +28,26 @@ export default class App extends React.Component {
   }
 
   handleSubmit(Username, Password) {
-    var temp = lc.checkCredentials(Username, Password);
+    var temp = null;//lc.checkCredentials(Username, Password);
     alert(temp);
-    this.state = {
+    this.setState({
       correct: temp
-    };
+    });
   }
 
   componentDidMount() {
-    lc.setup();
+    this.callBackendAPI().then(res => this.setState({data: res.express})).catch(err => console.log(err));
+  }
+
+  callBackendAPI = async () => {
+    const response = await fetch('/express_backend');
+    const body = await response.json();
+
+    if(response.status !== 200) {
+      throw Error(body.message);
+    }
+    console.log(body);
+    return body;
   }
 
 }
