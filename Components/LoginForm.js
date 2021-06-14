@@ -41,9 +41,13 @@ export default class LoginForm extends React.Component {
         let tempName = "";
         if(this.state.Username !== "" && this.state.Password !== "") {
             const response = await fetch(`/API/checkLogin-${this.state.Username}-${this.state.Password}`);
-            const body = await response.json();
-            isCorrect = body.Correct;
-            tempName = body.Name;
+            if(response) {
+                const body = await response.json();
+                if(body) {
+                    isCorrect = body.Correct;
+                    tempName = body.Name;
+                }
+            }
         }
         if((isCorrect + "") !== "true") {
             this.setState({
