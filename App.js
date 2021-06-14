@@ -6,7 +6,7 @@ import LoginPage from './Pages/LoginPage';
 
 const initialState = {
   correct: null,
-  User: "potato",
+  User: null,
   loggedIn: false,
   redirect: null
 };
@@ -50,13 +50,13 @@ export default class App extends React.Component {
             <Switch>
               {this.state.redirect}
               <Route path="/turtles">
-                <ILikeTurtles Correct = {this.state.correct} loggedIn = {this.state.loggedIn} />
+                <ILikeTurtles loggedIn = {this.state.loggedIn} />
               </Route>
               {/*<Route path="/users">
                 <Users />
               </Route>*/}
               <Route path="/">
-                <LoginPage onSubmit = {this.checkLogin} correct = {this.state.correct} />
+                <LoginPage onSubmit = {this.checkLogin} />
                 {welcome}
               </Route>
             </Switch>
@@ -75,6 +75,7 @@ export default class App extends React.Component {
         redirect: <Redirect exact from = "/" to = "/turtles" />
       });
     } else {
+      this.setState(initialState);
       this.setState({correct: false});
     }
   }
@@ -90,10 +91,8 @@ function ILikeTurtles(props) {
     return (<Redirect to = "../" />);
   }
   return (
-    <div>
-      <h1>I like turtles: {props.Correct + ""}</h1>
-      <h1>{window.location.pathname + ""}</h1>
-      <h1>{props.loggedIn + ""}</h1>
+    <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+      <h1>I like turtles: {props.loggedIn + ""}</h1>
     </div>
   );
 }
