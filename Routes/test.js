@@ -33,8 +33,6 @@ async function checkLogin(Username, Password) {
         console.error('SQL error', err);
     }
     pool.close();
-    //var JSONObject = JSON.parse({"Correct" : (tempPassword == Password) + "", "Name" : (tempUser + "")});
-    console.log(`{"Correct" : "${tempPassword}", "Name" : "${tempUser}"}`);
     return (`{"Correct" : "${tempPassword}", "Name" : "${tempUser}"}`);
 }
 

@@ -22,14 +22,10 @@ export default class App extends React.Component {
 
   render() {
     let welcome;
-    //console.log(window.location.pathname);
     if(this.state.loggedIn) {
       welcome = <h1>Welcome, {this.state.User}</h1>;
-      //redirect = <Redirect exact from = "/" to = "/turtles" />
-      //this.setState({loggedIn: false})
     } else if(window.location.pathname != "/") {
       welcome = null;
-      //redirect = <Redirect exact to = "/" />;
     }
     if((this.state.correct + "") == "false") {
       welcome = <h1>Incorrect Username or Password</h1>
