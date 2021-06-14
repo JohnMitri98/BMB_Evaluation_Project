@@ -37,15 +37,21 @@ export default class LoginForm extends React.Component {
 
     async handleSubmit(e) {
         e.preventDefault();
-        const response = await fetch(`/testAPI/checkLogin-${this.state.Username}-${this.state.Password}`);
-        const body = await response.json();
-        if((body.Correct + "") != "true") {
+        let isCorrect = false;
+        let tempName = "";
+        if(this.state.Username !== "" && this.state.Password !== "") {
+            const response = await fetch(`/API/checkLogin-${this.state.Username}-${this.state.Password}`);
+            const body = await response.json();
+            isCorrect = body.Correct;
+            tempName = body.Name;
+        }
+        if((isCorrect + "") !== "true") {
             this.setState({
                 Username: "",
                 Password: ""
             });
         }
-        this.props.onSubmit(body.Correct, body.Name);
+        this.props.onSubmit(isCorrect, tempName);
     }
 
     handleUsernameChange(event) {

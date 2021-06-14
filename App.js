@@ -24,10 +24,10 @@ export default class App extends React.Component {
     let welcome;
     if(this.state.loggedIn) {
       welcome = <h1>Welcome, {this.state.User}</h1>;
-    } else if(window.location.pathname != "/") {
+    } else if(window.location.pathname !== "/") {
       welcome = null;
     }
-    if((this.state.correct + "") == "false") {
+    if((this.state.correct + "") === "false") {
       welcome = <h1>Incorrect Username or Password</h1>
     }
     return (
@@ -67,7 +67,7 @@ export default class App extends React.Component {
   }
 
   checkLogin(Correct, Username) {
-    if(Correct == "true") {
+    if(Correct === "true") {
       this.setState({
         correct: true,
         User: Username,
@@ -87,7 +87,7 @@ export default class App extends React.Component {
 }
 
 function ILikeTurtles(props) {
-  if((props.loggedIn + "") == "false") {
+  if((props.loggedIn + "") === "false") {
     return (<Redirect to = "../" />);
   }
   return (
