@@ -1,55 +1,105 @@
 import './App.css';
 import React from 'react';
-import Form from './Form';
 import ReactDOM from 'react-dom';
-//import LoginChecker from './LoginChecker.js';
+import {BrowserRouter as Router, Route, Switch, Link, Redirect} from 'react-router-dom';
+import LoginPage from './Pages/LoginPage';
 
-//const lc = new LoginChecker();
+const initialState = {
+  correct: null,
+  User: "potato",
+  loggedIn: false,
+  redirect: null
+};
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      correct: false,
-      data: null
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = initialState;
+    this.checkLogin = this.checkLogin.bind(this);
+    this.resetLogin = this.resetLogin.bind(this);
   }
 
   render() {
+    let welcome;
+    //console.log(window.location.pathname);
+    if(this.state.loggedIn) {
+      welcome = <h1>Welcome, {this.state.User}</h1>;
+      //redirect = <Redirect exact from = "/" to = "/turtles" />
+      //this.setState({loggedIn: false})
+    } else if(window.location.pathname != "/") {
+      welcome = null;
+      //redirect = <Redirect exact to = "/" />;
+    }
+    if((this.state.correct + "") == "false") {
+      welcome = <h1>Incorrect Username or Password</h1>
+    }
     return (
-      <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-        <h1>Hello</h1>
-        <Form onSubmit = {this.handleSubmit}/>
-        <h1>Yo {this.state.correct + ""}</h1>
-      </div>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/" onClick = {this.resetLogin}>Login</Link>
+              </li>
+              <li>
+                <Link to="/turtles">Turtles</Link>
+              </li>
+              {/*<li>
+                <Link to="/users">Users</Link>
+              </li>*/}
+            </ul>
+          </nav>
+          <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+            <Switch>
+              {this.state.redirect}
+              <Route path="/turtles">
+                <ILikeTurtles Correct = {this.state.correct} loggedIn = {this.state.loggedIn} />
+              </Route>
+              {/*<Route path="/users">
+                <Users />
+              </Route>*/}
+              <Route path="/">
+                <LoginPage onSubmit = {this.checkLogin} correct = {this.state.correct} />
+                {welcome}
+              </Route>
+            </Switch>
+          </div>
+        </div>
+      </Router>
     );
   }
 
-  handleSubmit(Correct) {
-    if(Correct) {
-      this.setState({correct: true});
+  checkLogin(Correct, Username) {
+    if(Correct == "true") {
+      this.setState({
+        correct: true,
+        User: Username,
+        loggedIn: true,
+        redirect: <Redirect exact from = "/" to = "/turtles" />
+      });
     } else {
-      this.setState({correct: "Turtles"});
+      this.setState({correct: false});
     }
   }
 
-  /*componentDidMount() {
-    this.callBackendAPI().then(res => this.setState({data: res.express})).catch(err => console.log(err));
+  resetLogin() {
+    this.setState(initialState);
   }
 
-  callBackendAPI = async () => {
-    const response = await fetch('/express_backend');
-    const body = await response.json();
+}
 
-    if(response.status !== 200) {
-      throw Error(body.message);
-    }
-    console.log(body);
-    return body;
-  }*/
-
+function ILikeTurtles(props) {
+  if((props.loggedIn + "") == "false") {
+    return (<Redirect to = "../" />);
+  }
+  return (
+    <div>
+      <h1>I like turtles: {props.Correct + ""}</h1>
+      <h1>{window.location.pathname + ""}</h1>
+      <h1>{props.loggedIn + ""}</h1>
+    </div>
+  );
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))

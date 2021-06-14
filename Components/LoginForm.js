@@ -1,7 +1,6 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
 
-export default class Form extends React.Component {
+export default class LoginForm extends React.Component {
 
     constructor(props) {
         super(props);
@@ -40,7 +39,13 @@ export default class Form extends React.Component {
         e.preventDefault();
         const response = await fetch(`/testAPI/checkLogin-${this.state.Username}-${this.state.Password}`);
         const body = await response.json();
-        this.props.onSubmit(body);
+        if((body.Correct + "") != "true") {
+            this.setState({
+                Username: "",
+                Password: ""
+            });
+        }
+        this.props.onSubmit(body.Correct, body.Name);
     }
 
     handleUsernameChange(event) {
@@ -52,5 +57,3 @@ export default class Form extends React.Component {
     }
 
 }
-
-//ReactDOM.render(<Form />, document.getElementById('root'))

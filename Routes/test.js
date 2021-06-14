@@ -20,18 +20,22 @@ const sqlConfig = {
 
 async function checkLogin(Username, Password) {
     let tempPassword = null;
+    let tempUser = null;
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
     await poolConnect;
     try {
         const request = pool.request();
         const result = await request.query(`select * from dbo.Users where Username_Email = \'${Username}\'`);
-        tempPassword = result.recordset[0].Password;
+        tempPassword = (result.recordset[0].Password == Password) + "";
+        tempUser = result.recordset[0].First_Name + " " + result.recordset[0].Last_Name;
     } catch(err) {
         console.error('SQL error', err);
     }
     pool.close();
-    return (tempPassword == Password);
+    //var JSONObject = JSON.parse({"Correct" : (tempPassword == Password) + "", "Name" : (tempUser + "")});
+    console.log(`{"Correct" : "${tempPassword}", "Name" : "${tempUser}"}`);
+    return (`{"Correct" : "${tempPassword}", "Name" : "${tempUser}"}`);
 }
 
 router.get('/', function(req, res) {
