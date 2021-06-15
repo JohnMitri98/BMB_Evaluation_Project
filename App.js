@@ -2,12 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch, Link, Redirect} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
+import UserView from './Pages/UserView';
+import AdminView from './Pages/AdminView';
 
 const initialState = {
   correct: null,
   User: null,
   loggedIn: false,
-  redirect: null
+  redirect: null,
+  roles: {
+    Name: "",
+    Evaluation_View: null,
+    Details_View: null,
+    User_Edit_View: null,
+    User_Performance_View: null
+  }
 };
 
 export default class App extends React.Component {
@@ -49,11 +58,14 @@ export default class App extends React.Component {
             <Switch>
               {this.state.redirect}
               <Route path="/turtles">
-                <ILikeTurtles loggedIn = {this.state.loggedIn} />
+                <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
               </Route>
-              {/*<Route path="/users">
-                <Users />
-              </Route>*/}
+              <Route path="/userView">
+                <UserView loggedIn = {this.state.loggedIn} />
+              </Route>
+              <Route path="/adminView">
+                <AdminView loggedIn = {this.state.loggedIn} />
+              </Route>
               <Route path="/">
                 <LoginPage onSubmit = {this.checkLogin} />
                 {welcome}
@@ -65,14 +77,23 @@ export default class App extends React.Component {
     );
   }
 
-  checkLogin(Correct, Username) {
+  checkLogin(Correct, Username, Roles) {
     if(Correct === "true") {
       this.setState({
         correct: true,
         User: Username,
         loggedIn: true,
-        redirect: <Redirect exact from = "/" to = "/turtles" />
+        roles: Roles
       });
+      if((Roles.Name + "") === "Admin") {
+        this.setState({
+          redirect: <Redirect exact from = "/" to = "/adminView" />
+        });
+      } else {
+        this.setState({
+          redirect: <Redirect exact from = "/" to = "/userView" />
+        });
+      }
     } else {
       this.setState(initialState);
       this.setState({correct: false});
@@ -91,7 +112,7 @@ function ILikeTurtles(props) {
   }
   return (
     <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-      <h1>I like turtles: {props.loggedIn + ""}</h1>
+      <h1>I like turtles: {props.likesTurtles + ""}</h1>
     </div>
   );
 }
