@@ -6,7 +6,7 @@ export default class LoginForm extends React.Component {
         super(props);
         this.state = {
             Username: "",
-            Password: ""
+            Password: "",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -39,7 +39,7 @@ export default class LoginForm extends React.Component {
         e.preventDefault();
         let isCorrect = false;
         let tempName = "";
-        let tempRoles = {};
+        let tempRoles = null;
         if(this.state.Username !== "" && this.state.Password !== "") {
             const response = await fetch(`/API/checkLogin-${this.state.Username}-${this.state.Password}`);
             if(response) {
@@ -47,7 +47,9 @@ export default class LoginForm extends React.Component {
                 if(body) {
                     isCorrect = body.Correct;
                     tempName = body.Name;
-                    tempRoles = body.Roles;
+                    if(body.Roles){
+                        tempRoles = body.Roles;   
+                    }
                 }
             }
         }
