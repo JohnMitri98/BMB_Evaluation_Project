@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Switch, Link, Redirect, useHistory} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, Link, Redirect} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 import AdminView from './Pages/AdminView';
+import EvaluationsPage from './Pages/EvaluationsPage';
 
 const initialState = {
   correct: null,
@@ -70,13 +71,16 @@ export default class App extends React.Component {
               {/*<Route path="/turtles">
                 <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
               </Route>*/}
-              <Route path="/userView">
+              <Route exact path="/UserView">
                 <UserView loggedIn = {this.state.loggedIn} />
               </Route>
-              <Route path="/adminView">
+              <Route exact path="/AdminView">
                 <AdminView loggedIn = {this.state.loggedIn} />
               </Route>
-              <Route path="/">
+              <Route exact path="/UserView/Evaluations">
+                <EvaluationsPage loggedIn = {this.state.loggedIn} />
+              </Route>
+              <Route exact path="/">
                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} />
                 {warning}
               </Route>
@@ -97,11 +101,11 @@ export default class App extends React.Component {
       });
       if((Roles.Name + "") === "Admin") {
         this.setState({
-          redirect: <Redirect exact from = "/" to = "/adminView" />
+          redirect: <Redirect exact from = "/" to = "/AdminView" />
         });
       } else {
         this.setState({
-          redirect: <Redirect exact from = "/" to = "/userView" />
+          redirect: <Redirect exact from = "/" to = "/UserView" />
         });
       }
     } else {
