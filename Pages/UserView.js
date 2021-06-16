@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Redirect} from 'react-router-dom';
+import {Redirect, Switch} from 'react-router-dom';
 
 export default class UserView extends React.Component {
 
@@ -14,23 +14,37 @@ export default class UserView extends React.Component {
     render() {
         if((this.props.loggedIn + "") === "false") {
             this.setState({
-                redirect: <Redirect to = "../" />
+                redirect: <Redirect to = "/" />
             });
         }
         return (
-            <div>
+            <div style = {this.props.style}>
                 <Switch>
                     {this.state.redirect}
                 </Switch>
                 <h1>This is the UserView!</h1>
-                <button onClick = {this.redirectEvaluations}>Evaluations</button>
+                <button onClick = {() => this.redirectEvaluations("/Evaluations")}>
+                    Evaluations
+                </button>
+                <button onClick = {() => this.redirectEvaluations("/MyProfile")}>
+                    My Profile
+                </button>
+                <button onClick = {() => this.redirectEvaluations("/MyEvaluations")}>
+                    My Evaluations
+                </button>
+                <button onClick = {() => this.redirectEvaluations("/Performance")}>
+                    My Performance
+                </button>
+                <button onClick = {() => this.redirectEvaluations("/Details")}>
+                    Details
+                </button>
             </div>
         );
     }
 
-    redirectEvaluations() {
+    redirectEvaluations(redirection) {
         this.setState({
-            redirect: <Redirect exact to = "/UserView/Evaluations" />
+            redirect: <Redirect exact to = {`/UserView${redirection}`} />
         });
     }
 }

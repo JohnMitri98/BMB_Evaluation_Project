@@ -5,12 +5,15 @@ import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 import AdminView from './Pages/AdminView';
 import EvaluationsPage from './Pages/EvaluationsPage';
+import ProfilePage from './Pages/ProfilePage';
+import MyEvaluationsPage from './Pages/MyEvaluationsPage';
+import PerformancePage from './Pages/PerformancePage';
+import DetailsPage from './Pages/DetailsPage';
 
 const initialState = {
   correct: null,
   User: null,
   loggedIn: false,
-  //history: useHistory,
   redirect: null,
   roles: {
     Name: "",
@@ -27,8 +30,6 @@ const divStyle = {
   alignItems: "center",
   justifyContent: "center"
 };
-
-//const history = useHistory;
 
 export default class App extends React.Component {
 
@@ -53,7 +54,9 @@ export default class App extends React.Component {
         <div>
           <nav>
             <ul>
-              <button onClick = {this.signOut}>Sign Out</button>
+              <button onClick = {this.signOut}>
+                Sign Out
+              </button>
               {/*<li>
                 <Link to="/" onClick = {this.resetLogin}>Login</Link>
               </li>
@@ -72,13 +75,25 @@ export default class App extends React.Component {
                 <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
               </Route>*/}
               <Route exact path="/UserView">
-                <UserView loggedIn = {this.state.loggedIn} />
+                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>
               <Route exact path="/AdminView">
-                <AdminView loggedIn = {this.state.loggedIn} />
+                <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>
               <Route exact path="/UserView/Evaluations">
-                <EvaluationsPage loggedIn = {this.state.loggedIn} />
+                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} />
+              </Route>
+              <Route exact path="/UserView/MyProfile">
+                <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} />
+              </Route>
+              <Route exact path="/UserView/MyEvaluations">
+                <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} />
+              </Route>
+              <Route exact path="/UserView/Performance">
+                <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} />
+              </Route>
+              <Route exact path="/UserView/Details">
+                <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>
               <Route exact path="/">
                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} />

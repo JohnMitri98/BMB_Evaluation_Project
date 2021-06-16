@@ -1,7 +1,7 @@
 import React from 'react';
-import {Redirect, Switch} from 'react-router-dom';
+import {Redirect, Switch} from 'react-router';
 
-export default class EvaluationsPage extends React.Component {
+export default class DetailsPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -22,7 +22,7 @@ export default class EvaluationsPage extends React.Component {
                 <button onClick = {this.goBack}>
                     Back
                 </button>
-                <h1>This is the Evaluations Page</h1>
+                <h1>This is the Details Page</h1>
                 <Switch>
                     {this.state.redirect}
                 </Switch>
