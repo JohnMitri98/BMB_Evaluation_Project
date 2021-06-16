@@ -5,9 +5,9 @@ export default class LoginPage extends React.Component {
 
     render() {
         return(
-            <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+            <div style = {this.props.style}>
                 <h1>Login</h1>
-                <LoginForm onSubmit = {this.props.onSubmit}/>
+                <LoginForm style = {this.props.style} onSubmit = {this.props.onSubmit}/>
             </div>
         );
     }

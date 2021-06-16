@@ -16,7 +16,7 @@ export default class LoginForm extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+                <div style = {this.props.style}>
                     <div>
                         <label>
                             Username

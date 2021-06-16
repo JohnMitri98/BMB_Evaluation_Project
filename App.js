@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Switch, Link, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, Link, Redirect, useHistory} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 import AdminView from './Pages/AdminView';
@@ -9,6 +9,7 @@ const initialState = {
   correct: null,
   User: null,
   loggedIn: false,
+  //history: useHistory,
   redirect: null,
   roles: {
     Name: "",
@@ -19,6 +20,15 @@ const initialState = {
   }
 };
 
+const divStyle = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center"
+};
+
+//const history = useHistory;
+
 export default class App extends React.Component {
 
   constructor(props) {
@@ -26,40 +36,40 @@ export default class App extends React.Component {
     this.state = initialState;
     this.checkLogin = this.checkLogin.bind(this);
     this.resetLogin = this.resetLogin.bind(this);
+    this.signOut = this.signOut.bind(this);
   }
 
   render() {
-    let welcome;
-    if(this.state.loggedIn) {
-      welcome = <h1>Welcome, {this.state.User}</h1>;
-    } else if(window.location.pathname !== "/") {
-      welcome = null;
+    let warning;
+    if(window.location.pathname !== "/") {
+      warning = null;
     }
     if((this.state.correct + "") === "false") {
-      welcome = <h1>Incorrect Username or Password</h1>
+      warning = <h1>Incorrect Username or Password</h1>
     }
     return (
       <Router>
         <div>
           <nav>
             <ul>
-              <li>
+              <button onClick = {this.signOut}>Sign Out</button>
+              {/*<li>
                 <Link to="/" onClick = {this.resetLogin}>Login</Link>
               </li>
               <li>
                 <Link to="/turtles">Turtles</Link>
               </li>
-              {/*<li>
+              <li>
                 <Link to="/users">Users</Link>
               </li>*/}
             </ul>
           </nav>
-          <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+          <div style = {divStyle}>
             <Switch>
               {this.state.redirect}
-              <Route path="/turtles">
+              {/*<Route path="/turtles">
                 <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
-              </Route>
+              </Route>*/}
               <Route path="/userView">
                 <UserView loggedIn = {this.state.loggedIn} />
               </Route>
@@ -67,8 +77,8 @@ export default class App extends React.Component {
                 <AdminView loggedIn = {this.state.loggedIn} />
               </Route>
               <Route path="/">
-                <LoginPage onSubmit = {this.checkLogin} />
-                {welcome}
+                <LoginPage style = {divStyle} onSubmit = {this.checkLogin} />
+                {warning}
               </Route>
             </Switch>
           </div>
@@ -100,13 +110,20 @@ export default class App extends React.Component {
     }
   }
 
+  signOut() {
+    this.setState({
+      redirect: <Redirect exact to = "/" />
+    });
+    this.resetLogin();
+  }
+
   resetLogin() {
     this.setState(initialState);
   }
 
 }
 
-function ILikeTurtles(props) {
+/*function ILikeTurtles(props) {
   if((props.loggedIn + "") === "false") {
     return (<Redirect to = "../" />);
   }
@@ -115,6 +132,6 @@ function ILikeTurtles(props) {
       <h1>I like turtles: {props.likesTurtles + ""}</h1>
     </div>
   );
-}
+}*/
 
 ReactDOM.render(<App />, document.getElementById('root'))
