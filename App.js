@@ -75,7 +75,7 @@ export default class App extends React.Component {
                 <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
               </Route>*/}
               <Route exact path="/UserView">
-                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} />
+                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} />
               </Route>
               <Route exact path="/AdminView">
                 <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />

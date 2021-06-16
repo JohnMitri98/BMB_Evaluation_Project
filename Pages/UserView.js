@@ -23,9 +23,16 @@ export default class UserView extends React.Component {
                     {this.state.redirect}
                 </Switch>
                 <h1>This is the UserView!</h1>
-                <button onClick = {() => this.redirectEvaluations("/Evaluations")}>
-                    Evaluations
-                </button>
+                {((this.props.permissions.Evaluation_View + "") === "true") && 
+                    <button onClick = {() => this.redirectEvaluations("/Evaluations")}>
+                        Evaluations
+                    </button>
+                }
+                {((this.props.permissions.Details_View + "") === "true") && 
+                    <button onClick = {() => this.redirectEvaluations("/Details")}>
+                        Details
+                    </button>
+                }
                 <button onClick = {() => this.redirectEvaluations("/MyProfile")}>
                     My Profile
                 </button>
@@ -35,9 +42,7 @@ export default class UserView extends React.Component {
                 <button onClick = {() => this.redirectEvaluations("/Performance")}>
                     My Performance
                 </button>
-                <button onClick = {() => this.redirectEvaluations("/Details")}>
-                    Details
-                </button>
+                
             </div>
         );
     }
