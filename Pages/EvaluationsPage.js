@@ -1,12 +1,15 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
+import EvaluationsTable from '../Components/EvaluationsTable';
 
 export default class EvaluationsPage extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            redirect: null
+            redirect: null,
+            Evaluations: [],
+            ready: "notYet"
         }
         this.goBack = this.goBack.bind(this);
     }
@@ -22,7 +25,9 @@ export default class EvaluationsPage extends React.Component {
                 <button onClick = {this.goBack}>
                     Back
                 </button>
-                <h1>This is the Evaluations Page</h1>
+                {(this.state.ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} EvaluatorName = {this.props.EvaluatorName} style = {this.props.style} />}
+                {(this.state.ready === "false") && <h1>No Evaluations made yet</h1>}
+                {(this.state.ready === "notYet") && <h1>Loading</h1>}
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -33,6 +38,21 @@ export default class EvaluationsPage extends React.Component {
     goBack() {
         this.setState({
             redirect: <Redirect exact to = "/UserView" />
+        });
+    }
+
+    async componentDidMount() {
+        let tempEvaluations = [];
+        const response = await fetch(`/API/getEvaluationsDone-${this.props.ID}`);
+        if(response) {
+            const body = await response.json();
+            if(body.Evaluations) {
+                tempEvaluations = body.Evaluations;
+            }
+        }
+        this.setState({
+            Evaluations: tempEvaluations,
+            ready: (tempEvaluations[0] ? "true" : "false")
         });
     }
 

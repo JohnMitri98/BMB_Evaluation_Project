@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch, Link, Redirect} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
-import AdminView from './Pages/AdminView';
+//import AdminView from './Pages/AdminView';
 import EvaluationsPage from './Pages/EvaluationsPage';
 import ProfilePage from './Pages/ProfilePage';
 import MyEvaluationsPage from './Pages/MyEvaluationsPage';
@@ -13,6 +13,7 @@ import DetailsPage from './Pages/DetailsPage';
 const initialState = {
   correct: null,
   User: null,
+  UserID: 0,
   loggedIn: false,
   redirect: null,
   roles: {
@@ -54,9 +55,11 @@ export default class App extends React.Component {
         <div>
           <nav>
             <ul>
-              <button onClick = {this.signOut}>
-                Sign Out
-              </button>
+              {((this.state.loggedIn + "") === "true") && 
+                (<button onClick = {this.signOut}>
+                  Sign Out
+                </button>)
+              }
               {/*<li>
                 <Link to="/" onClick = {this.resetLogin}>Login</Link>
               </li>
@@ -77,11 +80,11 @@ export default class App extends React.Component {
               <Route exact path="/UserView">
                 <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} />
               </Route>
-              <Route exact path="/AdminView">
+              {/*<Route exact path="/AdminView">
                 <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
-              </Route>
+              </Route>*/}
               <Route exact path="/UserView/Evaluations">
-                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} />
+                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} EvaluatorName = {this.state.User + ""} />
               </Route>
               <Route exact path="/UserView/MyProfile">
                 <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} />
@@ -106,23 +109,24 @@ export default class App extends React.Component {
     );
   }
 
-  checkLogin(Correct, Username, Roles) {
+  checkLogin(Correct, Username, Roles, UserID) {
     if(Correct === "true") {
       this.setState({
         correct: true,
         User: Username,
+        UserID: UserID,
         loggedIn: true,
         roles: Roles
       });
-      if((Roles.Name + "") === "Admin") {
+      /*if((Roles.Name + "") === "Admin") {
         this.setState({
           redirect: <Redirect exact from = "/" to = "/AdminView" />
         });
-      } else {
+      } else {*/
         this.setState({
           redirect: <Redirect exact from = "/" to = "/UserView" />
         });
-      }
+      //}
     } else {
       this.setState(initialState);
       this.setState({correct: false});
