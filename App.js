@@ -22,7 +22,9 @@ const initialState = {
     Details_View: null,
     User_Edit_View: null,
     User_Performance_View: null
-  }
+  },
+  EvaluationID: 0
+  //previousPageHistory: ["/"]
 };
 
 const divStyle = {
@@ -36,10 +38,16 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = initialState;
+    this.state = {
+      ...initialState,
+      previousPageHistory: []
+    };
     this.checkLogin = this.checkLogin.bind(this);
     this.resetLogin = this.resetLogin.bind(this);
     this.signOut = this.signOut.bind(this);
+    this.setEvaluationIdForDetails = this.setEvaluationIdForDetails.bind(this);
+    this.setPreviousPage = this.setPreviousPage.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
 
   render() {
@@ -50,6 +58,9 @@ export default class App extends React.Component {
     if((this.state.correct + "") === "false") {
       warning = <h1>Incorrect Username or Password</h1>
     }
+    let history = [this.setPreviousPage, this.goBack];
+    let tempText = "";
+    this.state.previousPageHistory.forEach(element => tempText += (element + " "));
     return (
       <Router>
         <div>
@@ -72,34 +83,35 @@ export default class App extends React.Component {
             </ul>
           </nav>
           <div style = {divStyle}>
+            <h1>{tempText}</h1>
             <Switch>
               {this.state.redirect}
               {/*<Route path="/turtles">
                 <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
               </Route>*/}
               <Route exact path="/UserView">
-                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} />
+                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} history = {history} />
               </Route>
               {/*<Route exact path="/AdminView">
                 <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>*/}
               <Route exact path="/UserView/Evaluations">
-                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} EvaluatorName = {this.state.User + ""} />
+                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} EvaluatorName = {this.state.User + ""} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
               <Route exact path="/UserView/MyProfile">
-                <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} />
+                <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
               <Route exact path="/UserView/MyEvaluations">
-                <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} />
+                <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
               <Route exact path="/UserView/Performance">
-                <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} />
+                <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
               <Route exact path="/UserView/Details">
-                <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} />
+                <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluationID = {this.state.EvaluationID} history = {history} />
               </Route>
               <Route exact path="/">
-                <LoginPage style = {divStyle} onSubmit = {this.checkLogin} />
+                <LoginPage style = {divStyle} onSubmit = {this.checkLogin} history = {history} />
                 {warning}
               </Route>
             </Switch>
@@ -118,13 +130,16 @@ export default class App extends React.Component {
         loggedIn: true,
         roles: Roles
       });
+      let tempHistory = this.state.previousPageHistory;
       /*if((Roles.Name + "") === "Admin") {
         this.setState({
           redirect: <Redirect exact from = "/" to = "/AdminView" />
         });
       } else {*/
+        tempHistory.push("/");
         this.setState({
-          redirect: <Redirect exact from = "/" to = "/UserView" />
+          redirect: <Redirect exact from = "/" to = "/UserView" />,
+          previousPageHistory: tempHistory
         });
       //}
     } else {
@@ -133,9 +148,33 @@ export default class App extends React.Component {
     }
   }
 
-  signOut() {
+  setPreviousPage(page) {
+    let tempPageHistory = this.state.previousPageHistory;
+    tempPageHistory.push(page);
     this.setState({
-      redirect: <Redirect exact to = "/" />
+      previousPageHistory: tempPageHistory
+    });
+  }
+
+  goBack() {
+    let tempHistory = this.state.previousPageHistory;
+    let toReturn = tempHistory.pop();
+    this.setState({
+      previousPageHistory: tempHistory
+    });
+    return toReturn;
+  }
+
+  setEvaluationIdForDetails(ID) {
+    this.setState({
+      EvaluationID: ID
+    });
+  }
+
+  async signOut() {
+    await this.setState({
+      redirect: <Redirect exact to = "/" />,
+      previousPageHistory: []
     });
     this.resetLogin();
   }

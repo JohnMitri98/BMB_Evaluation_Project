@@ -13,6 +13,7 @@ export default class ProfilePage extends React.Component {
 
     render() {
         if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/UserView/MyProfile");
             this.setState({
                 redirect: <Redirect to = "/" />
             });
@@ -31,8 +32,9 @@ export default class ProfilePage extends React.Component {
     }
 
     goBack() {
+        let redirectPath = this.props.history[1]();
         this.setState({
-            redirect: <Redirect exact to = "/UserView" />
+            redirect: <Redirect exact to = {redirectPath} />
         });
     }
 

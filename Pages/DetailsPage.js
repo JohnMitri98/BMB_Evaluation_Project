@@ -31,8 +31,9 @@ export default class DetailsPage extends React.Component {
     }
 
     goBack() {
+        let redirectPath = this.props.history[1]();
         this.setState({
-            redirect: <Redirect exact to = "/UserView" />
+            redirect: <Redirect exact to = {redirectPath} />
         });
     }
 

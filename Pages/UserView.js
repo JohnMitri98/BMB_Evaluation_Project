@@ -8,11 +8,12 @@ export default class UserView extends React.Component {
         this.state = {
             redirect: null
         };
-        this.redirectEvaluations = this.redirectEvaluations.bind(this);
+        this.redirectView = this.redirectView.bind(this);
     }
 
     render() {
         if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/UserView");
             this.setState({
                 redirect: <Redirect to = "/" />
             });
@@ -24,22 +25,22 @@ export default class UserView extends React.Component {
                 </Switch>
                 <h1>This is the UserView!</h1>
                 {((this.props.permissions.Evaluation_View + "") === "true") && 
-                    <button onClick = {() => this.redirectEvaluations("/Evaluations")}>
+                    <button onClick = {() => this.redirectView("/Evaluations")}>
                         Evaluations
                     </button>
                 }
-                {((this.props.permissions.Details_View + "") === "true") && 
-                    <button onClick = {() => this.redirectEvaluations("/Details")}>
+                {/*((this.props.permissions.Details_View + "") === "true") && 
+                    <button onClick = {() => this.redirectView("/Details")}>
                         Details
                     </button>
-                }
-                <button onClick = {() => this.redirectEvaluations("/MyProfile")}>
+                */}
+                <button onClick = {() => this.redirectView("/MyProfile")}>
                     My Profile
                 </button>
-                <button onClick = {() => this.redirectEvaluations("/MyEvaluations")}>
+                <button onClick = {() => this.redirectView("/MyEvaluations")}>
                     My Evaluations
                 </button>
-                <button onClick = {() => this.redirectEvaluations("/Performance")}>
+                <button onClick = {() => this.redirectView("/Performance")}>
                     My Performance
                 </button>
                 
@@ -47,7 +48,8 @@ export default class UserView extends React.Component {
         );
     }
 
-    redirectEvaluations(redirection) {
+    redirectView(redirection) {
+        this.props.history[0]("/UserView");
         this.setState({
             redirect: <Redirect exact to = {`/UserView${redirection}`} />
         });
