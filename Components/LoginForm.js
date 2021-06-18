@@ -6,7 +6,7 @@ export default class LoginForm extends React.Component {
         super(props);
         this.state = {
             Username: "",
-            Password: "",
+            Password: ""
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleUsernameChange = this.handleUsernameChange.bind(this);

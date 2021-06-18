@@ -13,6 +13,7 @@ export default class UserView extends React.Component {
 
     render() {
         if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/");
             this.props.history[0]("/UserView");
             this.setState({
                 redirect: <Redirect to = "/" />

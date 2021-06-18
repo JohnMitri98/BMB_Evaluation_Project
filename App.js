@@ -9,6 +9,7 @@ import ProfilePage from './Pages/ProfilePage';
 import MyEvaluationsPage from './Pages/MyEvaluationsPage';
 import PerformancePage from './Pages/PerformancePage';
 import DetailsPage from './Pages/DetailsPage';
+import DetailsEditPage from './Pages/DetailsEditPage';
 
 const initialState = {
   correct: null,
@@ -24,7 +25,6 @@ const initialState = {
     User_Performance_View: null
   },
   EvaluationID: 0
-  //previousPageHistory: ["/"]
 };
 
 const divStyle = {
@@ -59,8 +59,7 @@ export default class App extends React.Component {
       warning = <h1>Incorrect Username or Password</h1>
     }
     let history = [this.setPreviousPage, this.goBack];
-    let tempText = "";
-    this.state.previousPageHistory.forEach(element => tempText += (element + " "));
+
     return (
       <Router>
         <div>
@@ -83,7 +82,6 @@ export default class App extends React.Component {
             </ul>
           </nav>
           <div style = {divStyle}>
-            <h1>{tempText}</h1>
             <Switch>
               {this.state.redirect}
               {/*<Route path="/turtles">
@@ -110,6 +108,9 @@ export default class App extends React.Component {
               <Route exact path="/UserView/Details">
                 <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluationID = {this.state.EvaluationID} history = {history} />
               </Route>
+              <Route exact path="/UserView/Details/DetailsEdit">
+                <DetailsEditPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} EvaluationID = {this.state.EvaluationID} history = {history} />
+              </Route>
               <Route exact path="/">
                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} history = {history} />
                 {warning}
@@ -126,7 +127,7 @@ export default class App extends React.Component {
       this.setState({
         correct: true,
         User: Username,
-        UserID: UserID,
+        UserID: parseInt(UserID),
         loggedIn: true,
         roles: Roles
       });
@@ -136,11 +137,15 @@ export default class App extends React.Component {
           redirect: <Redirect exact from = "/" to = "/AdminView" />
         });
       } else {*/
-        tempHistory.push("/");
-        this.setState({
-          redirect: <Redirect exact from = "/" to = "/UserView" />,
-          previousPageHistory: tempHistory
-        });
+        if(this.state.previousPageHistory.length === 0) {
+          tempHistory.push("/");
+          this.setState({
+            redirect: <Redirect exact from = "/" to = "/UserView" />,
+            previousPageHistory: tempHistory
+          });
+        } else {
+          this.goBack();
+        }
       //}
     } else {
       this.setState(initialState);
@@ -156,13 +161,17 @@ export default class App extends React.Component {
     });
   }
 
-  goBack() {
+  async goBack() {
     let tempHistory = this.state.previousPageHistory;
-    let toReturn = tempHistory.pop();
-    this.setState({
-      previousPageHistory: tempHistory
+    let redirectPath = tempHistory.pop();
+    await this.setState({
+      previousPageHistory: tempHistory,
+      redirect: <Redirect exact to = {redirectPath + ""} />
     });
-    return toReturn;
+    await this.setState({
+      redirect: null
+    })
+    //return toReturn;
   }
 
   setEvaluationIdForDetails(ID) {

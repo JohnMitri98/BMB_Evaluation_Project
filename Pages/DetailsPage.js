@@ -8,21 +8,19 @@ export default class DetailsPage extends React.Component {
         this.state = {
             redirect: null
         }
-        this.goBack = this.goBack.bind(this);
+        this.goToDetails = this.goToDetails.bind(this);
     }
 
     render() {
-        if((this.props.loggedIn + "") === "false") {
-            this.setState({
-                redirect: <Redirect to = "/" />
-            });
-        }
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.goBack}>
+                <button onClick = {this.props.history[1]}>
                     Back
                 </button>
                 <h1>This is the Details Page</h1>
+                <button onClick = {this.goToDetails}>
+                    Add Detail
+                </button>
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -30,11 +28,22 @@ export default class DetailsPage extends React.Component {
         );
     }
 
-    goBack() {
-        let redirectPath = this.props.history[1]();
+    goToDetails() {
+        this.props.history[0]("/UserView/Details");
         this.setState({
-            redirect: <Redirect exact to = {redirectPath} />
+            redirect: <Redirect exact to = {`/UserView/Details/DetailsEdit`} />
         });
+    }
+
+    componentDidMount() {
+        if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/");
+            this.props.history[0]("/UserView");
+            this.props.history[0]("/UserView/Details");
+            this.setState({
+                redirect: <Redirect to = "/" />
+            });
+        }
     }
 
 }

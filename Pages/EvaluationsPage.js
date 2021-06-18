@@ -11,20 +11,13 @@ export default class EvaluationsPage extends React.Component {
             Evaluations: [],
             ready: "notYet"
         }
-        this.goBack = this.goBack.bind(this);
         this.goToDetails = this.goToDetails.bind(this);
     }
 
     render() {
-        if((this.props.loggedIn + "") === "false") {
-            this.props.history[0]("/UserView/Evaluations")
-            this.setState({
-                redirect: <Redirect to = "/" />
-            });
-        }
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.goBack}>
+                <button onClick = {this.props.history[1]}>
                     Back
                 </button>
                 {(this.state.ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} EvaluatorName = {this.props.EvaluatorName} style = {this.props.style} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} />}
@@ -37,14 +30,15 @@ export default class EvaluationsPage extends React.Component {
         );
     }
 
-    goBack() {
-        let redirectPath = this.props.history[1]();
-        this.setState({
-            redirect: <Redirect exact to = {redirectPath} />
-        });
-    }
-
     async componentDidMount() {
+        if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/");
+            this.props.history[0]("/UserView");
+            this.props.history[0]("/UserView/Evaluations");
+            this.setState({
+                redirect: <Redirect to = "/" />
+            });
+        }
         let tempEvaluations = [];
         const response = await fetch(`/API/getEvaluationsDone-${this.props.ID}`);
         if(response) {

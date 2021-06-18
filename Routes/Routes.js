@@ -1,5 +1,7 @@
 var express = require("express");
 var router = express.Router();
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 var sql = require('mssql');
 
 const sqlConfig = {
@@ -52,15 +54,13 @@ async function checkLogin(Username, Password) {
         console.error('SQL error', err);
     }
     pool.close();
-    let tempReturn = `{"Correct" : "${tempCorrect + ""}", "Name" : "${tempUser}", "UserID" : "${tempUserID + ""}", "Roles" : {`;
-    if(roles) {
-        for([key, value] of Object.entries(roles)) {
-            tempReturn += `"${key}" : "${value}", `;
-        }
-        tempReturn = tempReturn.substring(0, (tempReturn.length - 2));
-    }
-    tempReturn += `}}`;
-    return (tempReturn);
+    let tempObj = {
+        Correct: tempCorrect + "",
+        Name: tempUser,
+        UserID: tempUserID + "",
+        Roles: roles
+    };
+    return JSON.stringify(tempObj);
 }
 
 async function getEvaluationsDone(Evaluator) {
@@ -77,19 +77,24 @@ async function getEvaluationsDone(Evaluator) {
         console.error('SQL error', err);
     }
     pool.close();
-    let tempReturn = `{"Evaluations" : [`;
-    tempResult.forEach(result => {
-        tempReturn += "{";
-        for([key, value] of Object.entries(result)) {
-            tempReturn += `"${key}" : "${value}", `;
-        }
-        tempReturn = tempReturn.substring(0, (tempReturn.length - 2));
-        tempReturn += "}, "
-    })
-    tempReturn = tempReturn.substring(0, (tempReturn.length - 2));
-    tempReturn += `]}`;
-    return (tempReturn);
+    let tempObj = {
+        Evaluations: tempResult
+    };
+    return JSON.stringify(tempObj);
 
+}
+
+async function insertEvaluationDetail(Detail) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Insert into dbo.Evaluation_Details (Evaluation_ID, Supervisor_ID, Status, Type, Severity, Description, Link) values (${parseInt(Detail.EvaluationID)}, ${parseInt(Detail.SupervisorID)}, '${Detail.Status}', '${Detail.Type}', ${parseInt(Detail.Severity)}, '${Detail.Description}', '${Detail.Link}')`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
 }
 
 router.get('/', function(req, res) {
@@ -104,6 +109,11 @@ router.get('/:method-:param1-:param2', async function(req, res) {
 router.get('/:method-:Evaluator', async function(req, res) {
     if(req.params.method = "getEvaluationsDone") {
         res.send(await getEvaluationsDone(req.params.Evaluator));
+    }
+});
+router.post('/:method', jsonParser, async function(req, res) {
+    if(req.params.method = "insertEvaluationDetail") {
+        await insertEvaluationDetail(req.body.Detail);
     }
 });
 

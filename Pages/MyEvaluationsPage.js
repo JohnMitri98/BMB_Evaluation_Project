@@ -10,24 +10,15 @@ export default class MyEvaluationsPage extends React.Component {
             redirect: null,
             Evaluations: []
         }
-        this.goBack = this.goBack.bind(this);
     }
 
     render() {
-        if((this.props.loggedIn + "") === "false") {
-            this.props.history[0]("/UserView/MyEvaluations");
-            this.setState({
-                redirect: <Redirect to = "/" />
-            });
-        }
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.goBack}>
+                <button onClick = {this.props.history[1]}>
                     Back
                 </button>
                 <h1>This is the My Evaluations Page</h1>
-                {/*{this.state.Evaluations[0] && <EvaluationsTable Evaluations = {this.state.Evaluations} />}*/}
-                {/*<h1>{this.state.Evaluations[0] && this.state.Evaluations[0].ID + ""}</h1>*/}
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -35,11 +26,15 @@ export default class MyEvaluationsPage extends React.Component {
         );
     }
 
-    goBack() {
-        let redirectPath = this.props.history[1]();
-        this.setState({
-            redirect: <Redirect exact to = {redirectPath} />
-        });
+    componentDidMount() {
+        if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/");
+            this.props.history[0]("/UserView");
+            this.props.history[0]("/UserView/MyEvaluations");
+            this.setState({
+                redirect: <Redirect to = "/" />
+            });
+        }
     }
 
     /*async componentDidMount() {
