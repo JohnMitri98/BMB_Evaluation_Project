@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
-import EvaluationsTable from '../Components/EvaluationsTable'
+//import EvaluationsTable from '../Components/EvaluationsTable'
 
 export default class MyEvaluationsPage extends React.Component {
 

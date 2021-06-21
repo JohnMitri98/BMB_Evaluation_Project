@@ -24,11 +24,10 @@ export default class DetailsCreationForm extends React.Component {
     }
     
     render() {
-        let {Status, Type, Severity, Description, Link} = this.state.Detail;
+        let {Severity, Description, Link} = this.state.Detail;
         return (
             <form onSubmit={this.handleSubmit}>
                 <div style = {this.props.style}>
-                    <h1>{this.state.Detail.Type + ""}</h1>
                     <div>
                         <label>
                             Status: 
@@ -43,7 +42,6 @@ export default class DetailsCreationForm extends React.Component {
                         {(this.state.Detail.Status === "Rejected" && 
                             <label>
                                 Type: 
-                                {/*<input type = "text" value = {Type} onChange = {this.handleTypeChange}/>*/}
                                 <select onChange = {this.handleTypeChange}>
                                     <option value = "Normal">Normal</option>
                                     <option value = "Severe">Severe</option>
@@ -53,10 +51,12 @@ export default class DetailsCreationForm extends React.Component {
                         )}
                     </div>
                     <div>
-                        <label>
-                            Severity: 
-                            <input type = "text" pattern = "[0-9]*" value = {Severity} onChange = {this.handleSeverityChange}/>
-                        </label>
+                        {this.state.Detail.Status === "Rejected" &&
+                            <label>
+                                Severity: 
+                                <input type = "text" pattern = "[0-9]*" value = {Severity} onChange = {this.handleSeverityChange}/>
+                            </label>
+                        }
                     </div>
                     <div>
                         <label>
@@ -80,10 +80,10 @@ export default class DetailsCreationForm extends React.Component {
         e.preventDefault();
         let {EvaluationID, SupervisorID, Status, Type, Severity, Description, Link} = this.state.Detail;
         if(Type === "") {
-            Type = null;
+            Type = "None";
         }
         if(Severity === "") {
-            Severity = null;
+            Severity = 0;
         }
         if(Description === "") {
             Description = null;
@@ -102,7 +102,6 @@ export default class DetailsCreationForm extends React.Component {
                     Link: Link
                 }
             };
-            this.props.onSubmit(true);
             await fetch('/API/insertEvaluationDetail', {
                 method: 'POST',
                 headers: {
@@ -110,16 +109,17 @@ export default class DetailsCreationForm extends React.Component {
                 },
                 body: JSON.stringify(tempObj)
             });
+            this.props.onSubmit(true);
         }
     };
 
     handleStatusChange(event) {
-        let {EvaluationID, SupervisorID, Status, Type, Severity, Description, Link} = this.state.Detail;
+        let {EvaluationID, SupervisorID, Severity, Description, Link} = this.state.Detail;
         let tempDetail = {
             EvaluationID: EvaluationID,
             SupervisorID: SupervisorID,
             Status: event.target.value,
-            Type: (Status === "Accepted" ? "" : "Normal"),
+            Type: (event.target.value === "Accepted" ? "None" : "Normal"),
             Severity: Severity,
             Description: Description,
             Link: Link
@@ -128,7 +128,7 @@ export default class DetailsCreationForm extends React.Component {
     }
 
     handleTypeChange(event) {
-        let {EvaluationID, SupervisorID, Status, Type, Severity, Description, Link} = this.state.Detail;
+        let {EvaluationID, SupervisorID, Status, Severity, Description, Link} = this.state.Detail;
         let tempDetail = {
             EvaluationID: EvaluationID,
             SupervisorID: SupervisorID,
@@ -169,7 +169,7 @@ export default class DetailsCreationForm extends React.Component {
     }
 
     handleDescriptionChange(event) {
-        let {EvaluationID, SupervisorID, Status, Type, Severity, Description, Link} = this.state.Detail;
+        let {EvaluationID, SupervisorID, Status, Type, Severity, Link} = this.state.Detail;
         let tempDetail = {
             EvaluationID: EvaluationID,
             SupervisorID: SupervisorID,
@@ -183,7 +183,7 @@ export default class DetailsCreationForm extends React.Component {
     }
 
     handleLinkChange(event) {
-        let {EvaluationID, SupervisorID, Status, Type, Severity, Description, Link} = this.state.Detail;
+        let {EvaluationID, SupervisorID, Status, Type, Severity, Description} = this.state.Detail;
         let tempDetail = {
             EvaluationID: EvaluationID,
             SupervisorID: SupervisorID,

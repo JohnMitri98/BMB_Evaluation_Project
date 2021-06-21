@@ -40,7 +40,7 @@ export default class DetailsEditPage extends React.Component {
             this.setState({
                 Correct: "true"
             });
-            this.goBack();
+            this.props.history[1]();
         } else {
             this.setState({
                 Correct: "false"

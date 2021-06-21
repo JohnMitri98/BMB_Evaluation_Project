@@ -76,9 +76,9 @@ export default class EvaluationsTable extends React.Component {
         });
     }
 
-    handleDetails(id) {
-        this.props.onDetailsButton[0](id);
-        this.props.onDetailsButton[1]();
+    async handleDetails(id) {
+        await this.props.onDetailsButton[0](id);
+        await this.props.onDetailsButton[1]();
     }
 
 }

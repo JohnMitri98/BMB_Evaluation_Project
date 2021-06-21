@@ -48,7 +48,7 @@ export default class EvaluationsPage extends React.Component {
             }
         }
         this.setState({
-            Evaluations: tempEvaluations,
+            Evaluations: (tempEvaluations[0] ? tempEvaluations : []),
             ready: (tempEvaluations[0] ? "true" : "false")
         });
     }

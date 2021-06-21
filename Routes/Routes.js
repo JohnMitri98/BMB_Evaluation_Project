@@ -31,7 +31,7 @@ async function checkLogin(Username, Password) {
     try {
         let roleID = null;
         const request = pool.request();
-        var result = await request.query(`select * from dbo.Users where Username_Email = \'${Username}\'`);
+        var result = await request.query(`select * from dbo.Users where Username_Email = \'${Username}\';`);
         if(result.recordset[0]) {
             tempCorrect = (result.recordset[0].Password == Password) + "";
             tempUser = result.recordset[0].First_Name + " " + result.recordset[0].Last_Name;
@@ -39,7 +39,7 @@ async function checkLogin(Username, Password) {
             roleID = result.recordset[0].Roles_ID;
         }
         if(roleID) {
-            result = await request.query(`select * from dbo.Roles where ID = \'${roleID}\'`);
+            result = await request.query(`select * from dbo.Roles where ID = \'${roleID}\';`);
             if(result.recordset[0]) {
                 roles = {
                     Name: result.recordset[0].Name,
@@ -64,14 +64,13 @@ async function checkLogin(Username, Password) {
 }
 
 async function getEvaluationsDone(Evaluator) {
-    
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
     let tempResult = [];
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID;`);
         result.recordset.forEach(result => tempResult.push(result));
     } catch(err) {
         console.error('SQL error', err);
@@ -81,7 +80,6 @@ async function getEvaluationsDone(Evaluator) {
         Evaluations: tempResult
     };
     return JSON.stringify(tempObj);
-
 }
 
 async function insertEvaluationDetail(Detail) {
@@ -90,11 +88,30 @@ async function insertEvaluationDetail(Detail) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Evaluation_Details (Evaluation_ID, Supervisor_ID, Status, Type, Severity, Description, Link) values (${parseInt(Detail.EvaluationID)}, ${parseInt(Detail.SupervisorID)}, '${Detail.Status}', '${Detail.Type}', ${parseInt(Detail.Severity)}, '${Detail.Description}', '${Detail.Link}')`);
+        await request.query(`Insert into dbo.Evaluation_Details (Evaluation_ID, Supervisor_ID, Status, Type, Severity, Description, Link) values (${parseInt(Detail.EvaluationID)}, ${parseInt(Detail.SupervisorID)}, '${Detail.Status}', '${Detail.Type}', ${parseInt(Detail.Severity)}, '${Detail.Description}', '${Detail.Link}');`);
     } catch(err) {
         console.error('SQL error', err);
     }
     pool.close();
+}
+
+async function getDetails(EvaluationID) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select u.First_Name, u.Last_Name, ed.* from dbo.Evaluation_Details ed, dbo.Users u where ed.Evaluation_ID = ${EvaluationID} AND ed.Supervisor_ID = u.ID;`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Details: tempResult
+    };
+    return JSON.stringify(tempObj);
 }
 
 router.get('/', function(req, res) {
@@ -102,18 +119,24 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:method-:param1-:param2', async function(req, res) {
-    if(req.params.method = "checkLogin") {
+    if(req.params.method === "checkLogin") {
         res.send(await checkLogin(req.params.param1, req.params.param2));
     }
 });
-router.get('/:method-:Evaluator', async function(req, res) {
-    if(req.params.method = "getEvaluationsDone") {
-        res.send(await getEvaluationsDone(req.params.Evaluator));
+router.get('/:method-:searchID', async function(req, res) {
+    switch(req.params.method) {
+        case "getDetails":
+            res.send(await getDetails(req.params.searchID));
+            break;
+        case "getEvaluationsDone":
+            res.send(await getEvaluationsDone(req.params.searchID));
+            break;
     }
 });
 router.post('/:method', jsonParser, async function(req, res) {
-    if(req.params.method = "insertEvaluationDetail") {
+    if(req.params.method === "insertEvaluationDetail") {
         await insertEvaluationDetail(req.body.Detail);
+        res.send("Done");
     }
 });
 
