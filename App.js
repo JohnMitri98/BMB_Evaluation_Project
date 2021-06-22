@@ -84,9 +84,6 @@ export default class App extends React.Component {
           <div style = {divStyle}>
             <Switch>
               {this.state.redirect}
-              {/*<Route path="/turtles">
-                <ILikeTurtles loggedIn = {this.state.loggedIn} likesTurtles = {this.state.roles.Evaluation_View} />
-              </Route>*/}
               <Route exact path="/UserView">
                 <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} history = {history} />
               </Route>
@@ -171,7 +168,6 @@ export default class App extends React.Component {
     await this.setState({
       redirect: null
     })
-    //return toReturn;
   }
 
   setEvaluationIdForDetails(ID) {
@@ -193,16 +189,5 @@ export default class App extends React.Component {
   }
 
 }
-
-/*function ILikeTurtles(props) {
-  if((props.loggedIn + "") === "false") {
-    return (<Redirect to = "../" />);
-  }
-  return (
-    <div style = {{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-      <h1>I like turtles: {props.likesTurtles + ""}</h1>
-    </div>
-  );
-}*/
 
 ReactDOM.render(<App />, document.getElementById('root'))
