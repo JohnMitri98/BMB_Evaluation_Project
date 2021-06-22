@@ -19,13 +19,13 @@ export default class LoginForm extends React.Component {
                 <div style = {this.props.style}>
                     <div>
                         <label>
-                            Username
+                            Username:
                             <input type = "text" value = {this.state.Username} onChange = {this.handleUsernameChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Password
+                            Password:
                             <input type = "password" value = {this.state.Password} onChange = {this.handlePasswordChange}/>
                         </label>
                     </div>
