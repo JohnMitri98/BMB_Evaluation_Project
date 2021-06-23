@@ -100,7 +100,7 @@ export default class App extends React.Component {
                 <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
               <Route exact path="/UserView/Performance">
-                <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
+                <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} UserID = {this.state.UserID} history = {history} />
               </Route>
               <Route exact path="/UserView/Details">
                 <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluationID = {this.state.EvaluationID} history = {history} />

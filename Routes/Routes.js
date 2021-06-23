@@ -114,6 +114,36 @@ async function getDetails(EvaluationID) {
     return JSON.stringify(tempObj);
 }
 
+async function getMyPerformance(UserID) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempTotalEvaluations = [];
+    let tempPreviousEvaluation = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select * from dbo.Evaluations where Evaluated_ID = ${UserID};`);
+        result.recordset.forEach(result => tempTotalEvaluations.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    try {
+        const request = pool.request();
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluated_ID = ${UserID} AND e.Sprint_ID = (Select MAX(Sprint_ID) from dbo.Evaluations) AND u.ID = e.Evaluator_ID;`);
+        result.recordset.forEach(result => tempPreviousEvaluation.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Evaluations: {
+            TotalEvaluations: tempTotalEvaluations,
+            PreviousEvaluation: tempPreviousEvaluation
+        }
+    };
+    return JSON.stringify(tempObj);
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -131,12 +161,17 @@ router.get('/:method-:searchID', async function(req, res) {
         case "getEvaluationsDone":
             res.send(await getEvaluationsDone(req.params.searchID));
             break;
+        case "getMyPerformance": 
+            res.send(await getMyPerformance(req.params.searchID));
+            break;
     }
 });
 router.post('/:method', jsonParser, async function(req, res) {
-    if(req.params.method === "insertEvaluationDetail") {
-        await insertEvaluationDetail(req.body.Detail);
-        res.send("Done");
+    switch(req.params.method) {
+        case "insertEvaluationDetail":
+            await insertEvaluationDetail(req.body.Detail);
+            res.send("Done");
+            break;
     }
 });
 
