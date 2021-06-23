@@ -93,9 +93,9 @@ export default class App extends React.Component {
               <Route exact path="/UserView/Evaluations">
                 <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} EvaluatorName = {this.state.User + ""} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
-              <Route exact path="/UserView/MyProfile">
+              {/*<Route exact path="/UserView/MyProfile">
                 <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
-              </Route>
+              </Route>*/}
               <Route exact path="/UserView/MyEvaluations">
                 <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>

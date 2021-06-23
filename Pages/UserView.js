@@ -35,9 +35,9 @@ export default class UserView extends React.Component {
                         Details
                     </button>
                 */}
-                <button onClick = {() => this.redirectView("/MyProfile")}>
+                {/*<button onClick = {() => this.redirectView("/MyProfile")}>
                     My Profile
-                </button>
+                </button>*/}
                 <button onClick = {() => this.redirectView("/MyEvaluations")}>
                     My Evaluations
                 </button>
