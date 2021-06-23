@@ -101,7 +101,7 @@ export default class PerformanceTable extends React.Component {
             totalEvaluations.TotalNBPRS += parseInt(Nb_PR_Severe);
             totalEvaluations.TotalNBPRA += parseInt(Nb_PR_Abandoned);
         });
-        let Grade = ((totalEvaluations.TotalNBPRR / totalEvaluations.TotalNBPR * 100) + (totalEvaluations.TotalNBPRS * ss) + (totalEvaluations.TotalNBPRA * sa) - (totalEvaluations.TotalNBPR * st));
+        let Grade = Math.floor(((totalEvaluations.TotalNBPRR / totalEvaluations.TotalNBPR * 100) + (totalEvaluations.TotalNBPRS * ss) + (totalEvaluations.TotalNBPRA * sa) - (totalEvaluations.TotalNBPR * st)) * 100) / 100;
         return (
             <tr>
                 <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBFT}</td>
@@ -129,9 +129,9 @@ export default class PerformanceTable extends React.Component {
                 Nb_PR,
                 Nb_PR_Rejected,
                 Nb_PR_Severe,
-                Nb_PR_Abandoned
+                Nb_PR_Abandoned,
+                Grade
             } = Evaluation;
-            let Grade = ((Nb_PR_Rejected / Nb_PR * 100) + (Nb_PR_Severe * ss) + (Nb_PR_Abandoned * sa) - (Nb_PR * st));
             return (
                 <tr key = {index}>
                     <td id = "Name" style = {{textAlign: "center"}}>{First_Name + " " + Last_Name}</td>
