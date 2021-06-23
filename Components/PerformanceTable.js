@@ -1,4 +1,5 @@
 import React from 'react';
+import "../Styles/Table.css";
 
 
 let ss = 1;
@@ -20,19 +21,23 @@ export default class PerformanceTable extends React.Component {
         return(
             <div style = {this.props.style}>
                 <h1>Total Performance: </h1>
-                <table>
-                    <tbody>
-                        {this.renderTotalTableHeader()}
-                        {this.renderTotalTableData()}
-                    </tbody>
-                </table>
+                <div class = "table-wrapper">
+                    <table class = "fl-table">
+                        <tbody>
+                            {this.renderTotalTableHeader()}
+                            {this.renderTotalTableData()}
+                        </tbody>
+                    </table>
+                </div>
                 <h1>Performance in Last Evaluation: </h1>
-                <table>
-                    <tbody>
-                        {this.renderPreviousTableHeader()}
-                        {this.renderPreviousTableData()}
-                    </tbody>
-                </table>
+                <div class = "table-wrapper">
+                    <table class = "fl-table">
+                        <tbody>
+                            {this.renderPreviousTableHeader()}
+                            {this.renderPreviousTableData()}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
@@ -40,15 +45,15 @@ export default class PerformanceTable extends React.Component {
     renderTotalTableHeader() {
         return (
             <tr>
-                <th style = {{textAlign: "center"}}># FT</th>
-                <th style = {{textAlign: "center"}}># FC</th>
-                <th style = {{textAlign: "center"}}># BT</th>
-                <th style = {{textAlign: "center"}}># BC</th>
-                <th style = {{textAlign: "center"}}># PR</th>
-                <th style = {{textAlign: "center"}}># PRR</th>
-                <th style = {{textAlign: "center"}}># PRS</th>
-                <th style = {{textAlign: "center"}}># PRA</th>
-                <th style = {{textAlign: "center"}}>Grade</th>
+                <th># FT</th>
+                <th># FC</th>
+                <th># BT</th>
+                <th># BC</th>
+                <th># PR</th>
+                <th># PRR</th>
+                <th># PRS</th>
+                <th># PRA</th>
+                <th>Grade</th>
             </tr>
         );
     }
@@ -56,17 +61,17 @@ export default class PerformanceTable extends React.Component {
     renderPreviousTableHeader() {
         return (
             <tr>
-                <th style = {{textAlign: "center"}}>Evaluator</th>
-                <th style = {{textAlign: "center"}}>Sprint ID</th>
-                <th style = {{textAlign: "center"}}># FT</th>
-                <th style = {{textAlign: "center"}}># FC</th>
-                <th style = {{textAlign: "center"}}># BT</th>
-                <th style = {{textAlign: "center"}}># BC</th>
-                <th style = {{textAlign: "center"}}># PR</th>
-                <th style = {{textAlign: "center"}}># PRR</th>
-                <th style = {{textAlign: "center"}}># PRS</th>
-                <th style = {{textAlign: "center"}}># PRA</th>
-                <th style = {{textAlign: "center"}}>Grade</th>
+                <th>Evaluator</th>
+                <th>Sprint ID</th>
+                <th># FT</th>
+                <th># FC</th>
+                <th># BT</th>
+                <th># BC</th>
+                <th># PR</th>
+                <th># PRR</th>
+                <th># PRS</th>
+                <th># PRA</th>
+                <th>Grade</th>
             </tr>
         );
     }
@@ -105,15 +110,15 @@ export default class PerformanceTable extends React.Component {
         let Grade = Math.floor(((totalEvaluations.TotalNBPRR / totalEvaluations.TotalNBPR * 100) + (totalEvaluations.TotalNBPRS * ss) + (totalEvaluations.TotalNBPRA * sa) - (totalEvaluations.TotalNBPR * st)) * 100) / 100;
         return (
             <tr>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBFT}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBFC}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBBT}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBBC}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBPR}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBPRR}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBPRS}</td>
-                <td style = {{textAlign: "center"}}>{totalEvaluations.TotalNBPRA}</td>
-                <td style = {{textAlign: "center"}}>{Grade}</td>
+                <td>{totalEvaluations.TotalNBFT}</td>
+                <td>{totalEvaluations.TotalNBFC}</td>
+                <td>{totalEvaluations.TotalNBBT}</td>
+                <td>{totalEvaluations.TotalNBBC}</td>
+                <td>{totalEvaluations.TotalNBPR}</td>
+                <td>{totalEvaluations.TotalNBPRR}</td>
+                <td>{totalEvaluations.TotalNBPRS}</td>
+                <td>{totalEvaluations.TotalNBPRA}</td>
+                <td>{Grade}</td>
             </tr>
         );
     }
@@ -135,17 +140,17 @@ export default class PerformanceTable extends React.Component {
             } = Evaluation;
             return (
                 <tr key = {index}>
-                    <td id = "Name" style = {{textAlign: "center"}}>{First_Name + " " + Last_Name}</td>
-                    <td style = {{textAlign: "center"}}>{Sprint_ID}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_Features_Taken}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_Features_Completed}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_Bugs_Taken}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_Bugs_Completed}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_PR}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_PR_Rejected}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_PR_Severe}</td>
-                    <td style = {{textAlign: "center"}}>{Nb_PR_Abandoned}</td>
-                    <td style = {{textAlign: "center"}}>{Grade}</td>
+                    <td id = "Name">{First_Name + " " + Last_Name}</td>
+                    <td>{Sprint_ID}</td>
+                    <td>{Nb_Features_Taken}</td>
+                    <td>{Nb_Features_Completed}</td>
+                    <td>{Nb_Bugs_Taken}</td>
+                    <td>{Nb_Bugs_Completed}</td>
+                    <td>{Nb_PR}</td>
+                    <td>{Nb_PR_Rejected}</td>
+                    <td>{Nb_PR_Severe}</td>
+                    <td>{Nb_PR_Abandoned}</td>
+                    <td>{Grade}</td>
                 </tr>
             );
         });

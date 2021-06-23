@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import '../Styles/Table.css';
 
 let ss = 1;
 let sa = 2;
@@ -23,29 +24,31 @@ export default class EvaluationsTable extends React.Component {
 
     render() {
         return(
-            <table>
-                <tbody>
-                    {this.renderTableHeader()}
-                    {this.renderTableData()}
-                </tbody>
-            </table>
+            <div class = "table-wrapper">
+                <table class = "fl-table">
+                    <tbody>
+                        {this.renderTableHeader()}
+                        {this.renderTableData()}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 
     renderTableHeader() {
         return (
             <tr>
-                <th style = {{textAlign: "center"}}>Evaluated</th>
-                <th style = {{textAlign: "center"}}>Sprint ID</th>
-                <th style = {{textAlign: "center"}}># FT</th>
-                <th style = {{textAlign: "center"}}># FC</th>
-                <th style = {{textAlign: "center"}}># BT</th>
-                <th style = {{textAlign: "center"}}># BC</th>
-                <th style = {{textAlign: "center"}}># PR</th>
-                <th style = {{textAlign: "center"}}># PRR</th>
-                <th style = {{textAlign: "center"}}># PRS</th>
-                <th style = {{textAlign: "center"}}># PRA</th>
-                <th style = {{textAlign: "center"}}>Grade</th>
+                <th>Evaluated</th>
+                <th>Sprint ID</th>
+                <th># FT</th>
+                <th># FC</th>
+                <th># BT</th>
+                <th># BC</th>
+                <th># PR</th>
+                <th># PRR</th>
+                <th># PRS</th>
+                <th># PRA</th>
+                <th>Grade</th>
             </tr>
         );
     }
@@ -68,64 +71,64 @@ export default class EvaluationsTable extends React.Component {
             } = Evaluation;
             return (
                 <tr key = {index}>
-                    <td id = "Name" style = {{textAlign: "center"}}>
+                    <td id = "Name">
                         {First_Name + " " + Last_Name}
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Sprint_ID}
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_Features_Taken}
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_Features_Completed}
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_Bugs_Taken}
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_Bugs_Completed}
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_PR}
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_PR_Rejected}
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_PR_Severe}
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Nb_PR_Abandoned}
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         {Grade}
                     </td>
-                    <td style = {{textAlign: "center"}}>
+                    <td>
                         <button onClick = {() => this.handleDetails(ID)}>
                             Details
                         </button>
