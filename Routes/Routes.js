@@ -144,15 +144,49 @@ async function getMyPerformance(UserID) {
     return JSON.stringify(tempObj);
 }
 
+async function incrementEvaluation(EvaluationID, Field) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Update dbo.Evaluations set ${Field} = (${Field} + 1) where ID = ${EvaluationID};`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
+async function changeGrade(EvaluationID, Grade, Decimal) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    console.log(`${Grade + parseInt(`0.${Decimal}`)}`);
+    try {
+        const request = pool.request();
+        await request.query(`Update dbo.Evaluations set Grade = (${Grade} + 0.${Decimal}) where ID = ${EvaluationID};`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
 
 router.get('/:method-:param1-:param2', async function(req, res) {
-    if(req.params.method === "checkLogin") {
-        res.send(await checkLogin(req.params.param1, req.params.param2));
+    switch(req.params.method) {
+        case "checkLogin": 
+            res.send(await checkLogin(req.params.param1, req.params.param2));
+            break;
+        case "incrementEvaluation":
+            await incrementEvaluation(req.params.param1, req.params.param2);
+            res.send("Done");
+            break;
     }
 });
+
 router.get('/:method-:searchID', async function(req, res) {
     switch(req.params.method) {
         case "getDetails":
@@ -170,6 +204,10 @@ router.post('/:method', jsonParser, async function(req, res) {
     switch(req.params.method) {
         case "insertEvaluationDetail":
             await insertEvaluationDetail(req.body.Detail);
+            res.send("Done");
+            break;
+        case "changeGrade": 
+            await changeGrade(req.body.Grade.ID, req.body.Grade.param1, req.body.Grade.param2);
             res.send("Done");
             break;
     }

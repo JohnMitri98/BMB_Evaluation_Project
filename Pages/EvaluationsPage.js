@@ -12,6 +12,7 @@ export default class EvaluationsPage extends React.Component {
             ready: "notYet"
         }
         this.goToDetails = this.goToDetails.bind(this);
+        this.refreshPage = this.refreshPage.bind(this);
     }
 
     render() {
@@ -20,7 +21,7 @@ export default class EvaluationsPage extends React.Component {
                 <button onClick = {this.props.history[1]}>
                     Back
                 </button>
-                {(this.state.ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} EvaluatorName = {this.props.EvaluatorName} style = {this.props.style} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} />}
+                {(this.state.ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} EvaluatorName = {this.props.EvaluatorName} style = {this.props.style} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} refreshPage = {this.refreshPage} />}
                 {(this.state.ready === "false") && <h1>No Evaluations made yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
                 <Switch>
@@ -57,6 +58,21 @@ export default class EvaluationsPage extends React.Component {
         this.props.history[0]("/UserView/Evaluations")
         this.setState({
             redirect: <Redirect to = "/UserView/Details" />
+        });
+    }
+
+    async refreshPage() {
+        let tempEvaluations = [];
+        const response = await fetch(`/API/getEvaluationsDone-${this.props.ID}`);
+        if(response) {
+            const body = await response.json();
+            if(body.Evaluations) {
+                tempEvaluations = body.Evaluations;
+            }
+        }
+        this.setState({
+            Evaluations: (tempEvaluations[0] ? tempEvaluations : []),
+            ready: (tempEvaluations[0] ? "true" : "false")
         });
     }
 
