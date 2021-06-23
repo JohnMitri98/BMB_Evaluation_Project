@@ -14,14 +14,8 @@ export default class EvaluationsTable extends React.Component {
         this.handleDetails = this.handleDetails.bind(this);
         this.calculateGrade = this.calculateGrade.bind(this);
         this.incrementDB = this.incrementDB.bind(this);
-        this.handleNBFTInc = this.handleNBFTInc.bind(this);
-        this.handleNBFCInc = this.handleNBFCInc.bind(this);
-        this.handleNBBTInc = this.handleNBBTInc.bind(this);
-        this.handleNBBCInc = this.handleNBBCInc.bind(this);
-        this.handleNBPRInc = this.handleNBPRInc.bind(this);
-        this.handleNBPRRInc = this.handleNBPRRInc.bind(this);
-        this.handleNBPRSInc = this.handleNBPRSInc.bind(this);
-        this.handleNBPRAInc = this.handleNBPRAInc.bind(this);
+        this.handleInc = this.handleInc.bind(this);
+        this.handleIncG = this.handleIncG.bind(this);
         this.state = {
             redirect: null
         };
@@ -82,49 +76,49 @@ export default class EvaluationsTable extends React.Component {
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_Features_Taken}
-                            <Link onClick={() => this.handleNBFTInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                                +
-                            </Link>
+                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            +
+                        </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_Features_Completed}
-                        <Link onClick={() => this.handleNBFCInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_Bugs_Taken}
-                        <Link onClick={() => this.handleNBBTInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_Bugs_Completed}
-                        <Link onClick={() => this.handleNBBCInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_PR}
-                        <Link onClick={() => this.handleNBPRInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_PR_Rejected}
-                        <Link onClick={() => this.handleNBPRRInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_PR_Severe}
-                        <Link onClick={() => this.handleNBPRSInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
                     <td style = {{textAlign: "center"}}>
                         {Nb_PR_Abandoned}
-                        <Link onClick={() => this.handleNBPRAInc(Evaluation)} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
                     </td>
@@ -170,52 +164,16 @@ export default class EvaluationsTable extends React.Component {
         this.props.refreshPage();
     }
 
-    async handleNBFTInc(Evaluation) {
+    async handleInc(Evaluation, Field) {
         let tempGrade = this.calculateGrade(Evaluation);
-        await this.incrementDB(Evaluation.ID, "Nb_Features_Taken", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
+        await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
     }
 
-    async handleNBFCInc(Evaluation) {
-        let tempGrade = this.calculateGrade(Evaluation);
-        await this.incrementDB(Evaluation.ID, "Nb_Features_Completed", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleNBBTInc(Evaluation) {
-        let tempGrade = this.calculateGrade(Evaluation);
-        await this.incrementDB(Evaluation.ID, "Nb_Bugs_Taken", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleNBBCInc(Evaluation) {
-        let tempGrade = this.calculateGrade(Evaluation);
-        await this.incrementDB(Evaluation.ID, "Nb_Bugs_Completed", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleNBPRInc(Evaluation) {
+    async handleIncG(Evaluation, Field) {
         let tempEval = Evaluation;
-        tempEval.Nb_PR++;
+        tempEval[Field]++;
         let tempGrade = this.calculateGrade(tempEval);
-        await this.incrementDB(Evaluation.ID, "Nb_PR", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleNBPRRInc(Evaluation) {
-        let tempEval = Evaluation;
-        tempEval.Nb_PR_Rejected++;
-        let tempGrade = this.calculateGrade(tempEval);
-        await this.incrementDB(Evaluation.ID, "Nb_PR_Rejected", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleNBPRSInc(Evaluation) {
-        let tempEval = Evaluation;
-        tempEval.Nb_PR_Severe++;
-        let tempGrade = this.calculateGrade(tempEval);
-        await this.incrementDB(Evaluation.ID, "Nb_PR_Severe", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleNBPRAInc(Evaluation) {
-        let tempEval = Evaluation;
-        tempEval.Nb_PR_Abandoned++;
-        let tempGrade = this.calculateGrade(tempEval);
-        await this.incrementDB(Evaluation.ID, "Nb_PR_Abandoned", Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
+        await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
     }
 
 }
