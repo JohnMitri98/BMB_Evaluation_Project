@@ -5,7 +5,7 @@ import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 //import AdminView from './Pages/AdminView';
 import EvaluationsPage from './Pages/EvaluationsPage';
-import ProfilePage from './Pages/ProfilePage';
+//import ProfilePage from './Pages/ProfilePage';
 import MyEvaluationsPage from './Pages/MyEvaluationsPage';
 import PerformancePage from './Pages/PerformancePage';
 import DetailsPage from './Pages/DetailsPage';
@@ -65,11 +65,22 @@ export default class App extends React.Component {
         <div>
           <nav>
             <ul>
-              {((this.state.loggedIn + "") === "true") && 
-                (<button onClick = {this.signOut}>
-                  Sign Out
-                </button>)
+              {
+                ((this.state.loggedIn + "") === "true") && 
+                  (<button onClick = {this.signOut}>
+                    Sign Out
+                  </button>)
               }
+            </ul>
+            <ul>
+              {
+                ((this.state.loggedIn + "") === "true") && 
+                (this.state.previousPageHistory[this.state.previousPageHistory.length - 1] !== "/") && 
+                  (<button onClick = {this.goBack}>
+                    Back
+                  </button>)
+              }
+            </ul>
               {/*<li>
                 <Link to="/" onClick = {this.resetLogin}>Login</Link>
               </li>
@@ -78,8 +89,8 @@ export default class App extends React.Component {
               </li>
               <li>
                 <Link to="/users">Users</Link>
-              </li>*/}
-            </ul>
+              </li>
+            </ul>*/}
           </nav>
           <div style = {divStyle}>
             <Switch>

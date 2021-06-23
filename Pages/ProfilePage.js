@@ -13,9 +13,6 @@ export default class ProfilePage extends React.Component {
     render() {
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.props.history[1]}>
-                    Back
-                </button>
                 <h1>This is My Profile Page</h1>
                 <Switch>
                     {this.state.redirect}

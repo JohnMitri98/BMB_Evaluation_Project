@@ -18,9 +18,6 @@ export default class EvaluationsPage extends React.Component {
     render() {
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.props.history[1]}>
-                    Back
-                </button>
                 {(this.state.ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} EvaluatorName = {this.props.EvaluatorName} style = {this.props.style} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} refreshPage = {this.refreshPage} />}
                 {(this.state.ready === "false") && <h1>No Evaluations made yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
