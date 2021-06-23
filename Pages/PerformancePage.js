@@ -7,7 +7,8 @@ export default class PerformancePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: null
+            redirect: null,
+            ready: "notYet"
         };
     }
 
