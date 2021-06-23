@@ -161,7 +161,6 @@ async function changeGrade(EvaluationID, Grade, Decimal) {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
     await poolConnect;
-    console.log(`${Grade + parseInt(`0.${Decimal}`)}`);
     try {
         const request = pool.request();
         await request.query(`Update dbo.Evaluations set Grade = (${Grade} + 0.${Decimal}) where ID = ${EvaluationID};`);
