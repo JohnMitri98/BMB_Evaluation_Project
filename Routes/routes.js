@@ -6,7 +6,7 @@ const sqlConfig = {
     user: 'admin',
     password: 'admin',
     database: 'project',
-    server: 'DESKTOP-2210SANA',
+    server: 'DESKTOP-2210SAN\SQLEXPRESS',
     port: 49172,
     pool: {
         max: 10,
@@ -66,9 +66,10 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:method-:param1-:param2', async function(req, res) {
-    if(req.params.method = "checkLogin") {
+    /*if(req.params.method = "checkLogin") {
         res.send(await checkLogin(req.params.param1, req.params.param2));
-    }
+    }*/
+    res.send("hello");
 });
 
 module.exports = router;

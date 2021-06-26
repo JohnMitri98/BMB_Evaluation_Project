@@ -1,7 +1,8 @@
 import React from 'react';
+import "../App.css";
 
 export default class LoginForm extends React.Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -12,25 +13,43 @@ export default class LoginForm extends React.Component {
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
+    
 
     render() {
+        
+      
+        
         return (
+            
+
             <form onSubmit={this.handleSubmit}>
-                <div style = {this.props.style}>
-                    <div>
-                        <label>
-                            Username
-                            <input type = "text" value = {this.state.Username} onChange = {this.handleUsernameChange} />
-                        </label>
+         
+      
+        
+     
+              
+                
+                    <div><center><h5 color="white" style={{ marginBottom: 0 }}>
+                        
+                           <h1> Welcome</h1>
+                        </h5></center> </div>
+                    <div><center>
+                        <label> 
+                       Username
+                            <input type = "text" value = {this.state.Username} color="lightBlue" placeholder="Enter your username"
+                                iconName="username"onChange = {this.handleUsernameChange}/>
+                        </label></center>
                     </div>
                     <div>
-                        <label>
+                      <center> <label>
                             Password
-                            <input type = "password" value = {this.state.Password} onChange = {this.handlePasswordChange}/>
-                        </label>
-                    </div>
-                    <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>
-                </div>
+                            <input type = "password"   
+                                placeholder=" Enter your password"
+                                iconName="lock"value = {this.state.Password} onChange = {this.handlePasswordChange}/>
+                        </label></center> 
+                    </div> <center>
+                    <input type = "submit" value = "Login"  onSubmit = {this.onSubmit}/></center>
+               
             </form>
         )
     }
