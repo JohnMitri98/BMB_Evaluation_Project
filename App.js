@@ -10,6 +10,7 @@ import MyEvaluationsPage from './Pages/MyEvaluationsPage';
 import PerformancePage from './Pages/PerformancePage';
 import DetailsPage from './Pages/DetailsPage';
 import DetailsEditPage from './Pages/DetailsEditPage';
+import './Styles/Test.css';
 
 const initialState = {
   correct: null,
@@ -67,7 +68,7 @@ export default class App extends React.Component {
             <ul>
               {
                 ((this.state.loggedIn + "") === "true") && 
-                  (<button onClick = {this.signOut}>
+                  (<button onClick = {this.signOut} class = 'signOut'>
                     Sign Out
                   </button>)
               }
@@ -76,7 +77,7 @@ export default class App extends React.Component {
               {
                 ((this.state.loggedIn + "") === "true") && 
                 (this.state.previousPageHistory[this.state.previousPageHistory.length - 1] !== "/") && 
-                  (<button onClick = {this.goBack}>
+                  (<button onClick = {this.goBack} class = 'signOut'>
                     Back
                   </button>)
               }

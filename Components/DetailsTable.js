@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Styles/Table.css';
+//import '../Styles/Table.css';
 
 export default class DetailsTable extends React.Component {
 
@@ -14,8 +14,10 @@ export default class DetailsTable extends React.Component {
 
     render() {
         return(
-            <div class = "table-wrapper">
-                <table class = "fl-table">
+            <div>
+            {/*<div class = "table-wrapper">*/}
+                <table>
+                {/*<table class = "fl-table">*/}
                     <tbody>
                         {this.renderTableHeader()}
                         {this.renderTableData()}

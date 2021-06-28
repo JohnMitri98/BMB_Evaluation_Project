@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import '../Styles/Table.css';
+//import '../Styles/Table.css';
 
 let ss = 1;
 let sa = 2;
@@ -24,8 +24,10 @@ export default class EvaluationsTable extends React.Component {
 
     render() {
         return(
-            <div class = "table-wrapper">
-                <table class = "fl-table">
+            <div>
+            {/*<div class = "table-wrapper">*/}
+                <table>
+                {/*<table class = "fl-table">*/}
                     <tbody>
                         {this.renderTableHeader()}
                         {this.renderTableData()}
@@ -49,6 +51,7 @@ export default class EvaluationsTable extends React.Component {
                 <th># PRS</th>
                 <th># PRA</th>
                 <th>Grade</th>
+                <th>Details</th>
             </tr>
         );
     }
@@ -71,7 +74,7 @@ export default class EvaluationsTable extends React.Component {
             } = Evaluation;
             return (
                 <tr key = {index}>
-                    <td id = "Name">
+                    <td id = "Name" style = {{fontWeight: "bold"}}>
                         {First_Name + " " + Last_Name}
                     </td>
                     <td>
@@ -129,7 +132,7 @@ export default class EvaluationsTable extends React.Component {
                         {Grade}
                     </td>
                     <td>
-                        <button onClick = {() => this.handleDetails(ID)}>
+                        <button onClick = {() => this.handleDetails(ID)} class = 'signOut'>
                             Details
                         </button>
                     </td>

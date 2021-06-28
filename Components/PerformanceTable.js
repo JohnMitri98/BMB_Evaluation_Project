@@ -1,5 +1,5 @@
 import React from 'react';
-import "../Styles/Table.css";
+//import "../Styles/Table.css";
 
 
 let ss = 1;
@@ -21,8 +21,10 @@ export default class PerformanceTable extends React.Component {
         return(
             <div style = {this.props.style}>
                 <h1>Total Performance: </h1>
-                <div class = "table-wrapper">
-                    <table class = "fl-table">
+                {/*<div class = "table-wrapper">*/}
+                <div>
+                    {/*<table class = "fl-table">*/}
+                    <table>
                         <tbody>
                             {this.renderTotalTableHeader()}
                             {this.renderTotalTableData()}
