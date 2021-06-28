@@ -95,6 +95,23 @@ async function insertEvaluationDetail(Detail) {
     pool.close();
 }
 
+async function insertEvaluation(Evaluation) {
+    let {EvaluatorID, EvaluatedID, SprintID, Nb_Features_Taken, Nb_Features_Completed, Nb_Bugs_Taken, Nb_Bugs_Completed, Nb_PR, Nb_PRR, Nb_PRS, Nb_PRA, Grade} = Evaluation;
+    const pool = new sql.ConnectionPool(sqlConfig);
+    let tempCheck = {Success: "Failed"};
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Insert into dbo.Evaluations (Evaluator_ID, Evaluated_ID, Sprint_ID, Nb_Features_Taken, Nb_Features_Completed, Nb_Bugs_Taken, Nb_Bugs_Completed, Nb_PR, Nb_PR_Rejected, Nb_PR_Severe, Nb_PR_Abandoned, Grade) values (${parseInt(EvaluatorID)}, ${parseInt(EvaluatedID)}, ${parseInt(SprintID)}, ${parseInt(Nb_Features_Taken)}, ${parseInt(Nb_Features_Completed)}, ${parseInt(Nb_Bugs_Taken)}, ${parseInt(Nb_Bugs_Completed)}, ${parseInt(Nb_PR)}, ${parseInt(Nb_PRR)}, ${parseInt(Nb_PRS)}, ${parseInt(Nb_PRA)}, ${parseFloat(Grade)});`);
+        tempCheck = {Success: "Done"};
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    return(JSON.stringify(tempCheck));
+}
+
 async function getDetails(EvaluationID) {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
@@ -170,46 +187,112 @@ async function changeGrade(EvaluationID, Grade, Decimal) {
     pool.close();
 }
 
+async function getMyEvaluations(EvaluatedID) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluated_ID = ${EvaluatedID} AND e.Evaluator_ID = u.ID;`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Evaluations: tempResult
+    };
+    return JSON.stringify(tempObj);
+}
+
+async function getSubordinates(ManagerID) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select ID, First_Name, Last_Name, Username_Email from dbo.Users where Manager = ${ManagerID};`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Subordinates: tempResult
+    };
+    return JSON.stringify(tempObj);
+}
+
+async function getSprints() {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select * from dbo.Sprints;`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Sprints: tempResult
+    };
+    return JSON.stringify(tempObj);
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
 
-router.get('/:method-:param1-:param2', async function(req, res) {
-    switch(req.params.method) {
-        case "checkLogin": 
-            res.send(await checkLogin(req.params.param1, req.params.param2));
-            break;
-        case "incrementEvaluation":
-            await incrementEvaluation(req.params.param1, req.params.param2);
-            res.send("Done");
-            break;
-    }
+router.get('/getSprints', async function(req, res) {
+    res.send(await getSprints());
 });
 
-router.get('/:method-:searchID', async function(req, res) {
-    switch(req.params.method) {
-        case "getDetails":
-            res.send(await getDetails(req.params.searchID));
-            break;
-        case "getEvaluationsDone":
-            res.send(await getEvaluationsDone(req.params.searchID));
-            break;
-        case "getMyPerformance": 
-            res.send(await getMyPerformance(req.params.searchID));
-            break;
-    }
+router.post('/inserEvaluationDetail', async function(req, res) {
+    await insertEvaluationDetail(req.body.Detail);
+    res.send("Done");
 });
-router.post('/:method', jsonParser, async function(req, res) {
-    switch(req.params.method) {
-        case "insertEvaluationDetail":
-            await insertEvaluationDetail(req.body.Detail);
-            res.send("Done");
-            break;
-        case "changeGrade": 
-            await changeGrade(req.body.Grade.ID, req.body.Grade.param1, req.body.Grade.param2);
-            res.send("Done");
-            break;
-    }
+
+router.post('/insertEvaluation', async function(req, res) {
+    res.send(await insertEvaluation(req.body.Evaluation));
+});
+
+router.post('/changeGrade', async function(req, res) {
+    await changeGrade(req.body.Grade.ID, req.body.Grade.param1, req.body.Grade.param2);
+    res.send("Done");
+});
+
+router.get('/getDetails/:evaluationID', async function(req, res) {
+    res.send(await getDetails(req.params.evaluationID));
+});
+
+router.get('/getEvaluationsDone/:evaluatorID', async function(req, res) {
+    res.send(await getEvaluationsDone(req.params.evaluatorID));
+});
+
+router.get('/getMyPerformance/:userID', async function(req, res) {
+    res.send(await getMyPerformance(req.params.userID));
+});
+
+router.get('/getMyEvaluations/:evaluatedID', async function(req, res) {
+    res.send(await getMyEvaluations(req.params.evaluatedID));
+});
+
+router.get('/getSubordinates/:managerID', async function(req, res) {
+    res.send(await getSubordinates(req.params.managerID));
+});
+
+router.get('/checkLogin/:username-:password', async function(req, res) {
+    res.send(await checkLogin(req.params.username, req.params.password));
+});
+
+router.get('/incrementEvaluation/:evaluationID-:field', async function(req, res) {
+    await incrementEvaluation(req.params.evaluationID, req.params.field);
+    res.send("Done");
 });
 
 module.exports = router;

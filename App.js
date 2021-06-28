@@ -10,6 +10,7 @@ import MyEvaluationsPage from './Pages/MyEvaluationsPage';
 import PerformancePage from './Pages/PerformancePage';
 import DetailsPage from './Pages/DetailsPage';
 import DetailsEditPage from './Pages/DetailsEditPage';
+import CreateEvaluationPage from './Pages/CreateEvaluationPage';
 import './Styles/Test.css';
 
 const initialState = {
@@ -59,7 +60,7 @@ export default class App extends React.Component {
     if((this.state.correct + "") === "false") {
       warning = <h1>Incorrect Username or Password</h1>
     }
-    let history = [this.setPreviousPage, this.goBack];
+    let history = [this.setPreviousPage, this.goBack, this.state.previousPageHistory];
 
     return (
       <Router>
@@ -103,13 +104,16 @@ export default class App extends React.Component {
                 <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>*/}
               <Route exact path="/UserView/Evaluations">
-                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} EvaluatorName = {this.state.User + ""} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
+                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
+              </Route>
+              <Route exact path="/UserView/Evaluations/CreateEvaluation">
+                <CreateEvaluationPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} history = {history} />
               </Route>
               {/*<Route exact path="/UserView/MyProfile">
                 <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>*/}
               <Route exact path="/UserView/MyEvaluations">
-                <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
+                <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
               <Route exact path="/UserView/Performance">
                 <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} UserID = {this.state.UserID} history = {history} />

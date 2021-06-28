@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
-//import EvaluationsTable from '../Components/EvaluationsTable'
+import MyEvaluationsTable from '../Components/MyEvaluationsTable'
 
 export default class MyEvaluationsPage extends React.Component {
 
@@ -8,14 +8,18 @@ export default class MyEvaluationsPage extends React.Component {
         super(props);
         this.state = {
             redirect: null,
-            Evaluations: []
+            Evaluations: [],
+            ready: "notYet"
         }
+        this.goToDetails = this.goToDetails.bind(this);
     }
 
     render() {
         return (
             <div style = {this.props.style}>
-                <h1>This is the My Evaluations Page</h1>
+                {(this.state.ready === "true") && <MyEvaluationsTable Evaluations = {this.state.Evaluations} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} />}
+                {(this.state.ready === "false") && <h1>No Evaluations yet</h1>}
+                {(this.state.ready === "notYet") && <h1>Loading</h1>}
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -23,7 +27,7 @@ export default class MyEvaluationsPage extends React.Component {
         );
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
@@ -32,11 +36,8 @@ export default class MyEvaluationsPage extends React.Component {
                 redirect: <Redirect to = "/" />
             });
         }
-    }
-
-    /*async componentDidMount() {
         let tempEvaluations = [];
-        const response = await fetch(`/API/getEvaluationsDone-${this.props.ID}`);
+        const response = await fetch(`/API/getMyEvaluations/${this.props.ID}`);
         if(response) {
             const body = await response.json();
             if(body.Evaluations) {
@@ -44,8 +45,16 @@ export default class MyEvaluationsPage extends React.Component {
             }
         }
         this.setState({
-            Evaluations: tempEvaluations
+            Evaluations: (tempEvaluations[0] ? tempEvaluations : []),
+            ready: (tempEvaluations[0] ? "true" : "false")
         });
-    }*/
+    }
+    
+    goToDetails() {
+        this.props.history[0]("/UserView/MyEvaluations")
+        this.setState({
+            redirect: <Redirect to = "/UserView/Details" />
+        });
+    }
 
 }

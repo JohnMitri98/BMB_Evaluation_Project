@@ -12,7 +12,8 @@ export default class DetailsCreationForm extends React.Component {
                 Type: "",
                 Severity: "",
                 Description: "",
-                Link: ""
+                Link: "",
+                formClass: null
             }
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,7 +27,7 @@ export default class DetailsCreationForm extends React.Component {
     render() {
         let {Severity, Description, Link} = this.state.Detail;
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} class = {this.state.formClass}>
                 <div style = {this.props.style}>
                     <div>
                         <label>
@@ -124,7 +125,10 @@ export default class DetailsCreationForm extends React.Component {
             Description: Description,
             Link: Link
         }
-        this.setState({Detail: tempDetail});
+        this.setState({
+            Detail: tempDetail,
+            formClass: (event.target.value === "Accepted" ? "None" : "largerDetails")
+        });
     }
 
     handleTypeChange(event) {

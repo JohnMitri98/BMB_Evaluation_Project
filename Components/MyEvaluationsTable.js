@@ -1,12 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 //import '../Styles/Table.css';
 
 let ss = 1;
 let sa = 2;
 let st = 0.2;
 
-export default class EvaluationsTable extends React.Component {
+export default class MyEvaluationsTable extends React.Component {
 
     constructor(props) {
         super(props);
@@ -14,9 +13,6 @@ export default class EvaluationsTable extends React.Component {
         this.renderTableData = this.renderTableData.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.calculateGrade = this.calculateGrade.bind(this);
-        this.incrementDB = this.incrementDB.bind(this);
-        this.handleInc = this.handleInc.bind(this);
-        this.handleIncG = this.handleIncG.bind(this);
         this.state = {
             redirect: null
         };
@@ -40,7 +36,7 @@ export default class EvaluationsTable extends React.Component {
     renderTableHeader() {
         return (
             <tr>
-                <th>Evaluated</th>
+                <th>Evaluator</th>
                 <th>Sprint ID</th>
                 <th># FT</th>
                 <th># FC</th>
@@ -82,51 +78,27 @@ export default class EvaluationsTable extends React.Component {
                     </td>
                     <td>
                         {Nb_Features_Taken}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_Features_Completed}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_Bugs_Taken}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_Bugs_Completed}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_PR}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_PR_Rejected}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_PR_Severe}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Nb_PR_Abandoned}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
                     </td>
                     <td>
                         {Grade}
@@ -148,38 +120,6 @@ export default class EvaluationsTable extends React.Component {
 
     calculateGrade(Evaluation) {
         return ((Evaluation.Nb_PR_Rejected / Evaluation.Nb_PR * 100) + (Evaluation.Nb_PR_Severe * ss) + (Evaluation.Nb_PR_Abandoned * sa) - (Evaluation.Nb_PR * st));
-    }
-    
-    async incrementDB(ID, Field, Grade, Decimal) {
-        await fetch(`/API/incrementEvaluation/${ID}-${Field}`);
-        let tempObj = await {
-            Grade: {
-                ID: ID,
-                param1: Grade,
-                param2: Decimal
-            }
-        };
-        await fetch(`/API/changeGrade`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tempObj)
-        });
-        this.setState({});
-        this.props.refreshPage();
-    }
-
-    async handleInc(Evaluation, Field) {
-        let tempGrade = this.calculateGrade(Evaluation);
-        await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
-
-    async handleIncG(Evaluation, Field) {
-        let tempEval = Evaluation;
-        tempEval[Field]++;
-        let tempGrade = this.calculateGrade(tempEval);
-        await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
     }
 
 }

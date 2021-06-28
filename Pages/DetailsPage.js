@@ -20,9 +20,11 @@ export default class DetailsPage extends React.Component {
                 {(this.state.ready === "true") && <DetailsTable Details = {this.state.Details} style = {this.props.style} />}
                 {(this.state.ready === "false") && <h1>No Details Listed</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
-                <button onClick = {this.goToDetails} class = 'addDetail'>
-                    Add Detail
-                </button>
+                {(this.props.history[2][this.props.history.length - 1] === "/UserView/Evaluations") &&
+                    <button onClick = {this.goToDetails} class = 'addDetail'>
+                        Add Detail
+                    </button>
+                }
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -47,7 +49,7 @@ export default class DetailsPage extends React.Component {
             });
         }
         let tempDetails = [];
-        const response = await fetch(`/API/getDetails-${this.props.EvaluationID}`);
+        const response = await fetch(`/API/getDetails/${this.props.EvaluationID}`);
         if(response) {
             const body = await response.json();
             if(body.Details) {

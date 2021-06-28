@@ -5,10 +5,10 @@ var APIRouter = require('./Routes/Routes');
 const port = process.env.PORT || 5000;
 app.set('port', port);
 
-app.use("/API", APIRouter)
-
 app.use(express.json());
 
 app.use(express.urlencoded({extended:false}));
+
+app.use("/API", APIRouter)
 
 app.listen(port, () => console.log(`Listening on Port ${port}`));
