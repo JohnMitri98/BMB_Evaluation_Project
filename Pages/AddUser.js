@@ -4,7 +4,8 @@ export default class AddUser extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+
+        this.state = { 
             First_Name: "",
             Last_Name: "",
             Username_Email:"",
@@ -23,7 +24,22 @@ export default class AddUser extends React.Component {
         this.handlePositionChange = this.handlePositionChange.bind(this);
         this.handleRoles_IdChange = this.handleRoles_IdChange.bind(this);
     }
-
+saveTables() {
+ const { state, dispatch, tables } = this.props;
+ this.state.tables.map((table) => {
+  const data ={
+    First_Name: users.First_Name,
+    Last_Name: table.Last_Name,
+    Username_Email: table.Username_Email,
+    Password: users.Password,
+    Manager: users.Manager,
+    Speciality: users.Speciality,
+    Position: users.Position,
+    Roles_Id: users.Roles_Id
+  }
+  dispatch(Actions.save(this.props.tables.channel, data));
+ })
+}
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
@@ -79,7 +95,7 @@ export default class AddUser extends React.Component {
                     <div>
        
 
-                         <button onClick={connection.query}>Add </button>
+                         <button onClick={this.saveTables}>Add </button>
                         <div> {addNew} </div>
                           </div>
                 </div>

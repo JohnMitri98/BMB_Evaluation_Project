@@ -20,9 +20,6 @@ export default class DetailsEditPage extends React.Component {
         }
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.props.history[1]}>
-                    Back
-                </button>
                 <h1>This is the Details Edit Page</h1>
                 <DetailsCreationForm style = {this.props.style} onSubmit = {this.handleSubmit} EvaluatorID = {this.props.EvaluatorID} EvaluationID = {this.props.EvaluationID} />
                 {warning && 
@@ -40,7 +37,7 @@ export default class DetailsEditPage extends React.Component {
             this.setState({
                 Correct: "true"
             });
-            this.goBack();
+            this.props.history[1]();
         } else {
             this.setState({
                 Correct: "false"
@@ -52,8 +49,7 @@ export default class DetailsEditPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Details");
-            this.props.history[0]("/UserView/Details/DetailsEdit");
+            this.props.history[0]("/UserView/Evaluations");
             this.setState({
                 redirect: <Redirect to = "/" />
             });
