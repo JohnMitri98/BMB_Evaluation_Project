@@ -49,8 +49,13 @@ export default class LoginForm extends React.Component {
                         </label></center> 
                     </div> <center>
                     <input type = "submit" value = "Login"  onSubmit = {this.onSubmit}/></center>
-               
+                    <div class="topnav" id="myTopnav">
+  <a href="#home" class="active">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a></div>
             </form>
+            
         )
     }
 

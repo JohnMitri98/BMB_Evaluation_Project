@@ -24,22 +24,7 @@ export default class AddUser extends React.Component {
         this.handlePositionChange = this.handlePositionChange.bind(this);
         this.handleRoles_IdChange = this.handleRoles_IdChange.bind(this);
     }
-saveTables() {
- const { state, dispatch, tables } = this.props;
- this.state.tables.map((table) => {
-  const data ={
-    First_Name: users.First_Name,
-    Last_Name: table.Last_Name,
-    Username_Email: table.Username_Email,
-    Password: users.Password,
-    Manager: users.Manager,
-    Speciality: users.Speciality,
-    Position: users.Position,
-    Roles_Id: users.Roles_Id
-  }
-  dispatch(Actions.save(this.props.tables.channel, data));
- })
-}
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
@@ -95,12 +80,167 @@ saveTables() {
                     <div>
        
 
-                         <button onClick={this.saveTables}>Add </button>
-                        <div> {addNew} </div>
+                         <button onClick={this.onSubmit}>Add </button>
+                       
                           </div>
                 </div>
 
             </form>
         )
-    }}
+    }
+    async handleSubmit(e) {
+        e.preventDefault();
+        let {First_Name, Last_Name,Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        if(First_Name === "") {
+            First_Name = "None";this.props.onSubmit(false);
+        }
+        if(Last_Name === "") {
+            Last_Name = "None";this.props.onSubmit(false);
+        }
+        if(Username_Email === "") {
+            Username_Email= "None";this.props.onSubmit(false);
+        }
+        if(Password === "") {
+            Password= "None";this.props.onSubmit(false);
+        } if(Manager === "") {
+            Manager= "None";this.props.onSubmit(false);
+        } if(Speciality=== "") {
+            Speciality= "None";this.props.onSubmit(false);
+        }
+        if(Position === "") {
+            Position= "None";this.props.onSubmit(false);
+        } if(Roles_Id === "") {
+            Roles_Id= "None";
+        this.props.onSubmit(false);
+        }
+            
+         else {
+            let tempObj = {
+                User: {
+                    First_Name: First_Name,
+                    Last_Name: Last_Name,
+                    Username_Email: Username_Email,
+                    Password: Password,
+                    Manager: Manager,
+                    Speciality: Speciality,
+                    Position: Position,
+                    Roles_Id: Roles_Id
+                }
+            };
+            await fetch('/API/insertUser', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tempObj)
+            });
+            this.props.onSubmit(true);
+        }
+    };
+
+    handleFirt_NameChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+
+    handleLast_NameChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+
+    handleUsername_EmailChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+
+    handlePasswordChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+
+    handleSpecialityChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+    handlePositionChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+    handleRoles_IdChange(event) {
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let tempUser = {
+         First_Name: First_Name,
+            Last_Name: Last_Name,
+            Username_Email: Username_Email,
+            Password:Password,
+            Manager: Manager,
+            Speciality:Speciality,
+            Position: Position,
+            Roles_Id: Roles_Id
+        }
+        this.setState({User: tempUser});
+    }
+
+
+}
   

@@ -30,14 +30,7 @@ export default class UserView extends React.Component {
                         Evaluations
                     </button>
                 }
-                {/*((this.props.permissions.Details_View + "") === "true") && 
-                    <button onClick = {() => this.redirectView("/Details")}>
-                        Details
-                    </button>
-                */}
-                {/*<button onClick = {() => this.redirectView("/MyProfile")}>
-                    My Profile
-                </button>*/}
+               
                 <button onClick = {() => this.redirectView("/MyEvaluations")}>
                     My Evaluations
                 </button>
