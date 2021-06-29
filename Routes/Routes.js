@@ -266,6 +266,38 @@ async function getSprints() {
     return JSON.stringify(tempObj);
 }
 
+async function insertUser(User) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Insert into dbo.Users (First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Position, Roles_Id) values ('${User.First_Name}', '${User.Last_Name}', ${User.Username_Email ? `${User.Username_Email}` : null}, ${User.Password ? `${User.Password}` : null}, ${User.Manager ? parseInt(User.Manager) : null}, ${User.Specialty ? `${User.Specialty}` : null}, ${User.Position ? `${User.Position}` : null}, ${User.Roles_ID ? parseInt(User.Roles_ID) : null});`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
+async function getUsers() {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select * from dbo.Users;`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Users: tempResult
+    };
+    return JSON.stringify(tempObj);
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -320,6 +352,15 @@ router.get('/incrementEvaluation/:evaluationID-:field', async function(req, res)
 router.get('/decrementEvaluation/:evaluationID-:field', async function(req, res) {
     await decrementEvaluation(req.params.evaluationID, req.params.field);
     res.send("Done");
+});
+
+router.post('/insertUser', async function(req, res) {
+    await insertUser(req.body.User);
+    res.send("Done");
+});
+
+router.get('/getUsers', async function(req, res) {
+    res.send(await getUsers());
 });
 
 module.exports = router;

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
+import UsersPage from './Pages/UsersPage';
+import CreateUserPage from './Pages/CreateUserPage';
 //import AdminView from './Pages/AdminView';
 import EvaluationsPage from './Pages/EvaluationsPage';
 import ProfilePage from './Pages/ProfilePage';
@@ -85,6 +87,11 @@ export default class App extends React.Component {
                     Home
                   </button>
                 }
+                {(this.state.CurrentPage !== "/UserView/Users") && 
+                  <button onClick = {() => this.redirectView("/UserView/Users")} class = "signOut">
+                    Users
+                  </button>
+                }
                 {(this.state.CurrentPage !== "/UserView/Sprints") &&
                   <button onClick = {() => this.redirectView("/UserView/Sprints")} class = "signOut">
                     Sprints
@@ -121,37 +128,43 @@ export default class App extends React.Component {
           <div style = {divStyle}>
             <Switch>
               {this.state.redirect}
-              <Route exact path="/UserView">
+              <Route exact path = "/UserView">
                 <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} history = {history} />
               </Route>
               {/*<Route exact path="/AdminView">
                 <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>*/}
-              <Route exact path="/UserView/Evaluations">
+              <Route exact path = "/UserView/Users">
+                <UsersPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
+              </Route>
+              <Route exact path = "/UserView/Users/CreateUser">
+                <CreateUserPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
+              </Route>
+              <Route exact path = "/UserView/Evaluations">
                 <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} role = {this.state.roles.Name} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
-              <Route exact path="/UserView/Evaluations/CreateEvaluation">
+              <Route exact path = "/UserView/Evaluations/CreateEvaluation">
                 <CreateEvaluationPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} role = {this.state.roles.Name} history = {history} />
               </Route>
-              <Route exact path="/UserView/MyProfile">
+              <Route exact path = "/UserView/MyProfile">
                 <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
-              <Route exact path="/UserView/MyEvaluations">
+              <Route exact path = "/UserView/MyEvaluations">
                 <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
-              <Route exact path="/UserView/Performance">
+              <Route exact path = "/UserView/Performance">
                 <PerformancePage style = {divStyle} loggedIn = {this.state.loggedIn} UserID = {this.state.UserID} history = {history} />
               </Route>
-              <Route exact path="/UserView/Details">
+              <Route exact path = "/UserView/Details">
                 <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluationID = {this.state.EvaluationID} history = {history} />
               </Route>
-              <Route exact path="/UserView/Details/CreateDetails">
+              <Route exact path = "/UserView/Details/CreateDetails">
                 <CreateDetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} EvaluationID = {this.state.EvaluationID} history = {history} />
               </Route>
-              <Route exact path="/UserView/Sprints">
+              <Route exact path = "/UserView/Sprints">
                 <SprintsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
-              <Route exact path="/">
+              <Route exact path = "/">
                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} history = {history} />
                 {warning}
               </Route>

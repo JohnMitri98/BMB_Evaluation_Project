@@ -158,17 +158,6 @@ export default class DetailsCreationForm extends React.Component {
                 Link: Link
             }
             this.setState({Detail: tempDetail});
-        } else {
-            let tempDetail = {
-                EvaluationID: EvaluationID,
-                SupervisorID: SupervisorID,
-                Status: Status,
-                Type: Type,
-                Severity: Severity,
-                Description: Description,
-                Link: Link
-            }
-            this.setState({Detail: tempDetail});
         }
     }
 
