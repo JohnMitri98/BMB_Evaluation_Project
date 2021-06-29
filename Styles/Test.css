@@ -80,7 +80,7 @@ button {
     width: 200px;
 	margin-bottom: 10px;
 	border: none;
-	background: #f2f2f2;
+	background: #fff5f5;
 	padding: 0px;
 	font-size: 18px;
     position: relative;
@@ -114,6 +114,10 @@ th, td {
     text-align: center;
     border-right: 1px solid black;
     border-bottom: 1px solid black;
+}
+
+th {
+    background: #bbb9b9;
 }
 
 th:last-child, td:last-child { 

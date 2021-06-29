@@ -174,6 +174,19 @@ async function incrementEvaluation(EvaluationID, Field) {
     pool.close();
 }
 
+async function decrementEvaluation(EvaluationID, Field) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Update dbo.Evaluations set ${Field} = (${Field} - 1) where ID = ${EvaluationID};`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 async function changeGrade(EvaluationID, Grade, Decimal) {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
@@ -292,6 +305,11 @@ router.get('/checkLogin/:username-:password', async function(req, res) {
 
 router.get('/incrementEvaluation/:evaluationID-:field', async function(req, res) {
     await incrementEvaluation(req.params.evaluationID, req.params.field);
+    res.send("Done");
+});
+
+router.get('/decrementEvaluation/:evaluationID-:field', async function(req, res) {
+    await decrementEvaluation(req.params.evaluationID, req.params.field);
     res.send("Done");
 });
 

@@ -17,6 +17,9 @@ export default class EvaluationsTable extends React.Component {
         this.incrementDB = this.incrementDB.bind(this);
         this.handleInc = this.handleInc.bind(this);
         this.handleIncG = this.handleIncG.bind(this);
+        this.decrementDB = this.decrementDB.bind(this);
+        this.handleDec = this.handleDec.bind(this);
+        this.handleDecG = this.handleDecG.bind(this);
         this.state = {
             redirect: null
         };
@@ -51,7 +54,7 @@ export default class EvaluationsTable extends React.Component {
                 <th># PRS</th>
                 <th># PRA</th>
                 <th>Grade</th>
-                <th>Details</th>
+                <th></th>
             </tr>
         );
     }
@@ -85,11 +88,17 @@ export default class EvaluationsTable extends React.Component {
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
+                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
+                        </Link>
                     </td>
                     <td>
                         {Nb_Features_Completed}
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
+                        </Link>
+                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
                         </Link>
                     </td>
                     <td>
@@ -97,11 +106,17 @@ export default class EvaluationsTable extends React.Component {
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
+                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
+                        </Link>
                     </td>
                     <td>
                         {Nb_Bugs_Completed}
                         <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
+                        </Link>
+                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
                         </Link>
                     </td>
                     <td>
@@ -109,11 +124,17 @@ export default class EvaluationsTable extends React.Component {
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
+                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
+                        </Link>
                     </td>
                     <td>
                         {Nb_PR_Rejected}
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
+                        </Link>
+                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
                         </Link>
                     </td>
                     <td>
@@ -121,11 +142,17 @@ export default class EvaluationsTable extends React.Component {
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
                         </Link>
+                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
+                        </Link>
                     </td>
                     <td>
                         {Nb_PR_Abandoned}
                         <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
                             +
+                        </Link>
+                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
+                            -
                         </Link>
                     </td>
                     <td>
@@ -152,7 +179,7 @@ export default class EvaluationsTable extends React.Component {
     
     async incrementDB(ID, Field, Grade, Decimal) {
         await fetch(`/API/incrementEvaluation/${ID}-${Field}`);
-        let tempObj = await {
+        let tempObj = {
             Grade: {
                 ID: ID,
                 param1: Grade,
@@ -166,8 +193,28 @@ export default class EvaluationsTable extends React.Component {
             },
             body: JSON.stringify(tempObj)
         });
-        this.setState({});
-        this.props.refreshPage();
+        await this.setState({});
+        await this.props.refreshPage();
+    }
+
+    async decrementDB(ID, Field, Grade, Decimal) {
+        await fetch(`/API/decrementEvaluation/${ID}-${Field}`);
+        let tempObj = {
+            Grade: {
+                ID: ID,
+                param1: Grade,
+                param2: Decimal
+            }
+        };
+        await fetch(`/API/changeGrade`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
+        await this.setState({});
+        await this.props.refreshPage();
     }
 
     async handleInc(Evaluation, Field) {
@@ -175,11 +222,25 @@ export default class EvaluationsTable extends React.Component {
         await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
     }
 
+    async handleDec(Evaluation, Field) {
+        let tempGrade = this.calculateGrade(Evaluation);
+        await this.decrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
+    }
+
     async handleIncG(Evaluation, Field) {
         let tempEval = Evaluation;
         tempEval[Field]++;
         let tempGrade = this.calculateGrade(tempEval);
         await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
+    }
+
+    async handleDecG(Evaluation, Field) {
+        let tempEval = Evaluation;
+        if(tempEval[Field] > 0) {
+            tempEval[Field]--;
+            let tempGrade = this.calculateGrade(tempEval);
+            await this.decrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
+        }
     }
 
 }
