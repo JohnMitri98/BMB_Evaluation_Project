@@ -40,16 +40,17 @@ export default class EvaluationsPage extends React.Component {
                 Redirect: <Redirect to = "/" />
             });
         }
+        this.props.history[3]("/UserView/Evaluations");
         let tempEvaluations = [];
         let tempSubordinates = [];
-        var response = await fetch(`/API/getEvaluationsDone/${this.props.ID}`);
+        var response = await fetch(`/API/getEvaluationsDone/${this.props.ID}-${(this.props.role === "Admin") + ""}`);
         if(response) {
             const body = await response.json();
             if(body.Evaluations) {
                 tempEvaluations = body.Evaluations;
             }
         }
-        response = await fetch(`/API/getSubordinates/${this.props.ID}`);
+        response = await fetch(`/API/getSubordinates/${this.props.ID}-${(this.props.role === "Admin") + ""}`);
         if(response) {
             const body = await response.json();
             if(body.Subordinates) {

@@ -1,5 +1,4 @@
 import React from 'react';
-//import '../Styles/Table.css';
 
 let ss = 1;
 let sa = 2;
@@ -104,7 +103,7 @@ export default class MyEvaluationsTable extends React.Component {
                         {Grade}
                     </td>
                     <td>
-                        <button onClick = {() => this.handleDetails(ID)} class = 'signOut'>
+                        <button onClick = {() => this.handleDetails(ID)} class = 'details'>
                             Details
                         </button>
                     </td>

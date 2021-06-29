@@ -63,14 +63,19 @@ async function checkLogin(Username, Password) {
     return JSON.stringify(tempObj);
 }
 
-async function getEvaluationsDone(Evaluator) {
+async function getEvaluationsDone(Evaluator, Admin) {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
     let tempResult = [];
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID;`);
+        if(Admin === "true") {
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluated_ID = u.ID;`);
+        } else {
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID;`);
+        }
+        
         result.recordset.forEach(result => tempResult.push(result));
     } catch(err) {
         console.error('SQL error', err);
@@ -119,7 +124,7 @@ async function getDetails(EvaluationID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, ed.* from dbo.Evaluation_Details ed, dbo.Users u where ed.Evaluation_ID = ${EvaluationID} AND ed.Supervisor_ID = u.ID;`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, ed.* from dbo.Evaluation_Details ed, dbo.Users u where ed.Evaluation_ID = ${EvaluationID};`);
         result.recordset.forEach(result => tempResult.push(result));
     } catch(err) {
         console.error('SQL error', err);
@@ -219,14 +224,18 @@ async function getMyEvaluations(EvaluatedID) {
     return JSON.stringify(tempObj);
 }
 
-async function getSubordinates(ManagerID) {
+async function getSubordinates(ManagerID, Admin) {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
     let tempResult = [];
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select ID, First_Name, Last_Name, Username_Email from dbo.Users where Manager = ${ManagerID};`);
+        if(Admin === "true") {
+            var result = await request.query(`select ID, First_Name, Last_Name, Username_Email from dbo.Users;`);
+        } else {
+            var result = await request.query(`select ID, First_Name, Last_Name, Username_Email from dbo.Users where Manager = ${ManagerID};`);
+        }
         result.recordset.forEach(result => tempResult.push(result));
     } catch(err) {
         console.error('SQL error', err);
@@ -283,8 +292,8 @@ router.get('/getDetails/:evaluationID', async function(req, res) {
     res.send(await getDetails(req.params.evaluationID));
 });
 
-router.get('/getEvaluationsDone/:evaluatorID', async function(req, res) {
-    res.send(await getEvaluationsDone(req.params.evaluatorID));
+router.get('/getEvaluationsDone/:evaluatorID-:admin', async function(req, res) {
+    res.send(await getEvaluationsDone(req.params.evaluatorID, req.params.admin));
 });
 
 router.get('/getMyPerformance/:userID', async function(req, res) {
@@ -295,8 +304,8 @@ router.get('/getMyEvaluations/:evaluatedID', async function(req, res) {
     res.send(await getMyEvaluations(req.params.evaluatedID));
 });
 
-router.get('/getSubordinates/:managerID', async function(req, res) {
-    res.send(await getSubordinates(req.params.managerID));
+router.get('/getSubordinates/:managerID-:admin', async function(req, res) {
+    res.send(await getSubordinates(req.params.managerID, req.params.admin));
 });
 
 router.get('/checkLogin/:username-:password', async function(req, res) {

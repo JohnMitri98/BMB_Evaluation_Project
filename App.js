@@ -5,12 +5,13 @@ import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 //import AdminView from './Pages/AdminView';
 import EvaluationsPage from './Pages/EvaluationsPage';
-//import ProfilePage from './Pages/ProfilePage';
+import ProfilePage from './Pages/ProfilePage';
 import MyEvaluationsPage from './Pages/MyEvaluationsPage';
 import PerformancePage from './Pages/PerformancePage';
 import DetailsPage from './Pages/DetailsPage';
-import DetailsEditPage from './Pages/DetailsEditPage';
+import CreateDetailsPage from './Pages/CreateDetailsPage';
 import CreateEvaluationPage from './Pages/CreateEvaluationPage';
+import SprintsPage from './Pages/SprintsPage';
 import './Styles/Test.css';
 
 const initialState = {
@@ -26,7 +27,8 @@ const initialState = {
     User_Edit_View: null,
     User_Performance_View: null
   },
-  EvaluationID: 0
+  EvaluationID: 0,
+  CurrentPage: "/"
 };
 
 const divStyle = {
@@ -50,6 +52,7 @@ export default class App extends React.Component {
     this.setEvaluationIdForDetails = this.setEvaluationIdForDetails.bind(this);
     this.setPreviousPage = this.setPreviousPage.bind(this);
     this.goBack = this.goBack.bind(this);
+    this.setCurrentPage = this.setCurrentPage.bind(this);
   }
 
   render() {
@@ -60,40 +63,56 @@ export default class App extends React.Component {
     if((this.state.correct + "") === "false") {
       warning = <h1>Incorrect Username or Password</h1>
     }
-    let history = [this.setPreviousPage, this.goBack, this.state.previousPageHistory];
+    let history = [this.setPreviousPage, this.goBack, this.state.previousPageHistory, this.setCurrentPage];
 
     return (
       <Router>
-        <div>
-          <nav>
-            <ul>
-              {
-                ((this.state.loggedIn + "") === "true") && 
-                  (<button onClick = {this.signOut} class = 'signOut'>
-                    Sign Out
-                  </button>)
-              }
-            </ul>
-            <ul>
-              {
-                ((this.state.loggedIn + "") === "true") && 
-                (this.state.previousPageHistory[this.state.previousPageHistory.length - 1] !== "/") && 
-                  (<button onClick = {this.goBack} class = 'signOut'>
+        <div style = {divStyle}>
+          {(this.state.loggedIn + "") === "true" &&
+            <nav>
+              <div class = "navBar">
+                <button onClick = {this.signOut} class = "signOut">
+                  Sign Out
+                </button>
+                {(this.state.CurrentPage !== "/" && 
+                  this.state.CurrentPage !== "/UserView") && 
+                  <button onClick = {this.goBack} class = "signOut">
                     Back
-                  </button>)
-              }
-            </ul>
-              {/*<li>
-                <Link to="/" onClick = {this.resetLogin}>Login</Link>
-              </li>
-              <li>
-                <Link to="/turtles">Turtles</Link>
-              </li>
-              <li>
-                <Link to="/users">Users</Link>
-              </li>
-            </ul>*/}
-          </nav>
+                  </button>
+                }
+                {(this.state.CurrentPage !== "/UserView/Sprints") &&
+                  <button onClick = {() => this.redirectView("/UserView/Sprints")} class = "signOut">
+                    Sprints
+                  </button>
+                }
+                {(this.state.roles.Evaluation_View + "" === "true") && 
+                  this.state.CurrentPage !== "/UserView/Evaluations" &&
+                    <button onClick = {() => this.redirectView("/UserView/Evaluations")} class = "signOut">
+                        Evaluations
+                    </button>
+                }
+                {(this.state.CurrentPage !== "/UserView/MyEvaluations") && 
+                  <button onClick = {() => this.redirectView("/UserView/MyEvaluations")} class = "signOut">
+                    My Evaluations
+                  </button>
+                }
+                {(this.state.CurrentPage !== "/UserView/Performance") && 
+                  <button onClick = {() => this.redirectView("/Performance")} class = "signOut">
+                    My Performance
+                  </button>
+                }
+                {/*<li>
+                  <Link to="/" onClick = {this.resetLogin}>Login</Link>
+                </li>
+                <li>
+                  <Link to="/turtles">Turtles</Link>
+                </li>
+                <li>
+                  <Link to="/users">Users</Link>
+                </li>*/}
+              </div>
+            </nav>
+          }
           <div style = {divStyle}>
             <Switch>
               {this.state.redirect}
@@ -104,14 +123,14 @@ export default class App extends React.Component {
                 <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
               </Route>*/}
               <Route exact path="/UserView/Evaluations">
-                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
+                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} role = {this.state.roles.Name} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
               <Route exact path="/UserView/Evaluations/CreateEvaluation">
-                <CreateEvaluationPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} history = {history} />
+                <CreateEvaluationPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} role = {this.state.roles.Name} history = {history} />
               </Route>
-              {/*<Route exact path="/UserView/MyProfile">
+              <Route exact path="/UserView/MyProfile">
                 <ProfilePage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
-              </Route>*/}
+              </Route>
               <Route exact path="/UserView/MyEvaluations">
                 <MyEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
               </Route>
@@ -121,8 +140,11 @@ export default class App extends React.Component {
               <Route exact path="/UserView/Details">
                 <DetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluationID = {this.state.EvaluationID} history = {history} />
               </Route>
-              <Route exact path="/UserView/Details/DetailsEdit">
-                <DetailsEditPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} EvaluationID = {this.state.EvaluationID} history = {history} />
+              <Route exact path="/UserView/Details/CreateDetails">
+                <CreateDetailsPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} EvaluationID = {this.state.EvaluationID} history = {history} />
+              </Route>
+              <Route exact path="/UserView/Sprints">
+                <SprintsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
               </Route>
               <Route exact path="/">
                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} history = {history} />
@@ -135,7 +157,7 @@ export default class App extends React.Component {
     );
   }
 
-  checkLogin(Correct, Username, Roles, UserID) {
+  async checkLogin(Correct, Username, Roles, UserID) {
     if(Correct === "true") {
       this.setState({
         correct: true,
@@ -144,17 +166,18 @@ export default class App extends React.Component {
         loggedIn: true,
         roles: Roles
       });
-      let tempHistory = this.state.previousPageHistory;
       /*if((Roles.Name + "") === "Admin") {
         this.setState({
           redirect: <Redirect exact from = "/" to = "/AdminView" />
         });
       } else {*/
         if(this.state.previousPageHistory.length === 0) {
-          tempHistory.push("/");
+          this.setPreviousPage("/");
           this.setState({
-            redirect: <Redirect exact from = "/" to = "/UserView" />,
-            previousPageHistory: tempHistory
+            redirect: <Redirect to = "/UserView" />
+          });
+          this.setState({
+            redirect: null
           });
         } else {
           this.goBack();
@@ -202,6 +225,22 @@ export default class App extends React.Component {
 
   resetLogin() {
     this.setState(initialState);
+  }
+
+  async redirectView(redirection) {
+      this.setPreviousPage(this.state.CurrentPage);
+      await this.setState({
+        redirect: <Redirect exact to = {redirection} />
+      });
+      await this.setState({
+        redirect: null
+      });
+  }
+
+  setCurrentPage(page) {
+    this.setState({
+      CurrentPage: page
+    });
   }
 
 }

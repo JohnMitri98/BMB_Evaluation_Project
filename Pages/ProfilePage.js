@@ -30,6 +30,7 @@ export default class ProfilePage extends React.Component {
                 redirect: <Redirect to = "/" />
             });
         }
+        this.props.history[3]("/UserView/MyProfile");
     }
 
 }

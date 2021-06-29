@@ -58,9 +58,10 @@ export default class CreateEvaluation extends React.Component {
                 Redirect: <Redirect to = "/" />
             });
         }
+        this.props.history[3]("/UserView/Evaluations/CreateEvaluation");
         let tempSubordinates = [];
         let tempSprints = [];
-        var response = await fetch(`/API/getSubordinates/${this.props.EvaluatorID}`);
+        var response = await fetch(`/API/getSubordinates/${this.props.EvaluatorID}-${(this.props.role === "Admin") + ""}`);
         if(response) {
             const body = await response.json();
             if(body.Subordinates) {

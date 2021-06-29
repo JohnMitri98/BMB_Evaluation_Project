@@ -34,6 +34,7 @@ export default class PerformancePage extends React.Component {
                 redirect: <Redirect to = "/" />
             });
         }
+        this.props.history[3]("/UserView/Performance");
         let tempTotalEvaluations = [];
         let tempPreviousEvaluation = {};
         const response = await fetch(`/API/getMyPerformance/${parseInt(this.props.UserID)}`);

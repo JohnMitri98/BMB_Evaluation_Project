@@ -14,8 +14,6 @@ h1 {
 div {
 	color:rgb(10, 10, 12);
 	font-size:18px;
-	right:2px;
-    padding: 3px;
 }
 
 label {
@@ -78,8 +76,8 @@ input[type=submit] {
 
 button {
     width: 200px;
-	margin-bottom: 10px;
 	border: none;
+	margin-bottom: 10px;
 	background: #fff5f5;
 	padding: 0px;
 	font-size: 18px;
@@ -90,6 +88,14 @@ button {
 }
 
 button.signOut {
+    width: 140px;
+    height: 22px;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-bottom: 0px;
+}
+
+button.details {
     width: 100px;
 	margin-bottom: 0px;
 }
@@ -98,6 +104,32 @@ button.addDetail {
     width: 150px;
     height: 30px;
 	margin-top: 15px;
+}
+
+nav {
+    background: #ffffff;
+    width: auto;
+    height: 50px;
+    margin: 0px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 2px solid rgb(131, 127, 127);
+}
+
+div.navBar {
+    height: 50px;
+}
+
+div.navBar button {
+    margin-top: 14px;
+}
+
+div.navBar button:first-child{
+    margin-left: 10px;
+}
+
+div.navBar button:last-child{
+    margin-right: 10px;
 }
 
 table {
