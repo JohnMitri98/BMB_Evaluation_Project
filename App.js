@@ -80,6 +80,11 @@ export default class App extends React.Component {
                     Back
                   </button>
                 }
+                {(this.state.CurrentPage !== "/UserView") && 
+                  <button onClick = {() => this.redirectView("/UserView")} class = "signOut">
+                    Home
+                  </button>
+                }
                 {(this.state.CurrentPage !== "/UserView/Sprints") &&
                   <button onClick = {() => this.redirectView("/UserView/Sprints")} class = "signOut">
                     Sprints
@@ -97,7 +102,7 @@ export default class App extends React.Component {
                   </button>
                 }
                 {(this.state.CurrentPage !== "/UserView/Performance") && 
-                  <button onClick = {() => this.redirectView("/Performance")} class = "signOut">
+                  <button onClick = {() => this.redirectView("/UserView/Performance")} class = "signOut">
                     My Performance
                   </button>
                 }

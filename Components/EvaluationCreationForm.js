@@ -55,35 +55,35 @@ export default class DetailsCreationForm extends React.Component {
                         </select>
                     </label>
                     <label>
-                        # FT: 
+                        # Features T: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Taken} onChange = {this.handleFTChange}/>
                     </label>
                     <label>
-                        # FC: 
+                        # Features C: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Completed} onChange = {this.handleFCChange}/>
                     </label>
                     <label>
-                        # BT: 
+                        # Bugs T: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Taken} onChange = {this.handleBTChange}/>
                     </label>
                     <label>
-                        # BC: 
+                        # Bugs C: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Completed} onChange = {this.handleBCChange}/>
                     </label>
                     <label>
-                        # PR: 
+                        # Pull Requests: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PR} onChange = {this.handlePRChange}/>
                     </label>
                     <label>
-                        # PRR: 
+                        # Pull Requests R: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRR} onChange = {this.handlePRRChange}/>
                     </label>
                     <label>
-                        # PRS: 
+                        # Pull Requests S: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRS} onChange = {this.handlePRSChange}/>
                     </label>
                     <label>
-                        # PRA: 
+                        # Pull Requests A: 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRA} onChange = {this.handlePRAChange}/>
                     </label>
                     <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>

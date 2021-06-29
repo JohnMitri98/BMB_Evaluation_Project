@@ -46,16 +46,16 @@ export default class EvaluationsTable extends React.Component {
             <tr>
                 <th>Evaluated</th>
                 <th>Sprint ID</th>
-                <th># FT</th>
-                <th># FC</th>
-                <th># BT</th>
-                <th># BC</th>
-                <th># PR</th>
-                <th># PRR</th>
-                <th># PRS</th>
-                <th># PRA</th>
+                <th>Features Taken</th>
+                <th>Features Completed</th>
+                <th>Bugs Taken</th>
+                <th>Bugs Completed</th>
+                <th>Pull Requests</th>
+                <th>Pull Requests Rejected</th>
+                <th>Pull Requests Severe</th>
+                <th>Pull Requests Abandoned</th>
                 <th>Grade</th>
-                <th></th>
+                <th>Details</th>
             </tr>
         );
     }
