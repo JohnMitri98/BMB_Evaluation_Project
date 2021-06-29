@@ -298,6 +298,19 @@ async function getUsers() {
     return JSON.stringify(tempObj);
 }
 
+async function insertSprint(Sprint) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Insert into dbo.Sprints (Start_Date, End_Date) values ('${new Date(Sprint.StartDate).getFullYear()}-${new Date(Sprint.StartDate).getMonth()}-${new Date(Sprint.StartDate).getDate()}', '${new Date(Sprint.EndDate).getFullYear()}-${new Date(Sprint.EndDate).getMonth() + 1}-${new Date(Sprint.EndDate).getDate()}');`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -361,6 +374,11 @@ router.post('/insertUser', async function(req, res) {
 
 router.get('/getUsers', async function(req, res) {
     res.send(await getUsers());
+});
+
+router.post('/insertSprint', async function(req, res) {
+    await insertSprint(req.body.Sprint);
+    res.send("Done");
 });
 
 module.exports = router;

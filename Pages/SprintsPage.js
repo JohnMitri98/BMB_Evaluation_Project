@@ -11,6 +11,7 @@ export default class SprintsPage extends React.Component {
             Sprints: [],
             ready: "notYet"
         }
+        this.goToSprint = this.goToSprint.bind(this);
     }
 
     render() {
@@ -19,6 +20,9 @@ export default class SprintsPage extends React.Component {
                 {(this.state.ready === "true") && <SprintsTable Sprints = {this.state.Sprints} />}
                 {(this.state.ready === "false") && <h1>No Sprints yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
+                <button onClick = {this.goToSprint} class = "addDetail">
+                    Create Sprint
+                </button>
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -49,12 +53,12 @@ export default class SprintsPage extends React.Component {
             ready: (tempSprints[0] ? "true" : "false")
         });
     }
-    
-    /*goToDetails() {
-        this.props.history[0]("/UserView/Sprints")
+
+    goToSprint() {
+        this.props.history[0]("/UserView/Sprints");
         this.setState({
-            redirect: <Redirect to = "/UserView/Details" />
+            redirect: <Redirect to = "/UserView/Sprints/CreateSprint" />
         });
-    }*/
+    }
 
 }

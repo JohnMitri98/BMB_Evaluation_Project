@@ -74,6 +74,23 @@ input[type=submit] {
 	text-align: 50px;
 }
 
+select {
+    width: 150px;
+	border: none;
+	margin-bottom: 10px;
+	background: #fff5f5;
+	padding: 0px;
+	font-size: 18px;
+    position: relative;
+	text-align: 50px;
+    border: 1px solid rgb(131, 127, 127);
+    border-radius: 4px;
+}
+
+select.date {
+    width: 350px;
+}
+
 button {
     width: 200px;
 	border: none;

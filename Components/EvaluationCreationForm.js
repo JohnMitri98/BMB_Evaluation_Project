@@ -4,7 +4,7 @@ let ss = 1;
 let sa = 2;
 let st = 0.2;
 
-export default class DetailsCreationForm extends React.Component {
+export default class EvaluationCreationForm extends React.Component {
 
     constructor(props) {
         super(props);
@@ -50,7 +50,7 @@ export default class DetailsCreationForm extends React.Component {
                     </label>
                     <label>
                         Sprint: 
-                        <select onChange = {this.handleSprintChange}>
+                        <select onChange = {this.handleSprintChange} class = "date">
                             {this.props.Sprints.map(sprint => <option value = {sprint.ID}>{(new Date(sprint.Start_Date)).toDateString() + " => " + (new Date(sprint.End_Date)).toDateString()}</option>)}
                         </select>
                     </label>

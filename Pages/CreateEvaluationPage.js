@@ -2,7 +2,7 @@ import React from 'react';
 import {Switch, Redirect} from 'react-router-dom';
 import EvaluationCreationForm from '../Components/EvaluationCreationForm';
 
-export default class CreateEvaluation extends React.Component {
+export default class CreateEvaluationPage extends React.Component {
 
     constructor(props) {
         super(props);

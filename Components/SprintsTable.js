@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class MyEvaluationsTable extends React.Component {
+export default class SprintsTable extends React.Component {
 
     constructor(props) {
         super(props);

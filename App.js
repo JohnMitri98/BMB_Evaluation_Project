@@ -14,6 +14,7 @@ import DetailsPage from './Pages/DetailsPage';
 import CreateDetailsPage from './Pages/CreateDetailsPage';
 import CreateEvaluationPage from './Pages/CreateEvaluationPage';
 import SprintsPage from './Pages/SprintsPage';
+import CreateSprintPage from './Pages/CreateSprintPage';
 import './Styles/Test.css';
 
 const initialState = {
@@ -163,6 +164,9 @@ export default class App extends React.Component {
                             </Route>
                             <Route exact path = "/UserView/Sprints">
                                 <SprintsPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
+                            </Route>
+                            <Route exact path = "/UserView/Sprints/CreateSprint">
+                                <CreateSprintPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
                             </Route>
                             <Route exact path = "/">
                                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} history = {history} />

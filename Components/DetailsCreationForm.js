@@ -146,7 +146,7 @@ export default class DetailsCreationForm extends React.Component {
     }
 
     handleSeverityChange(event) {
-        let {EvaluationID, SupervisorID, Status, Type, Severity, Description, Link} = this.state.Detail;
+        let {EvaluationID, SupervisorID, Status, Type, Description, Link} = this.state.Detail;
         if(event.target.validity.valid) {
             let tempDetail = {
                 EvaluationID: EvaluationID,
