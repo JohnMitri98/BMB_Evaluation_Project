@@ -23,7 +23,7 @@ export default class RolesTable extends React.Component {
 
     render() {
         return(
-            <div>
+            <div style = {this.props.style}>
             {/*<div class = "table-wrapper">*/}
                 <table>
                 {/*<table class = "fl-table">*/}
@@ -69,11 +69,10 @@ export default class RolesTable extends React.Component {
 
     renderTableData() {
         const thisObj = this;
-        return this.state.Roles.map(function (Role, index) {
-            const RolesIndex = index;
+        return this.state.Roles.map((Role, index) => {
             return(
                 <tr key = {index}>
-                    {Object.keys(Role).map(function (key, index) {
+                    {Object.keys(Role).map((key, index) => {
                         if(index === 1) {
                             return <td>{Role[key] + ""}</td>;
                         } else if(index > 1) {
@@ -137,7 +136,13 @@ export default class RolesTable extends React.Component {
     async addColumn() {
         let tempRoles = [];
         let tempColumnNames = [];
-        if(this.state.ColumnNameText === "") {
+        let tempCheck = false;
+        this.state.ColumnNames.forEach(Name => {
+            if(this.state.ColumnNameText === (Name.COLUMN_NAME + "")) {
+                tempCheck = true;
+            }
+        });
+        if(this.state.ColumnNameText === "" || tempCheck) {
             this.setState({
                 warning: "Invalid Column Name",
                 ColumnNameText: ""
