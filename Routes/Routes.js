@@ -311,6 +311,57 @@ async function insertSprint(Sprint) {
     pool.close();
 }
 
+async function getColumnNames(Name) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = '${Name}' Order By ORDINAL_POSITION;`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.log('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Columns: tempResult
+    }
+    return JSON.stringify(tempObj);
+}
+
+async function getRoles() {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`select * from dbo.Roles;`);
+        result.recordset.forEach(result => tempResult.push(result));
+    } catch(err) {
+        console.log('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        Roles: tempResult
+    }
+    return JSON.stringify(tempObj);
+}
+
+async function switchRoleView(RoleID, Column) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Update dbo.Roles set ${Column} = ~${Column} where ID = ${RoleID};`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -378,6 +429,20 @@ router.get('/getUsers', async function(req, res) {
 
 router.post('/insertSprint', async function(req, res) {
     await insertSprint(req.body.Sprint);
+    res.send("Done");
+});
+
+router.get('/getColumnNames/:name', async function(req, res) {
+    res.send(await getColumnNames(req.params.name));
+});
+
+router.get('/getRoles', async function(req, res) {
+    res.send(await getRoles());
+});
+
+router.get('/switchRoleView/:roleID-:column', async function(req, res) {
+    console.log(req.params.roleID, "    ", req.params.column);
+    await switchRoleView(req.params.roleID, req.params.column);
     res.send("Done");
 });
 

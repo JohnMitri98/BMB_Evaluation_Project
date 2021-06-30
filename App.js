@@ -15,6 +15,7 @@ import CreateDetailsPage from './Pages/CreateDetailsPage';
 import CreateEvaluationPage from './Pages/CreateEvaluationPage';
 import SprintsPage from './Pages/SprintsPage';
 import CreateSprintPage from './Pages/CreateSprintPage';
+import RolesPage from './Pages/RolesPage';
 import './Styles/Test.css';
 
 const initialState = {
@@ -114,6 +115,11 @@ export default class App extends React.Component {
                                         My Performance
                                     </button>
                                 }
+                                {(this.state.CurrentPage !== "/UserView/Roles") && 
+                                    <button onClick = {() => this.redirectView("/UserView/Roles")} class = "signOut">
+                                        Roles
+                                    </button>
+                                }
                                 {/*<li>
                                     <Link to="/" onClick = {this.resetLogin}>Login</Link>
                                 </li>
@@ -167,6 +173,9 @@ export default class App extends React.Component {
                             </Route>
                             <Route exact path = "/UserView/Sprints/CreateSprint">
                                 <CreateSprintPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
+                            </Route>
+                            <Route exact path = "/UserView/Roles">
+                                <RolesPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
                             </Route>
                             <Route exact path = "/">
                                 <LoginPage style = {divStyle} onSubmit = {this.checkLogin} history = {history} />
