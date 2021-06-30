@@ -362,6 +362,32 @@ async function switchRoleView(RoleID, Column) {
     pool.close();
 }
 
+async function insertRole(RoleName) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Insert into dbo.Roles (Name) values ('${RoleName}');`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
+async function insertRoleColumn(ColumnName) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`ALTER TABLE dbo.Roles ADD ${ColumnName} Bit NOT NULL CONSTRAINT ${ColumnName}_Default DEFAULT 0;`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -441,8 +467,17 @@ router.get('/getRoles', async function(req, res) {
 });
 
 router.get('/switchRoleView/:roleID-:column', async function(req, res) {
-    console.log(req.params.roleID, "    ", req.params.column);
     await switchRoleView(req.params.roleID, req.params.column);
+    res.send("Done");
+});
+
+router.get('/insertRole/:roleName', async function(req, res) {
+    await insertRole(req.params.roleName);
+    res.send("Done");
+});
+
+router.get('/insertRoleColumn/:columnName', async function(req, res) {
+    await insertRoleColumn(req.params.columnName);
     res.send("Done");
 });
 
