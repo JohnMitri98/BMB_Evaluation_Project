@@ -150,7 +150,6 @@ export default class RolesTable extends React.Component {
         } else {
             await fetch(`/API/insertRoleColumn/${this.state.ColumnNameText + ""}`);
             var response = await fetch('/API/getColumnNames/Roles')
-            var response = await fetch(`/API/getColumnNames/Roles`);
             if(response) {
                 const body = await response.json();
                 if(body.Columns) {
