@@ -34,13 +34,13 @@ export default class UserCreationForm extends React.Component {
                 <div style = {this.props.style}>
                 <div>
                         <label>
-                           First Name
+                           First Name*
                             <input type = "text" value = {this.state.User.First_Name} onChange = {this.handleFirstNameChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Last Name
+                            Last Name*
                             <input type = "text" value = {this.state.User.Last_Name} onChange = {this.handleLastNameChange} />
                         </label>
                     </div>
