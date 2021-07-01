@@ -45,7 +45,7 @@ export default class EvaluationsTable extends React.Component {
         return (
             <tr>
                 <th>Evaluated</th>
-                <th>Sprint ID</th>
+                <th>Sprint Start Date</th>
                 <th>Features Taken</th>
                 <th>Features Completed</th>
                 <th>Bugs Taken</th>
@@ -65,7 +65,6 @@ export default class EvaluationsTable extends React.Component {
             const {ID,
                 First_Name,
                 Last_Name,
-                Sprint_ID,
                 Nb_Features_Taken,
                 Nb_Features_Completed,
                 Nb_Bugs_Taken,
@@ -74,7 +73,8 @@ export default class EvaluationsTable extends React.Component {
                 Nb_PR_Rejected,
                 Nb_PR_Severe,
                 Nb_PR_Abandoned,
-                Grade
+                Grade,
+                Start_Date
             } = Evaluation;
             return (
                 <tr key = {index}>
@@ -82,7 +82,7 @@ export default class EvaluationsTable extends React.Component {
                         {First_Name + " " + Last_Name}
                     </td>
                     <td>
-                        {Sprint_ID}
+                        {new Date(Start_Date).toDateString()}
                     </td>
                     <td>
                         {Nb_Features_Taken}
@@ -160,8 +160,10 @@ export default class EvaluationsTable extends React.Component {
                         {Grade}
                     </td>
                     <td>
-                        <button onClick = {() => this.handleDetails(ID)} class = 'details'>
-                            Details
+                        <button onClick = {() => this.handleDetails(ID)} class = 'signOut'>
+                            <div class = "extraWidth">
+                                Details
+                            </div>
                         </button>
                     </td>
                 </tr>

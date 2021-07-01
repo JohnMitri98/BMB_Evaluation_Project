@@ -29,7 +29,8 @@ const initialState = {
         Evaluation_View: null,
         Details_View: null,
         User_Edit_View: null,
-        User_Performance_View: null
+        User_Performance_View: null,
+        Roles_View: null
     },
     EvaluationID: 0,
     CurrentPage: "/"
@@ -76,48 +77,67 @@ export default class App extends React.Component {
                         <nav>
                             <div class = "navBar">
                                 <button onClick = {this.signOut} class = "signOut">
-                                    Sign Out
+                                    <div class = "extraWidth">
+                                        Sign Out
+                                    </div>
                                 </button>
-                                {(this.state.CurrentPage !== "/" && 
-                                    this.state.CurrentPage !== "/UserView") && 
+                                {(this.state.CurrentPage !== "/") && 
+                                    (this.state.CurrentPage !== "/UserView") && 
                                     <button onClick = {this.goBack} class = "signOut">
-                                        Back
+                                        <div class = "extraWidth">
+                                            Back
+                                        </div>
                                     </button>
                                 }
                                 {(this.state.CurrentPage !== "/UserView") && 
                                     <button onClick = {() => this.redirectView("/UserView")} class = "signOut">
-                                        Home
+                                        <div class = "extraWidth">
+                                            Home
+                                        </div>
                                     </button>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Users") && 
                                     <button onClick = {() => this.redirectView("/UserView/Users")} class = "signOut">
-                                        Users
+                                        <div class = "extraWidth">
+                                            Users
+                                        </div>
                                     </button>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Sprints") &&
                                     <button onClick = {() => this.redirectView("/UserView/Sprints")} class = "signOut">
-                                        Sprints
+                                        <div class = "extraWidth">
+                                            Sprints
+                                        </div>
                                     </button>
                                 }
                                 {(this.state.roles.Evaluation_View + "" === "true") && 
-                                    this.state.CurrentPage !== "/UserView/Evaluations" &&
+                                    (this.state.CurrentPage !== "/UserView/Evaluations") &&
                                     <button onClick = {() => this.redirectView("/UserView/Evaluations")} class = "signOut">
-                                        Evaluations
+                                        <div class = "extraWidth">
+                                            Evaluations
+                                        </div>
                                     </button>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/MyEvaluations") && 
                                     <button onClick = {() => this.redirectView("/UserView/MyEvaluations")} class = "signOut">
-                                        My Evaluations
+                                        <div class = "extraWidth">
+                                            My Evaluations
+                                        </div>
                                     </button>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Performance") && 
                                     <button onClick = {() => this.redirectView("/UserView/Performance")} class = "signOut">
-                                        My Performance
+                                        <div class = "extraWidth">
+                                            My Performance
+                                        </div>
                                     </button>
                                 }
-                                {(this.state.CurrentPage !== "/UserView/Roles") && 
+                                {(this.state.roles.Roles_View + "" === "true") && 
+                                    (this.state.CurrentPage !== "/UserView/Roles") && 
                                     <button onClick = {() => this.redirectView("/UserView/Roles")} class = "signOut">
-                                        Roles
+                                        <div class = "extraWidth">
+                                            Roles
+                                        </div>
                                     </button>
                                 }
                                 {/*<li>

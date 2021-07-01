@@ -16,6 +16,11 @@ div {
 	font-size:18px;
 }
 
+div.extraWidth {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 label {
 	color:rgb(14, 14, 17);
 	font-size: 22px;
@@ -105,7 +110,7 @@ button {
 }
 
 button.signOut {
-    width: 140px;
+    width: auto;
     height: 22px;
     margin-right: 5px;
     margin-left: 5px;

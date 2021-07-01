@@ -45,17 +45,17 @@ export default class UserTable extends React.Component {
                 Manager,
                 Speciality,
                 Position,
-                Roles_Id
+                Roles_ID
             } = User;
             return (
                 <tr key = {index}>
                     <td style = {{textAlign: "center"}}>{First_Name + " " + Last_Name}</td>
                     <td style = {{textAlign: "center"}}>{Username_Email}</td>
                     <td style = {{textAlign: "center"}}>{Password}</td>
-                    <td style = {{textAlign: "center"}}>{Manager}</td>
+                    <td style = {{textAlign: "center"}}>{Manager ? User.ManagerName : ""}</td>
                     <td style = {{textAlign: "center"}}>{Speciality}</td>
                     <td style = {{textAlign: "center"}}>{Position}</td>
-                    <td style = {{textAlign: "center"}}>{Roles_Id}</td>
+                    <td style = {{textAlign: "center"}}>{Roles_ID}</td>
                 </tr>
             );
         });

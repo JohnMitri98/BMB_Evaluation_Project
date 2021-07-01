@@ -37,7 +37,7 @@ export default class PerformancePage extends React.Component {
         this.props.history[3]("/UserView/Performance");
         let tempTotalEvaluations = [];
         let tempPreviousEvaluation = {};
-        const response = await fetch(`/API/getMyPerformance/${parseInt(this.props.UserID)}`);
+        const response = await fetch(`/API/getMyPerformance/${this.props.UserID}`);
         if(response) {
             const body = await response.json();
             if(body.Evaluations) {

@@ -64,7 +64,7 @@ export default class PerformanceTable extends React.Component {
         return (
             <tr>
                 <th>Evaluator</th>
-                <th>Sprint ID</th>
+                <th>Sprint Start Date</th>
                 <th>Features Taken</th>
                 <th>Features Completed</th>
                 <th>Bugs Taken</th>
@@ -129,7 +129,6 @@ export default class PerformanceTable extends React.Component {
         return this.props.PreviousEvaluation.map((Evaluation, index) => {
             const {First_Name,
                 Last_Name,
-                Sprint_ID,
                 Nb_Features_Taken,
                 Nb_Features_Completed,
                 Nb_Bugs_Taken,
@@ -138,12 +137,13 @@ export default class PerformanceTable extends React.Component {
                 Nb_PR_Rejected,
                 Nb_PR_Severe,
                 Nb_PR_Abandoned,
-                Grade
+                Grade,
+                Start_Date
             } = Evaluation;
             return (
                 <tr key = {index}>
                     <td id = "Name">{First_Name + " " + Last_Name}</td>
-                    <td>{Sprint_ID}</td>
+                    <td>{new Date(Start_Date).toDateString()}</td>
                     <td>{Nb_Features_Taken}</td>
                     <td>{Nb_Features_Completed}</td>
                     <td>{Nb_Bugs_Taken}</td>

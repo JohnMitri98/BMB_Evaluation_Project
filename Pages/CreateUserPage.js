@@ -8,7 +8,10 @@ export default class CreateUserPage extends React.Component {
         super(props);
         this.state = {
             redirect: null,
-            Correct: "notYet"
+            Correct: "notYet",
+            Ready: false,
+            Users: [],
+            Roles: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -21,7 +24,8 @@ export default class CreateUserPage extends React.Component {
         return (
             <div style = {this.props.style}>
                 <h1>This is the User Creation Page</h1>
-                <UserCreationForm style = {this.props.style} onSubmit = {this.handleSubmit} />
+                {(this.state.Ready === "true") && <UserCreationForm style = {this.props.style} onSubmit = {this.handleSubmit} Users = {this.state.Users} Roles = {this.state.Roles} />}
+                {(this.state.Ready === "false") && <h1>Loading</h1>}
                 {warning && 
                     <h1>{warning}</h1>
                 }
@@ -45,7 +49,7 @@ export default class CreateUserPage extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
@@ -55,6 +59,27 @@ export default class CreateUserPage extends React.Component {
             });
         }
         this.props.history[3]("/UserView/Users/CreateUser");
+        let tempUsers = [];
+        let tempRoles = [];
+        var response = await fetch(`/API/getUsers`);
+        if(response) {
+            const body = await response.json();
+            if(body.Users) {
+                tempUsers = body.Users;
+            }
+        }
+        response = await fetch(`/API/getRoles`);
+        if(response) {
+            const body = await response.json();
+            if(body.Roles) {
+                tempRoles = body.Roles;
+            }
+        }
+        this.setState({
+            Users: tempUsers,
+            Roles: tempRoles,
+            Ready: "true"
+        });
     }
 
 }

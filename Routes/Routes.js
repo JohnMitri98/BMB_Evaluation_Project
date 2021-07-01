@@ -41,13 +41,7 @@ async function checkLogin(Username, Password) {
         if(roleID) {
             result = await request.query(`select * from dbo.Roles where ID = \'${roleID}\';`);
             if(result.recordset[0]) {
-                roles = {
-                    Name: result.recordset[0].Name,
-                    Evaluation_View: result.recordset[0].Evaluation_View,
-                    Details_View: result.recordset[0].Details_View,
-                    User_Edit_View: result.recordset[0].User_Edit_View,
-                    User_Performance_View: result.recordset[0].User_Performance_View
-                };
+                roles = result.recordset[0];
             }
         }
     } catch(err) {
@@ -71,9 +65,9 @@ async function getEvaluationsDone(Evaluator, Admin) {
     try {
         const request = pool.request();
         if(Admin === "true") {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluated_ID = u.ID;`);
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
         } else {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID;`);
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
         }
         
         result.recordset.forEach(result => tempResult.push(result));
@@ -151,7 +145,7 @@ async function getMyPerformance(UserID) {
     }
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluated_ID = ${UserID} AND e.Sprint_ID = (Select MAX(Sprint_ID) from dbo.Evaluations) AND u.ID = e.Evaluator_ID;`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${UserID} AND e.Sprint_ID = (Select ID from dbo.Sprints where Start_Date = (Select Max(Start_Date) from dbo.Sprints)) AND u.ID = e.Evaluator_ID AND e.Sprint_ID = s.ID;`);
         result.recordset.forEach(result => tempPreviousEvaluation.push(result));
     } catch(err) {
         console.error('SQL error', err);
@@ -212,7 +206,7 @@ async function getMyEvaluations(EvaluatedID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.* from dbo.Evaluations e, dbo.Users u where e.Evaluated_ID = ${EvaluatedID} AND e.Evaluator_ID = u.ID;`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${EvaluatedID} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID;`);
         result.recordset.forEach(result => tempResult.push(result));
     } catch(err) {
         console.error('SQL error', err);
@@ -272,7 +266,7 @@ async function insertUser(User) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Users (First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Position, Roles_Id) values ('${User.First_Name}', '${User.Last_Name}', ${User.Username_Email ? `${User.Username_Email}` : null}, ${User.Password ? `${User.Password}` : null}, ${User.Manager ? parseInt(User.Manager) : null}, ${User.Specialty ? `${User.Specialty}` : null}, ${User.Position ? `${User.Position}` : null}, ${User.Roles_ID ? parseInt(User.Roles_ID) : null});`);
+        await request.query(`Insert into dbo.Users (First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Position, Roles_ID) values ('${User.First_Name}', '${User.Last_Name}', ${User.Username_Email ? `${User.Username_Email}` : null}, ${User.Password ? `${User.Password}` : null}, ${User.Manager ? parseInt(User.Manager) : null}, ${User.Specialty ? `${User.Specialty}` : null}, ${User.Position ? `${User.Position}` : null}, ${User.Roles_ID ? parseInt(User.Roles_ID) : null});`);
     } catch(err) {
         console.error('SQL error', err);
     }

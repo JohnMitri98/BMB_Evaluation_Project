@@ -14,7 +14,7 @@ export default class UserCreationForm extends React.Component {
                 Manager: "",
                 Speciality: "",
                 Position: "",
-                Roles_Id: ""
+                Roles_ID: ""
             }
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +25,7 @@ export default class UserCreationForm extends React.Component {
         this.handleManagerChange = this.handleManagerChange.bind(this);
         this.handleSpecialityChange = this.handleSpecialityChange.bind(this);
         this.handlePositionChange = this.handlePositionChange.bind(this);
-        this.handleRolesIDChange = this.handleRolesIDChange.bind(this);
+        this.handleRoleChange = this.handleRoleChange.bind(this);
     }
 
     render() {
@@ -34,50 +34,56 @@ export default class UserCreationForm extends React.Component {
                 <div style = {this.props.style}>
                 <div>
                         <label>
-                           First Name*
+                           First Name:* 
                             <input type = "text" value = {this.state.User.First_Name} onChange = {this.handleFirstNameChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Last Name*
+                            Last Name:* 
                             <input type = "text" value = {this.state.User.Last_Name} onChange = {this.handleLastNameChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Username/Email
+                            Username/Email: 
                             <input type = "text" value = {this.state.User.Username_Email} onChange = {this.handleUsernameEmailChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Password
+                            Password: 
                             <input type = "password" value = {this.state.User.Password} onChange = {this.handlePasswordChange}/>
                         </label>
                     </div>
                     <div>
                         <label>
-                            Manager
-                            <input type = "text" pattern = "[0-9]*" value = {this.state.User.Manager} onChange = {this.handleManagerChange} />
+                            Manager: 
+                            <select onChange = {this.handleManagerChange}>
+                                <option value = "">None</option>
+                                {this.props.Users.map(User => <option value = {User.ID}>{User.First_Name + " " + User.Last_Name}</option>)}
+                            </select>
                         </label>
                     </div>
                     <div>
                         <label>
-                            Speciality
+                            Speciality: 
                             <input type = "text" value = {this.state.User.Speciality} onChange = {this.handleSpecialityChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Position
+                            Position: 
                             <input type = "text" value = {this.state.User.Position} onChange = {this.handlePositionChange} />
                         </label>
                     </div>
                     <div>
                         <label>
-                            Roles Id
-                            <input type = "text" pattern = "[0-9]*" value = {this.state.User.Roles_Id} onChange = {this.handleRolesIDChange} />
+                            Role: 
+                            <select onChange = {this.handleRoleChange}>
+                                <option value = "">None</option>
+                                {this.props.Roles.map(Role => <option value = {Role.ID}>{Role.Name + ""}</option>)}
+                            </select>
                         </label>
                     </div>
                     <div>
@@ -90,7 +96,7 @@ export default class UserCreationForm extends React.Component {
     }
     async handleSubmit(e) {
         e.preventDefault();
-        let {First_Name, Last_Name,Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let {First_Name, Last_Name,Username_Email, Password, Manager, Speciality, Position, Roles_ID} = this.state.User;
         if(Username_Email === "") {
             Username_Email = null;
         }
@@ -98,7 +104,7 @@ export default class UserCreationForm extends React.Component {
             Password = null;
         }
         if(Manager === "") {
-            Manager = 0;
+            Manager = null;
         }
         if(Speciality === "") {
             Speciality = null;
@@ -106,11 +112,11 @@ export default class UserCreationForm extends React.Component {
         if(Position === "") {
             Position = null;
         }
-        if(Roles_Id === "") {
-            Roles_Id = 0;
+        if(Roles_ID === "") {
+            Roles_ID = null;
         }
 
-        if(First_Name === "" || Last_Name === "" || Username_Email === "" || Roles_Id === "") {
+        if(First_Name === "" || Last_Name === "") {
             this.props.onSubmit(false);
         } else {
             let tempObj = {
@@ -122,7 +128,7 @@ export default class UserCreationForm extends React.Component {
                     Manager: Manager,
                     Speciality: Speciality,
                     Position: Position,
-                    Roles_Id: Roles_Id
+                    Roles_ID: Roles_ID
                 }
             };
             await fetch('/API/insertUser', {
@@ -137,7 +143,7 @@ export default class UserCreationForm extends React.Component {
     };
 
     handleFirstNameChange(event) {
-        let {Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let {Last_Name, Username_Email, Password, Manager, Speciality, Position, Roles_ID} = this.state.User;
         let tempUser = {
             First_Name: event.target.value,
             Last_Name: Last_Name,
@@ -146,13 +152,13 @@ export default class UserCreationForm extends React.Component {
             Manager: Manager,
             Speciality: Speciality,
             Position: Position,
-            Roles_Id: Roles_Id
+            Roles_ID: Roles_ID
         }
         this.setState({User: tempUser});
     }
 
     handleLastNameChange(event) {
-        let {First_Name, Username_Email, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let {First_Name, Username_Email, Password, Manager, Speciality, Position, Roles_ID} = this.state.User;
         let tempUser = {
             First_Name: First_Name,
             Last_Name: event.target.value,
@@ -161,13 +167,13 @@ export default class UserCreationForm extends React.Component {
             Manager: Manager,
             Speciality: Speciality,
             Position: Position,
-            Roles_Id: Roles_Id
+            Roles_ID: Roles_ID
         }
         this.setState({User: tempUser});
     }
 
     handleUsernameEmailChange(event) {
-        let {First_Name, Last_Name, Password, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let {First_Name, Last_Name, Password, Manager, Speciality, Position, Roles_ID} = this.state.User;
         let tempUser = {
             First_Name: First_Name,
             Last_Name: Last_Name,
@@ -176,13 +182,13 @@ export default class UserCreationForm extends React.Component {
             Manager: Manager,
             Speciality: Speciality,
             Position: Position,
-            Roles_Id: Roles_Id
+            Roles_ID: Roles_ID
         }
         this.setState({User: tempUser});
     }
 
     handlePasswordChange(event) {
-        let {First_Name, Last_Name, Username_Email, Manager, Speciality, Position, Roles_Id} = this.state.User;
+        let {First_Name, Last_Name, Username_Email, Manager, Speciality, Position, Roles_ID} = this.state.User;
         let tempUser = {
             First_Name: First_Name,
             Last_Name: Last_Name,
@@ -191,13 +197,13 @@ export default class UserCreationForm extends React.Component {
             Manager: Manager,
             Speciality: Speciality,
             Position: Position,
-            Roles_Id: Roles_Id
+            Roles_ID: Roles_ID
         }
         this.setState({User: tempUser});
     }
 
     handleManagerChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Speciality, Position, Roles_Id} = this.state.User;
+        let {First_Name, Last_Name, Username_Email, Password, Speciality, Position, Roles_ID} = this.state.User;
         if(event.target.validity.valid) {
             let tempUser = {
                 First_Name: First_Name,
@@ -207,14 +213,14 @@ export default class UserCreationForm extends React.Component {
                 Manager: event.target.value,
                 Speciality: Speciality,
                 Position: Position,
-                Roles_Id: Roles_Id
+                Roles_ID: Roles_ID
             }
             this.setState({User: tempUser});
         }
     }
 
     handleSpecialityChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Manager, Position, Roles_Id} = this.state.User;
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Position, Roles_ID} = this.state.User;
         let tempUser = {
             First_Name: First_Name,
             Last_Name: Last_Name,
@@ -223,12 +229,12 @@ export default class UserCreationForm extends React.Component {
             Manager: Manager,
             Speciality: event.target.value,
             Position: Position,
-            Roles_Id: Roles_Id
+            Roles_ID: Roles_ID
         }
         this.setState({User: tempUser});
     }
     handlePositionChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Roles_Id} = this.state.User;
+        let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Roles_ID} = this.state.User;
         let tempUser = {
             First_Name: First_Name,
             Last_Name: Last_Name,
@@ -237,11 +243,11 @@ export default class UserCreationForm extends React.Component {
             Manager: Manager,
             Speciality: Speciality,
             Position: event.target.value,
-            Roles_Id: Roles_Id
+            Roles_ID: Roles_ID
         }
         this.setState({User: tempUser});
     }
-    handleRolesIDChange(event) {
+    handleRoleChange(event) {
         let {First_Name, Last_Name, Username_Email, Password, Manager, Speciality, Position} = this.state.User;
         if(event.target.validity.valid) {
             let tempUser = {
@@ -252,7 +258,7 @@ export default class UserCreationForm extends React.Component {
                 Manager: Manager,
                 Speciality: Speciality,
                 Position: Position,
-                Roles_Id: event.target.value
+                Roles_ID: event.target.value
             }
             this.setState({User: tempUser});
         }

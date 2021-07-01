@@ -12,6 +12,8 @@ export default class UsersPage extends React.Component {
             ready: "notYet"
         }
         this.goToUsers = this.goToUsers.bind(this);
+        this.searchManagerName = this.searchManagerName.bind(this);
+        this.searchRoleName = this.searchRoleName.bind(this);
     }
 
     render() {
@@ -48,17 +50,49 @@ export default class UsersPage extends React.Component {
         }
         this.props.history[3]("/UserView/Users");
         let tempUsers = [];
-        const response = await fetch(`/API/getUsers`);
+        let tempRoles = [];
+        var response = await fetch(`/API/getRoles`);
+        if(response) {
+            const body = await response.json();
+            if(body.Roles) {
+                tempRoles = body.Roles;
+            }
+        }
+        response = await fetch(`/API/getUsers`);
         if(response) {
             const body = await response.json();
             if(body.Users) {
                 tempUsers = body.Users;
             }
         }
+        tempUsers.forEach(User => {
+            if(User.Manager) {
+                User.ManagerName = this.searchManagerName(User.Manager, tempUsers);
+            }
+            if(User.Roles_ID) {
+                User.Roles_ID = this.searchRoleName(User.Roles_ID, tempRoles)
+            }
+        });
         this.setState({
             Users: (tempUsers[0] ? tempUsers : []),
             ready: (tempUsers[0] ? "true" : "false")
         });
+    }
+
+    searchManagerName(ManagerID, UserArray) {
+        for(var i = 0; i < UserArray.length; i++) {
+            if(UserArray[i].ID === ManagerID) {
+                return (UserArray[i].First_Name + " " + UserArray[i].Last_Name);
+            }
+        }
+    }
+
+    searchRoleName(RoleID, RoleArray) {
+        for(var i = 0; i < RoleArray.length; i++) {
+            if(RoleArray[i].ID === RoleID) {
+                return (RoleArray[i].Name + "");
+            }
+        }
     }
 
 }
