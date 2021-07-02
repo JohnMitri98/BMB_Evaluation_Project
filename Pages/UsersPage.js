@@ -1,7 +1,6 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router';
 import UserTable from '../Components/UserTable';
-import {Encrypt} from '../Encryption/Encryptor';
 import {Decrypt} from '../Encryption/Decryptor';
 
 export default class UsersPage extends React.Component {

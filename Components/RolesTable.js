@@ -63,7 +63,7 @@ export default class RolesTable extends React.Component {
                         return(
                             <th>{Name.COLUMN_NAME + ""}</th>
                         );
-                    }
+                    } else return "";
                 })}
             </tr>
         );
@@ -83,7 +83,7 @@ export default class RolesTable extends React.Component {
                                     <input name = {key} type = "checkbox" checked = {Role[key]} onChange = {() => thisObj.handlePermissionChange(Role, key)} />
                                 </td>
                             );
-                        }
+                        } else return "";
                     })}
                 </tr>
             );

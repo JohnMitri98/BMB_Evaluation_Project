@@ -1,7 +1,6 @@
 import React from 'react';
 import {Switch, Redirect} from 'react-router-dom';
 import UserCreationForm from '../Components/UserCreationForm';
-import {Encrypt} from '../Encryption/Encryptor';
 import {Decrypt} from '../Encryption/Decryptor';
 
 export default class CreateUserPage extends React.Component {

@@ -2,7 +2,6 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {Encrypt} from '../Encryption/Encryptor';
-import {Decrypt} from '../Encryption/Decryptor';
 
 export default class SprintCreationForm extends React.Component {
 

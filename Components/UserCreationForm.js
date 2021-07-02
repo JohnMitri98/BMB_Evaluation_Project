@@ -1,6 +1,5 @@
 import React from 'react';
 import {Encrypt} from '../Encryption/Encryptor';
-import {Decrypt} from '../Encryption/Decryptor';
 
 export default class UserCreationForm extends React.Component {
 

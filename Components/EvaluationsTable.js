@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Encrypt} from '../Encryption/Encryptor';
-import {Decrypt} from '../Encryption/Decryptor';
 
 let ss = 1;
 let sa = 2;

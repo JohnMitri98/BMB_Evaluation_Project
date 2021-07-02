@@ -1,7 +1,6 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
 import SprintsTable from '../Components/SprintsTable'
-import {Encrypt} from '../Encryption/Encryptor';
 import {Decrypt} from '../Encryption/Decryptor';
 
 export default class SprintsPage extends React.Component {
