@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router';
 import UserTable from '../Components/UserTable';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class UsersPage extends React.Component {
 
@@ -56,6 +58,17 @@ export default class UsersPage extends React.Component {
             const body = await response.json();
             if(body.Roles) {
                 tempRoles = body.Roles;
+                tempRoles.forEach(role => {
+                    for(const [key, value] of Object.entries(role)) {
+                        if(Decrypt(value) === "true") {
+                            role[key] = true;
+                        } else if(Decrypt(value) === "false") {
+                            role[key] = false;
+                        } else {
+                            role[key] = Decrypt(value);
+                        }
+                    }
+                });
             }
         }
         response = await fetch(`/API/getUsers`);
@@ -63,16 +76,21 @@ export default class UsersPage extends React.Component {
             const body = await response.json();
             if(body.Users) {
                 tempUsers = body.Users;
+                tempUsers.forEach(user => {
+                    for(const [key, value] of Object.entries(user)) {
+                        user[key] = Decrypt(value);
+                    }
+                });
+                tempUsers.forEach(user => {
+                    if(user.Manager) {
+                        user.ManagerName = this.searchManagerName(user.Manager, tempUsers);
+                    }
+                    if(user.Roles_ID) {
+                        user.Roles_ID = this.searchRoleName(user.Roles_ID, tempRoles)
+                    }
+                });
             }
         }
-        tempUsers.forEach(User => {
-            if(User.Manager) {
-                User.ManagerName = this.searchManagerName(User.Manager, tempUsers);
-            }
-            if(User.Roles_ID) {
-                User.Roles_ID = this.searchRoleName(User.Roles_ID, tempRoles)
-            }
-        });
         this.setState({
             Users: (tempUsers[0] ? tempUsers : []),
             ready: (tempUsers[0] ? "true" : "false")

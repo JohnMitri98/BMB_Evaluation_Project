@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
 import EvaluationsTable from '../Components/EvaluationsTable';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class EvaluationsPage extends React.Component {
 
@@ -43,18 +45,48 @@ export default class EvaluationsPage extends React.Component {
         this.props.history[3]("/UserView/Evaluations");
         let tempEvaluations = [];
         let tempSubordinates = [];
-        var response = await fetch(`/API/getEvaluationsDone/${this.props.ID}-${(this.props.role === "Admin") + ""}`);
+        let tempObj = {
+            UserID: Encrypt(this.props.ID),
+            Admin: Encrypt((this.props.role === "Admin") + "")
+        };
+        var response = await fetch(`/API/getEvaluationsDone`, {
+            method: 'SEARCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
         if(response) {
             const body = await response.json();
             if(body.Evaluations) {
                 tempEvaluations = body.Evaluations;
+                tempEvaluations.forEach(evaluation => {
+                    for(const [key, value] of Object.entries(evaluation)) {
+                        evaluation[key] = Decrypt(value);
+                    }
+                });
             }
         }
-        response = await fetch(`/API/getSubordinates/${this.props.ID}-${(this.props.role === "Admin") + ""}`);
+        let tempObj2 = {
+            ManagerID: Encrypt(this.props.ID),
+            Admin: Encrypt((this.props.role === "Admin") + "")
+        };
+        response = await fetch(`/API/getSubordinates`, {
+            method: 'SEARCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj2)
+        });
         if(response) {
             const body = await response.json();
             if(body.Subordinates) {
                 tempSubordinates = body.Subordinates;
+                tempSubordinates.forEach(subordinate => {
+                    for(const [key, value] of Object.entries(subordinate)) {
+                        subordinate[key] = Decrypt(value);
+                    }
+                });
             }
         }
         this.setState({

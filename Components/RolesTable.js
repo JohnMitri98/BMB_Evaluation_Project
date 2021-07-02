@@ -1,4 +1,6 @@
 import React from 'react';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class RolesTable extends React.Component {
 
@@ -91,7 +93,17 @@ export default class RolesTable extends React.Component {
     handlePermissionChange(Role, key) {
         Role[key] = !Role[key];
         this.setState({});
-        fetch(`/API/switchRoleView/${Role["ID"]}-${key}`);
+        let tempObj = {
+            RoleID: Encrypt(parseInt(Role["ID"])),
+            Column: Encrypt(key)
+        };
+        fetch(`/API/switchRoleView`, {
+            method: 'SEARCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
     }
 
     handleNewRoleChange(event) {
@@ -116,12 +128,32 @@ export default class RolesTable extends React.Component {
                 RoleText: ""
             });
         } else {
-            await fetch(`/API/insertRole/${this.state.RoleText + ""}`);
-            const response = await fetch('/API/getRoles')
+            let tempObj = {
+                RoleName: Encrypt(this.state.RoleText)
+            }
+            await fetch(`/API/insertRole`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tempObj)
+            });
+            const response = await fetch(`/API/getRoles`);
             if(response) {
                 const body = await response.json();
                 if(body.Roles) {
                     tempResult = body.Roles;
+                    tempResult.forEach(role => {
+                        for(const [key, value] of Object.entries(role)) {
+                            if(Decrypt(value) === "true") {
+                                role[key] = true;
+                            } else if(Decrypt(value) === "false") {
+                                role[key] = false;
+                            } else {
+                                role[key] = Decrypt(value);
+                            }
+                        }
+                    });
                 }
             }
             this.setState({
@@ -148,12 +180,36 @@ export default class RolesTable extends React.Component {
                 ColumnNameText: ""
             });
         } else {
-            await fetch(`/API/insertRoleColumn/${this.state.ColumnNameText + ""}`);
-            var response = await fetch('/API/getColumnNames/Roles')
+            //await fetch(`/API/insertRoleColumn/${this.state.ColumnNameText + ""}`);
+            let tempObj = {
+                ColumnName: Encrypt(this.state.ColumnNameText + "")
+            }
+            await fetch(`/API/insertRoleColumn`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tempObj)
+            });
+            let tempObj2 = {
+                Table: Encrypt("Roles")
+            };
+            var response = await fetch(`/API/getColumnNames`, {
+                method: 'SEARCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tempObj2)
+            });
             if(response) {
                 const body = await response.json();
                 if(body.Columns) {
                     tempColumnNames = body.Columns;
+                    tempColumnNames.forEach(column => {
+                        for(const [key, value] of Object.entries(column)) {
+                            column[key] = Decrypt(value);
+                        }
+                    });
                 }
             }
             response = await fetch(`/API/getRoles`);
@@ -161,6 +217,17 @@ export default class RolesTable extends React.Component {
                 const body = await response.json();
                 if(body.Roles) {
                     tempRoles = body.Roles;
+                    tempRoles.forEach(role => {
+                        for(const [key, value] of Object.entries(role)) {
+                            if(Decrypt(value) === "true") {
+                                role[key] = true;
+                            } else if(Decrypt(value) === "false") {
+                                role[key] = false;
+                            } else {
+                                role[key] = Decrypt(value);
+                            }
+                        }
+                    });
                 }
             }
             this.setState({

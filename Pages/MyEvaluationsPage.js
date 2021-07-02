@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
 import MyEvaluationsTable from '../Components/MyEvaluationsTable'
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class MyEvaluationsPage extends React.Component {
 
@@ -38,11 +40,23 @@ export default class MyEvaluationsPage extends React.Component {
         }
         this.props.history[3]("/UserView/MyEvaluations");
         let tempEvaluations = [];
-        const response = await fetch(`/API/getMyEvaluations/${this.props.ID}`);
+        let tempObj = {EvaluatedID: Encrypt(this.props.ID)};
+        const response = await fetch(`/API/getMyEvaluations`, {
+            method: 'SEARCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
         if(response) {
             const body = await response.json();
             if(body.Evaluations) {
                 tempEvaluations = body.Evaluations;
+                tempEvaluations.forEach(evaluation => {
+                    for(const [key, value] of Object.entries(evaluation)) {
+                        evaluation[key] = Decrypt(value);
+                    }
+                });
             }
         }
         this.setState({

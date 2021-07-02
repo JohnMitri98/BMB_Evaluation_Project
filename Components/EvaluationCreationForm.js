@@ -1,4 +1,6 @@
 import React from 'react';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 let ss = 1;
 let sa = 2;
@@ -55,35 +57,35 @@ export default class EvaluationCreationForm extends React.Component {
                         </select>
                     </label>
                     <label>
-                        # Features T: 
+                        # Features T:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Taken} onChange = {this.handleFTChange}/>
                     </label>
                     <label>
-                        # Features C: 
+                        # Features C:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Completed} onChange = {this.handleFCChange}/>
                     </label>
                     <label>
-                        # Bugs T: 
+                        # Bugs T:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Taken} onChange = {this.handleBTChange}/>
                     </label>
                     <label>
-                        # Bugs C: 
+                        # Bugs C:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Completed} onChange = {this.handleBCChange}/>
                     </label>
                     <label>
-                        # Pull Requests: 
+                        # Pull Requests:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PR} onChange = {this.handlePRChange}/>
                     </label>
                     <label>
-                        # Pull Requests R: 
+                        # Pull Requests R:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRR} onChange = {this.handlePRRChange}/>
                     </label>
                     <label>
-                        # Pull Requests S: 
+                        # Pull Requests S:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRS} onChange = {this.handlePRSChange}/>
                     </label>
                     <label>
-                        # Pull Requests A: 
+                        # Pull Requests A:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRA} onChange = {this.handlePRAChange}/>
                     </label>
                     <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>
@@ -101,18 +103,18 @@ export default class EvaluationCreationForm extends React.Component {
             let tempGrade = this.calculateGrade(this.state.Evaluation);
             let tempObj = {
                 Evaluation: {
-                    EvaluatorID: EvaluatorID,
-                    EvaluatedID: EvaluatedID,
-                    SprintID: SprintID,
-                    Nb_Features_Taken: Nb_Features_Taken,
-                    Nb_Features_Completed: Nb_Features_Completed,
-                    Nb_Bugs_Taken: Nb_Bugs_Taken,
-                    Nb_Bugs_Completed: Nb_Bugs_Completed,
-                    Nb_PR: Nb_PR,
-                    Nb_PRR: Nb_PRR,
-                    Nb_PRS: Nb_PRS,
-                    Nb_PRA: Nb_PRA,
-                    Grade: tempGrade
+                    EvaluatorID: Encrypt(EvaluatorID),
+                    EvaluatedID: Encrypt(EvaluatedID),
+                    SprintID: Encrypt(SprintID),
+                    Nb_Features_Taken: Encrypt(Nb_Features_Taken),
+                    Nb_Features_Completed: Encrypt(Nb_Features_Completed),
+                    Nb_Bugs_Taken: Encrypt(Nb_Bugs_Taken),
+                    Nb_Bugs_Completed: Encrypt(Nb_Bugs_Completed),
+                    Nb_PR: Encrypt(Nb_PR),
+                    Nb_PRR: Encrypt(Nb_PRR),
+                    Nb_PRS: Encrypt(Nb_PRS),
+                    Nb_PRA: Encrypt(Nb_PRA),
+                    Grade: Encrypt(tempGrade)
                 }
             };
             const response = await fetch('/API/insertEvaluation', {
@@ -125,7 +127,7 @@ export default class EvaluationCreationForm extends React.Component {
             if(response) {
                 const body = await response.json();
                 if(body.Success) {
-                    this.props.onSubmit(body.Success === "Done");
+                    this.props.onSubmit(Decrypt(body.Success) === "Done");
                 } else this.props.onSubmit(false);
             } else this.props.onSubmit(false);
         }

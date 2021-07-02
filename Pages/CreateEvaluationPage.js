@@ -1,6 +1,8 @@
 import React from 'react';
 import {Switch, Redirect} from 'react-router-dom';
 import EvaluationCreationForm from '../Components/EvaluationCreationForm';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class CreateEvaluationPage extends React.Component {
 
@@ -61,11 +63,26 @@ export default class CreateEvaluationPage extends React.Component {
         this.props.history[3]("/UserView/Evaluations/CreateEvaluation");
         let tempSubordinates = [];
         let tempSprints = [];
-        var response = await fetch(`/API/getSubordinates/${this.props.EvaluatorID}-${(this.props.role === "Admin") + ""}`);
+        let tempObj = {
+            ManagerID: Encrypt(this.props.EvaluatorID),
+            Admin: Encrypt((this.props.role === "Admin") + "")
+        };
+        var response = await fetch(`/API/getSubordinates`, {
+            method: 'SEARCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
         if(response) {
             const body = await response.json();
             if(body.Subordinates) {
                 tempSubordinates = body.Subordinates;
+                tempSubordinates.forEach(subordinate => {
+                    for(const [key, value] of Object.entries(subordinate)) {
+                        subordinate[key] = Decrypt(value);
+                    }
+                });
             }
         }
         response = await fetch(`/API/getSprints`);
@@ -73,6 +90,11 @@ export default class CreateEvaluationPage extends React.Component {
             const body = await response.json();
             if(body.Sprints) {
                 tempSprints = body.Sprints;
+                tempSprints.forEach(sprint => {
+                    for(const [key, value] of Object.entries(sprint)) {
+                        sprint[key] = Decrypt(value);
+                    }
+                });
             }
         }
         this.setState({

@@ -1,6 +1,8 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class SprintCreationForm extends React.Component {
 
@@ -25,13 +27,13 @@ export default class SprintCreationForm extends React.Component {
                     <div>
                         <label>
                             Start Date:
-                            <DatePicker selected = {StartDate} onChange = {(date) => this.handleStartDateChange(date)} />
+                            <DatePicker selected = {StartDate} value = {StartDate} onChange = {(date) => this.handleStartDateChange(date)} />
                         </label>
                     </div>
                     <div>
                         <label>
                             End Date: 
-                            <DatePicker selected = {EndDate} onChange = {(date) => this.handleEndDateChange(date)} />
+                            <DatePicker selected = {EndDate} value = {EndDate} onChange = {(date) => this.handleEndDateChange(date)} />
                         </label>
                     </div>
                     <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>
@@ -43,13 +45,19 @@ export default class SprintCreationForm extends React.Component {
     async handleSubmit(e) {
         e.preventDefault();
         let {StartDate, EndDate} = this.state.Sprint;
-        if((StartDate === "") || (EndDate === "")) {
+        if(!StartDate || !EndDate || (StartDate === "") || (EndDate === "")) {
+            this.setState({
+                Sprint: {
+                    StartDate: "",
+                    EndDate: ""
+                }
+            });
             this.props.onSubmit(false);
         } else {
             let tempObj = {
                 Sprint: {
-                    StartDate: StartDate,
-                    EndDate: EndDate
+                    StartDate: Encrypt(StartDate),
+                    EndDate: Encrypt(EndDate)
                 }
             };
             await fetch('/API/insertSprint', {

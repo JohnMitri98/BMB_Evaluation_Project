@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router';
 import DetailsTable from '../Components/DetailsTable';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class DetailsPage extends React.Component {
 
@@ -20,7 +22,7 @@ export default class DetailsPage extends React.Component {
                 {(this.state.ready === "true") && <DetailsTable Details = {this.state.Details} style = {this.props.style} />}
                 {(this.state.ready === "false") && <h1>No Details Listed</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
-                {(this.props.history[2][this.props.history.length - 1] === "/UserView/Evaluations") &&
+                {(this.props.history[2][this.props.history[2].length - 1] === "/UserView/Evaluations") &&
                     <button onClick = {this.goToDetails} class = 'addDetail'>
                         Add Detail
                     </button>
@@ -50,11 +52,22 @@ export default class DetailsPage extends React.Component {
         }
         this.props.history[3]("/UserView/Details");
         let tempDetails = [];
-        const response = await fetch(`/API/getDetails/${this.props.EvaluationID}`);
+        const response = await fetch(`/API/getDetails`, {
+            method: 'SEARCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(({EvaluationID: Encrypt(this.props.EvaluationID)}))
+        });
         if(response) {
             const body = await response.json();
             if(body.Details) {
                 tempDetails = body.Details;
+                tempDetails.forEach(detail => {
+                    for(const [key, value] of Object.entries(detail)) {
+                        detail[key] = Decrypt(value);
+                    }
+                });
             }
         }
         this.setState({

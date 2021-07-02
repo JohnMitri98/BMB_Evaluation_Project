@@ -1,6 +1,8 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
 import SprintsTable from '../Components/SprintsTable'
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class SprintsPage extends React.Component {
 
@@ -46,6 +48,11 @@ export default class SprintsPage extends React.Component {
             const body = await response.json();
             if(body.Sprints) {
                 tempSprints = body.Sprints;
+                tempSprints.forEach(sprint => {
+                    for(const [key, value] of Object.entries(sprint)) {
+                        sprint[key] = Decrypt(value);
+                    }
+                });
             }
         }
         this.setState({

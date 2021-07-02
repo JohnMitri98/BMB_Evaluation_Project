@@ -29,9 +29,9 @@ export default class UserTable extends React.Component {
                 <th style = {{textAlign: "center"}}>Username/Email</th>
                 <th style = {{textAlign: "center"}}>Password</th>
                 <th style = {{textAlign: "center"}}>Manager</th>
-                <th style = {{textAlign: "center"}}>Speciality</th>
+                <th style = {{textAlign: "center"}}>Specialty</th>
                 <th style = {{textAlign: "center"}}>Position</th>
-                <th style = {{textAlign: "center"}}>Roles Id</th>
+                <th style = {{textAlign: "center"}}>Role</th>
             </tr>
         );
     }
@@ -42,8 +42,8 @@ export default class UserTable extends React.Component {
                 Last_Name,
                 Username_Email,
                 Password,
-                Manager,
-                Speciality,
+                ManagerName,
+                Specialty,
                 Position,
                 Roles_ID
             } = User;
@@ -52,8 +52,8 @@ export default class UserTable extends React.Component {
                     <td style = {{textAlign: "center"}}>{First_Name + " " + Last_Name}</td>
                     <td style = {{textAlign: "center"}}>{Username_Email}</td>
                     <td style = {{textAlign: "center"}}>{Password}</td>
-                    <td style = {{textAlign: "center"}}>{Manager ? User.ManagerName : ""}</td>
-                    <td style = {{textAlign: "center"}}>{Speciality}</td>
+                    <td style = {{textAlign: "center"}}>{ManagerName ? ManagerName : ""}</td>
+                    <td style = {{textAlign: "center"}}>{Specialty}</td>
                     <td style = {{textAlign: "center"}}>{Position}</td>
                     <td style = {{textAlign: "center"}}>{Roles_ID}</td>
                 </tr>

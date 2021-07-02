@@ -1,4 +1,5 @@
 import React from 'react';
+import {Encrypt} from '../Encryption/Encryptor';
 
 export default class DetailsCreationForm extends React.Component {
 
@@ -9,7 +10,7 @@ export default class DetailsCreationForm extends React.Component {
                 EvaluationID: this.props.EvaluationID,
                 SupervisorID: this.props.EvaluatorID,
                 Status: "Accepted",
-                Type: "",
+                Type: "None",
                 Severity: "",
                 Description: "",
                 Link: "",
@@ -67,7 +68,7 @@ export default class DetailsCreationForm extends React.Component {
                     </div>
                     <div>
                         <label>
-                            Link: 
+                            Link:* 
                             <input type = "text" value = {Link} onChange = {this.handleLinkChange}/>
                         </label>
                     </div>
@@ -86,21 +87,18 @@ export default class DetailsCreationForm extends React.Component {
         if(Severity === "") {
             Severity = 0;
         }
-        if(Description === "") {
-            Description = null;
-        }
-        if((Status === "") || (Link === "")) {
+        if((Link === "")) {
             this.props.onSubmit(false);
         } else {
             let tempObj = {
                 Detail: {
-                    EvaluationID: EvaluationID,
-                    SupervisorID: SupervisorID,
-                    Status: Status,
-                    Type: Type,
-                    Severity: Severity,
-                    Description: Description,
-                    Link: Link
+                    EvaluationID: Encrypt(EvaluationID),
+                    SupervisorID: Encrypt(SupervisorID),
+                    Status: Encrypt(Status),
+                    Type: Encrypt(Type),
+                    Severity: Encrypt(Severity),
+                    Description: Encrypt(Description),
+                    Link: Encrypt(Link)
                 }
             };
             await fetch('/API/insertEvaluationDetail', {

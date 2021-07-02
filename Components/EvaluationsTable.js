@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-//import '../Styles/Table.css';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 let ss = 1;
 let sa = 2;
@@ -184,12 +185,22 @@ export default class EvaluationsTable extends React.Component {
     async incrementDB(ID, Field, Grade, Decimal) {
         this.setState({});
         this.props.refreshPage();
-        await fetch(`/API/incrementEvaluation/${ID}-${Field}`);
         let tempObj = {
+            EvaluationID: Encrypt(ID),
+            Field: Encrypt(Field)
+        };
+        await fetch(`/API/incrementEvaluation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
+        let tempObj2 = {
             Grade: {
-                ID: ID,
-                param1: Grade,
-                param2: Decimal
+                ID: Encrypt(ID),
+                param1: Encrypt(Grade),
+                param2: Encrypt(Decimal)
             }
         };
         await fetch(`/API/changeGrade`, {
@@ -197,19 +208,29 @@ export default class EvaluationsTable extends React.Component {
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify(tempObj)
+            body: JSON.stringify(tempObj2)
         });
     }
 
     async decrementDB(ID, Field, Grade, Decimal) {
         this.setState({});
         this.props.refreshPage();
-        await fetch(`/API/decrementEvaluation/${ID}-${Field}`);
         let tempObj = {
+            EvaluationID: Encrypt(ID),
+            Field: Encrypt(Field)
+        };
+        await fetch(`/API/decrementEvaluation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempObj)
+        });
+        let tempObj2 = {
             Grade: {
-                ID: ID,
-                param1: Grade,
-                param2: Decimal
+                ID: Encrypt(ID),
+                param1: Encrypt(Grade),
+                param2: Encrypt(Decimal)
             }
         };
         await fetch(`/API/changeGrade`, {
@@ -217,7 +238,7 @@ export default class EvaluationsTable extends React.Component {
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify(tempObj)
+            body: JSON.stringify(tempObj2)
         });
     }
 

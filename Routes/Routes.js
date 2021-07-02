@@ -1,8 +1,10 @@
 var express = require("express");
 var router = express.Router();
 var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
+//var jsonParser = bodyParser.json();
 var sql = require('mssql');
+const {Encrypt} = require('../Encryption/Encryptor');
+const {Decrypt} = require('../Encryption/Decryptor');
 
 const sqlConfig = {
     user: 'sa',
@@ -31,9 +33,9 @@ async function checkLogin(Username, Password) {
     try {
         let roleID = null;
         const request = pool.request();
-        var result = await request.query(`select * from dbo.Users where Username_Email = \'${Username}\';`);
+        var result = await request.query(`select * from dbo.Users where Username_Email = \'${Decrypt(Username)}\';`);
         if(result.recordset[0]) {
-            tempCorrect = (result.recordset[0].Password == Password) + "";
+            tempCorrect = (result.recordset[0].Password == Decrypt(Password)) + "";
             tempUser = result.recordset[0].First_Name + " " + result.recordset[0].Last_Name;
             tempUserID = result.recordset[0].ID + "";
             roleID = result.recordset[0].Roles_ID;
@@ -42,6 +44,9 @@ async function checkLogin(Username, Password) {
             result = await request.query(`select * from dbo.Roles where ID = \'${roleID}\';`);
             if(result.recordset[0]) {
                 roles = result.recordset[0];
+                for(const [key, value] of Object.entries(roles)) {
+                    roles[key] = Encrypt(value);
+                }
             }
         }
     } catch(err) {
@@ -49,9 +54,9 @@ async function checkLogin(Username, Password) {
     }
     pool.close();
     let tempObj = {
-        Correct: tempCorrect + "",
-        Name: tempUser,
-        UserID: tempUserID + "",
+        Correct: Encrypt(tempCorrect + ""),
+        Name: Encrypt(tempUser),
+        UserID: Encrypt(tempUserID + ""),
         Roles: roles
     };
     return JSON.stringify(tempObj);
@@ -64,13 +69,18 @@ async function getEvaluationsDone(Evaluator, Admin) {
     await poolConnect;
     try {
         const request = pool.request();
-        if(Admin === "true") {
+        if(Decrypt(Admin) === "true") {
             var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
         } else {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${Evaluator} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${Decrypt(Evaluator)} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
         }
         
-        result.recordset.forEach(result => tempResult.push(result));
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -87,7 +97,7 @@ async function insertEvaluationDetail(Detail) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Evaluation_Details (Evaluation_ID, Supervisor_ID, Status, Type, Severity, Description, Link) values (${parseInt(Detail.EvaluationID)}, ${parseInt(Detail.SupervisorID)}, '${Detail.Status}', '${Detail.Type}', ${parseInt(Detail.Severity)}, '${Detail.Description}', '${Detail.Link}');`);
+        await request.query(`Insert into dbo.Evaluation_Details (Evaluation_ID, Supervisor_ID, Status, Type, Severity, Description, Link) values (${parseInt(Decrypt(Detail.EvaluationID))}, ${parseInt(Decrypt(Detail.SupervisorID))}, '${Decrypt(Detail.Status)}', '${Decrypt(Detail.Type)}', ${parseInt(Decrypt(Detail.Severity))}, ${(Decrypt(Detail.Description) === "") ? null : `'${Decrypt(Detail.Description)}'`}, '${Decrypt(Detail.Link)}');`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -97,13 +107,13 @@ async function insertEvaluationDetail(Detail) {
 async function insertEvaluation(Evaluation) {
     let {EvaluatorID, EvaluatedID, SprintID, Nb_Features_Taken, Nb_Features_Completed, Nb_Bugs_Taken, Nb_Bugs_Completed, Nb_PR, Nb_PRR, Nb_PRS, Nb_PRA, Grade} = Evaluation;
     const pool = new sql.ConnectionPool(sqlConfig);
-    let tempCheck = {Success: "Failed"};
+    let tempCheck = {Success: Encrypt("Failed")};
     const poolConnect = pool.connect();
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Evaluations (Evaluator_ID, Evaluated_ID, Sprint_ID, Nb_Features_Taken, Nb_Features_Completed, Nb_Bugs_Taken, Nb_Bugs_Completed, Nb_PR, Nb_PR_Rejected, Nb_PR_Severe, Nb_PR_Abandoned, Grade) values (${parseInt(EvaluatorID)}, ${parseInt(EvaluatedID)}, ${parseInt(SprintID)}, ${parseInt(Nb_Features_Taken)}, ${parseInt(Nb_Features_Completed)}, ${parseInt(Nb_Bugs_Taken)}, ${parseInt(Nb_Bugs_Completed)}, ${parseInt(Nb_PR)}, ${parseInt(Nb_PRR)}, ${parseInt(Nb_PRS)}, ${parseInt(Nb_PRA)}, ${parseFloat(Grade)});`);
-        tempCheck = {Success: "Done"};
+        await request.query(`Insert into dbo.Evaluations (Evaluator_ID, Evaluated_ID, Sprint_ID, Nb_Features_Taken, Nb_Features_Completed, Nb_Bugs_Taken, Nb_Bugs_Completed, Nb_PR, Nb_PR_Rejected, Nb_PR_Severe, Nb_PR_Abandoned, Grade) values (${parseInt(Decrypt(EvaluatorID))}, ${parseInt(Decrypt(EvaluatedID))}, ${parseInt(Decrypt(SprintID))}, ${parseInt(Decrypt(Nb_Features_Taken))}, ${parseInt(Decrypt(Nb_Features_Completed))}, ${parseInt(Decrypt(Nb_Bugs_Taken))}, ${parseInt(Decrypt(Nb_Bugs_Completed))}, ${parseInt(Decrypt(Nb_PR))}, ${parseInt(Decrypt(Nb_PRR))}, ${parseInt(Decrypt(Nb_PRS))}, ${parseInt(Decrypt(Nb_PRA))}, ${parseFloat(Decrypt(Grade))});`);
+        tempCheck = {Success: Encrypt("Done")};
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -118,8 +128,13 @@ async function getDetails(EvaluationID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, ed.* from dbo.Evaluation_Details ed, dbo.Users u where ed.Evaluation_ID = ${EvaluationID};`);
-        result.recordset.forEach(result => tempResult.push(result));
+        var result = await request.query(`select u.First_Name, u.Last_Name, ed.* from dbo.Evaluation_Details ed, dbo.Users u where ed.Evaluation_ID = ${Decrypt(EvaluationID)} AND ed.Supervisor_ID = u.ID;`);
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = ((value || parseInt(value) === 0) ? Encrypt(value) : Encrypt(""));
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -138,15 +153,25 @@ async function getMyPerformance(UserID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select * from dbo.Evaluations where Evaluated_ID = ${UserID};`);
-        result.recordset.forEach(result => tempTotalEvaluations.push(result));
+        var result = await request.query(`select * from dbo.Evaluations where Evaluated_ID = ${Decrypt(UserID)};`);
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempTotalEvaluations.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${UserID} AND e.Sprint_ID = (Select ID from dbo.Sprints where Start_Date = (Select Max(Start_Date) from dbo.Sprints)) AND u.ID = e.Evaluator_ID AND e.Sprint_ID = s.ID;`);
-        result.recordset.forEach(result => tempPreviousEvaluation.push(result));
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(UserID)} AND e.Sprint_ID = (Select Max(a.SprintID) from (Select s.ID as SprintID, s.Start_Date, e.* from dbo.Sprints s, dbo.Evaluations e where e.Sprint_ID = s.ID) a where a.Start_Date = (Select Max(b.Start_Date) from (Select s.ID as SprintID, s.Start_Date, e.* from dbo.Sprints s, dbo.Evaluations e where e.Sprint_ID = s.ID AND e.Evaluated_ID = ${Decrypt(UserID)}) b)) AND u.ID = e.Evaluator_ID AND e.Sprint_ID = s.ID;`);
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempPreviousEvaluation.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -166,7 +191,7 @@ async function incrementEvaluation(EvaluationID, Field) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Update dbo.Evaluations set ${Field} = (${Field} + 1) where ID = ${EvaluationID};`);
+        await request.query(`Update dbo.Evaluations set ${Decrypt(Field)} = (${Decrypt(Field)} + 1) where ID = ${Decrypt(EvaluationID)};`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -179,7 +204,7 @@ async function decrementEvaluation(EvaluationID, Field) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Update dbo.Evaluations set ${Field} = (${Field} - 1) where ID = ${EvaluationID};`);
+        await request.query(`Update dbo.Evaluations set ${Decrypt(Field)} = (${Decrypt(Field)} - 1) where ID = ${Decrypt(EvaluationID)};`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -192,7 +217,7 @@ async function changeGrade(EvaluationID, Grade, Decimal) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Update dbo.Evaluations set Grade = (${Grade} + 0.${Decimal}) where ID = ${EvaluationID};`);
+        await request.query(`Update dbo.Evaluations set Grade = (${Decrypt(Grade)} + 0.${Decrypt(Decimal)}) where ID = ${Decrypt(EvaluationID)};`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -206,8 +231,13 @@ async function getMyEvaluations(EvaluatedID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${EvaluatedID} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID;`);
-        result.recordset.forEach(result => tempResult.push(result));
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(EvaluatedID)} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID;`);
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -225,12 +255,17 @@ async function getSubordinates(ManagerID, Admin) {
     await poolConnect;
     try {
         const request = pool.request();
-        if(Admin === "true") {
-            var result = await request.query(`select ID, First_Name, Last_Name, Username_Email from dbo.Users;`);
+        if(Decrypt(Admin) === "true") {
+            var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users;`);
         } else {
-            var result = await request.query(`select ID, First_Name, Last_Name, Username_Email from dbo.Users where Manager = ${ManagerID};`);
+            var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users where Manager = ${Decrypt(ManagerID)};`);
         }
-        result.recordset.forEach(result => tempResult.push(result));
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result)
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -248,8 +283,13 @@ async function getSprints() {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select * from dbo.Sprints;`);
-        result.recordset.forEach(result => tempResult.push(result));
+        var result = await request.query(`select * from dbo.Sprints Order By Start_Date;`);
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -266,7 +306,7 @@ async function insertUser(User) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Users (First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Position, Roles_ID) values ('${User.First_Name}', '${User.Last_Name}', ${User.Username_Email ? `${User.Username_Email}` : null}, ${User.Password ? `${User.Password}` : null}, ${User.Manager ? parseInt(User.Manager) : null}, ${User.Specialty ? `${User.Specialty}` : null}, ${User.Position ? `${User.Position}` : null}, ${User.Roles_ID ? parseInt(User.Roles_ID) : null});`);
+        await request.query(`Insert into dbo.Users (First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Position, Roles_ID) values ('${Decrypt(User.First_Name)}', '${Decrypt(User.Last_Name)}', ${Decrypt(User.Username_Email) !== "" ? `'${Decrypt(User.Username_Email)}'` : null}, ${Decrypt(User.Password) !== "" ? `'${Decrypt(User.Password)}'` : null}, ${Decrypt(User.Manager) !== "" ? parseInt(Decrypt(User.Manager)) : null}, ${Decrypt(User.Specialty) !== "" ? `'${Decrypt(User.Specialty)}'` : null}, ${Decrypt(User.Position) !== "" ? `'${Decrypt(User.Position)}'` : null}, ${Decrypt(User.Roles_ID) !== "" ? parseInt(Decrypt(User.Roles_ID)) : null});`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -281,7 +321,12 @@ async function getUsers() {
     try {
         const request = pool.request();
         var result = await request.query(`select * from dbo.Users;`);
-        result.recordset.forEach(result => tempResult.push(result));
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value ? value : "");
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -298,7 +343,7 @@ async function insertSprint(Sprint) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Sprints (Start_Date, End_Date) values ('${new Date(Sprint.StartDate).getFullYear()}-${new Date(Sprint.StartDate).getMonth()}-${new Date(Sprint.StartDate).getDate()}', '${new Date(Sprint.EndDate).getFullYear()}-${new Date(Sprint.EndDate).getMonth() + 1}-${new Date(Sprint.EndDate).getDate()}');`);
+        await request.query(`Insert into dbo.Sprints (Start_Date, End_Date) values ('${new Date(Decrypt(Sprint.StartDate)).getFullYear()}-${new Date(Decrypt(Sprint.StartDate)).getMonth()}-${new Date(Decrypt(Sprint.StartDate)).getDate()}', '${new Date(Decrypt(Sprint.EndDate)).getFullYear()}-${new Date(Decrypt(Sprint.EndDate)).getMonth() + 1}-${new Date(Decrypt(Sprint.EndDate)).getDate()}');`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -312,8 +357,13 @@ async function getColumnNames(Name) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = '${Name}' Order By ORDINAL_POSITION;`);
-        result.recordset.forEach(result => tempResult.push(result));
+        var result = await request.query(`select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = '${Decrypt(Name)}' Order By ORDINAL_POSITION;`);
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.log('SQL error', err);
     }
@@ -332,7 +382,12 @@ async function getRoles() {
     try {
         const request = pool.request();
         var result = await request.query(`select * from dbo.Roles;`);
-        result.recordset.forEach(result => tempResult.push(result));
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result);
+        });
     } catch(err) {
         console.log('SQL error', err);
     }
@@ -349,7 +404,7 @@ async function switchRoleView(RoleID, Column) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Update dbo.Roles set ${Column} = ~${Column} where ID = ${RoleID};`);
+        await request.query(`Update dbo.Roles set ${Decrypt(Column)} = ~${Decrypt(Column)} where ID = ${Decrypt(RoleID)};`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -362,7 +417,7 @@ async function insertRole(RoleName) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Roles (Name) values ('${RoleName}');`);
+        await request.query(`Insert into dbo.Roles (Name) values ('${Decrypt(RoleName)}');`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -375,7 +430,7 @@ async function insertRoleColumn(ColumnName) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`ALTER TABLE dbo.Roles ADD ${ColumnName} Bit NOT NULL CONSTRAINT ${ColumnName}_Default DEFAULT 0;`);
+        await request.query(`ALTER TABLE dbo.Roles ADD ${Decrypt(ColumnName)} Bit NOT NULL CONSTRAINT ${Decrypt(ColumnName)}_Default DEFAULT 0;`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -390,7 +445,7 @@ router.get('/getSprints', async function(req, res) {
     res.send(await getSprints());
 });
 
-router.post('/inserEvaluationDetail', async function(req, res) {
+router.post('/insertEvaluationDetail', async function(req, res) {
     await insertEvaluationDetail(req.body.Detail);
     res.send("Done");
 });
@@ -404,37 +459,48 @@ router.post('/changeGrade', async function(req, res) {
     res.send("Done");
 });
 
-router.get('/getDetails/:evaluationID', async function(req, res) {
-    res.send(await getDetails(req.params.evaluationID));
+router.search('/getDetails', async function(req, res) {
+    res.send(await getDetails(req.body.EvaluationID));
 });
 
-router.get('/getEvaluationsDone/:evaluatorID-:admin', async function(req, res) {
-    res.send(await getEvaluationsDone(req.params.evaluatorID, req.params.admin));
+router.search('/getEvaluationsDone', async function(req, res) {
+    res.send(await getEvaluationsDone(req.body.UserID, req.body.Admin));
 });
 
-router.get('/getMyPerformance/:userID', async function(req, res) {
-    res.send(await getMyPerformance(req.params.userID));
+router.search('/getMyPerformance', async function(req, res) {
+    res.send(await getMyPerformance(req.body.UserID));
 });
 
-router.get('/getMyEvaluations/:evaluatedID', async function(req, res) {
-    res.send(await getMyEvaluations(req.params.evaluatedID));
+router.search('/getMyEvaluations', async function(req, res) {
+    res.send(await getMyEvaluations(req.body.EvaluatedID));
 });
 
-router.get('/getSubordinates/:managerID-:admin', async function(req, res) {
-    res.send(await getSubordinates(req.params.managerID, req.params.admin));
+router.search('/getSubordinates', async function(req, res) {
+    res.send(await getSubordinates(req.body.ManagerID, req.body.Admin));
 });
 
-router.get('/checkLogin/:username-:password', async function(req, res) {
-    res.send(await checkLogin(req.params.username, req.params.password));
+/*router.get('/checkLogin/:username-:password', async function(req, res) {
+    const test = Encrypt("Jmitri");
+    console.log("Encrypted: ", test);
+    console.log("Decrypted: ", Decrypt(test));
+    console.log("Username: ", Decrypt(req.params.body.Username));
+    console.log("Password: ", req.params.password);
+    res.send(await checkLogin(Decrypt(req.params.username), Decrypt(req.params.password)));
+});*/
+
+router.search('/checkLogin', async function(req, res) {
+    /*const test = Encrypt("");
+    console.log("Test: ", Decrypt(test));*/
+    res.send(await checkLogin(req.body.Username, req.body.Password));
 });
 
-router.get('/incrementEvaluation/:evaluationID-:field', async function(req, res) {
-    await incrementEvaluation(req.params.evaluationID, req.params.field);
+router.post('/incrementEvaluation', async function(req, res) {
+    await incrementEvaluation(req.body.EvaluationID, req.body.Field);
     res.send("Done");
 });
 
-router.get('/decrementEvaluation/:evaluationID-:field', async function(req, res) {
-    await decrementEvaluation(req.params.evaluationID, req.params.field);
+router.post('/decrementEvaluation', async function(req, res) {
+    await decrementEvaluation(req.body.EvaluationID, req.body.Field);
     res.send("Done");
 });
 
@@ -452,26 +518,26 @@ router.post('/insertSprint', async function(req, res) {
     res.send("Done");
 });
 
-router.get('/getColumnNames/:name', async function(req, res) {
-    res.send(await getColumnNames(req.params.name));
+router.search('/getColumnNames', async function(req, res) {
+    res.send(await getColumnNames(req.body.Table));
 });
 
 router.get('/getRoles', async function(req, res) {
     res.send(await getRoles());
 });
 
-router.get('/switchRoleView/:roleID-:column', async function(req, res) {
-    await switchRoleView(req.params.roleID, req.params.column);
+router.search('/switchRoleView', async function(req, res) {
+    await switchRoleView(req.body.RoleID, req.body.Column);
     res.send("Done");
 });
 
-router.get('/insertRole/:roleName', async function(req, res) {
-    await insertRole(req.params.roleName);
+router.post('/insertRole', async function(req, res) {
+    await insertRole(req.body.RoleName);
     res.send("Done");
 });
 
-router.get('/insertRoleColumn/:columnName', async function(req, res) {
-    await insertRoleColumn(req.params.columnName);
+router.post('/insertRoleColumn', async function(req, res) {
+    await insertRoleColumn(req.body.ColumnName);
     res.send("Done");
 });
 

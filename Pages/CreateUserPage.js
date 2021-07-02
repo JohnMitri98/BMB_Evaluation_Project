@@ -1,6 +1,8 @@
 import React from 'react';
 import {Switch, Redirect} from 'react-router-dom';
 import UserCreationForm from '../Components/UserCreationForm';
+import {Encrypt} from '../Encryption/Encryptor';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class CreateUserPage extends React.Component {
 
@@ -66,6 +68,19 @@ export default class CreateUserPage extends React.Component {
             const body = await response.json();
             if(body.Users) {
                 tempUsers = body.Users;
+                tempUsers.forEach(user => {
+                    for(const [key, value] of Object.entries(user)) {
+                        user[key] = Decrypt(value);
+                    }
+                });
+                tempUsers.forEach(user => {
+                    if(user.Manager) {
+                        user.ManagerName = this.searchManagerName(user.Manager, tempUsers);
+                    }
+                    if(user.Roles_ID) {
+                        user.Roles_ID = this.searchRoleName(user.Roles_ID, tempRoles)
+                    }
+                });
             }
         }
         response = await fetch(`/API/getRoles`);
@@ -73,6 +88,17 @@ export default class CreateUserPage extends React.Component {
             const body = await response.json();
             if(body.Roles) {
                 tempRoles = body.Roles;
+                tempRoles.forEach(role => {
+                    for(const [key, value] of Object.entries(role)) {
+                        if(Decrypt(value) === "true") {
+                            role[key] = true;
+                        } else if(Decrypt(value) === "false") {
+                            role[key] = false;
+                        } else {
+                            role[key] = Decrypt(value);
+                        }
+                    }
+                });
             }
         }
         this.setState({

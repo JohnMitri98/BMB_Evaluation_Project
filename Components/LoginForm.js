@@ -1,4 +1,6 @@
 import React from 'react';
+const {Encrypt} = require('../Encryption/Encryptor');
+const {Decrypt} = require('../Encryption/Decryptor');
 
 export default class LoginForm extends React.Component {
 
@@ -42,15 +44,29 @@ export default class LoginForm extends React.Component {
         let tempRoles = null;
         let tempUserID = 0;
         if(this.state.Username !== "" && this.state.Password !== "") {
-            const response = await fetch(`/API/checkLogin/${this.state.Username}-${this.state.Password}`);
+            //const response = await fetch(`/API/checkLogin/${Encrypt(this.state.Username)}-${Encrypt(this.state.Password)}`);
+            let tempObj = {
+                Username: Encrypt(this.state.Username),
+                Password: Encrypt(this.state.Password)
+            }
+            const response = await fetch('/API/checkLogin', {
+                method: 'SEARCH',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tempObj)
+            });
             if(response) {
                 const body = await response.json();
                 if(body) {
-                    isCorrect = body.Correct;
-                    tempName = body.Name;
-                    tempUserID = body.UserID;
+                    isCorrect = Decrypt(body.Correct);
+                    tempName = Decrypt(body.Name);
+                    tempUserID = Decrypt(body.UserID);
                     if(body.Roles){
-                        tempRoles = body.Roles;   
+                        tempRoles = body.Roles; 
+                        for(const [key, value] of Object.entries(tempRoles)) {
+                            tempRoles[key] = Decrypt(value);
+                        }  
                     }
                 }
             }
