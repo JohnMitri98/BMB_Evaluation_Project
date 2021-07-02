@@ -365,7 +365,7 @@ async function getColumnNames(Name) {
             tempResult.push(result);
         });
     } catch(err) {
-        console.log('SQL error', err);
+        console.error('SQL error', err);
     }
     pool.close();
     let tempObj = {
@@ -389,7 +389,7 @@ async function getRoles() {
             tempResult.push(result);
         });
     } catch(err) {
-        console.log('SQL error', err);
+        console.error('SQL error', err);
     }
     pool.close();
     let tempObj = {
@@ -479,18 +479,7 @@ router.search('/getSubordinates', async function(req, res) {
     res.send(await getSubordinates(req.body.ManagerID, req.body.Admin));
 });
 
-/*router.get('/checkLogin/:username-:password', async function(req, res) {
-    const test = Encrypt("Jmitri");
-    console.log("Encrypted: ", test);
-    console.log("Decrypted: ", Decrypt(test));
-    console.log("Username: ", Decrypt(req.params.body.Username));
-    console.log("Password: ", req.params.password);
-    res.send(await checkLogin(Decrypt(req.params.username), Decrypt(req.params.password)));
-});*/
-
 router.search('/checkLogin', async function(req, res) {
-    /*const test = Encrypt("");
-    console.log("Test: ", Decrypt(test));*/
     res.send(await checkLogin(req.body.Username, req.body.Password));
 });
 
