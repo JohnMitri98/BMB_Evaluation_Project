@@ -8,10 +8,28 @@ export default class UserView extends React.Component {
         this.state = {
             redirect: null
         };
-        this.redirectView = this.redirectView.bind(this);
     }
 
     render() {
+        return (
+            <div style = {this.props.style}>
+                <h1>This is the Home Page!</h1>
+                {/*((this.props.permissions.Details_View + "") === "true") && 
+                    <button onClick = {() => this.redirectView("/Details")}>
+                        Details
+                    </button>
+                */}
+                {/*<button onClick = {() => this.redirectView("/MyProfile")}>
+                    My Profile
+                </button>*/}
+                <Switch>
+                    {this.state.redirect}
+                </Switch>
+            </div>
+        );
+    }
+
+    componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
@@ -19,35 +37,6 @@ export default class UserView extends React.Component {
                 redirect: <Redirect to = "/" />
             });
         }
-        return (
-            <div style = {this.props.style}>
-                <Switch>
-                    {this.state.redirect}
-                </Switch>
-                <h1>This is the UserView!</h1>
-                {((this.props.permissions.Evaluation_View + "") === "true") && 
-                    <button onClick = {() => this.redirectView("/Evaluations")}>
-                        Evaluations
-                    </button>
-                }
-               
-                <button onClick = {() => this.redirectView("/MyEvaluations")}>
-                    My Evaluations
-                </button>
-                <button onClick = {() => this.redirectView("/Performance")}>
-                    My Performance
-                </button>
-                <button onClick = {() => this.redirectView("/AddUser")}>
-                    Add User
-                </button>
-            </div>
-        );
-    }
-
-    redirectView(redirection) {
-        this.props.history[0]("/UserView");
-        this.setState({
-            redirect: <Redirect exact to = {`/UserView${redirection}`} />
-        });
+        this.props.history[3]("/UserView");
     }
 }

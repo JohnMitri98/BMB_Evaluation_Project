@@ -12,7 +12,8 @@ export default class DetailsCreationForm extends React.Component {
                 Type: "",
                 Severity: "",
                 Description: "",
-                Link: ""
+                Link: "",
+                formClass: null
             }
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,7 +27,7 @@ export default class DetailsCreationForm extends React.Component {
     render() {
         let {Severity, Description, Link} = this.state.Detail;
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} class = {this.state.formClass}>
                 <div style = {this.props.style}>
                     <div>
                         <label>
@@ -39,7 +40,7 @@ export default class DetailsCreationForm extends React.Component {
                         </label>
                     </div>
                     <div>
-                        {(this.state.Detail.Status === "Rejected" && 
+                        {this.state.Detail.Status === "Rejected" &&
                             <label>
                                 Type: 
                                 <select onChange = {this.handleTypeChange}>
@@ -48,10 +49,10 @@ export default class DetailsCreationForm extends React.Component {
                                     <option value = "Abandoned">Abandoned</option>
                                 </select>
                             </label>
-                        )}
+                        }
                     </div>
                     <div>
-                        {this.state.Detail.Status === "Rejected" &&
+                        {this.state.Detail.Status === "Rejected" && this.state.Detail.Type !== "Normal" &&
                             <label>
                                 Severity: 
                                 <input type = "text" pattern = "[0-9]*" value = {Severity} onChange = {this.handleSeverityChange}/>
@@ -124,7 +125,10 @@ export default class DetailsCreationForm extends React.Component {
             Description: Description,
             Link: Link
         }
-        this.setState({Detail: tempDetail});
+        this.setState({
+            Detail: tempDetail,
+            formClass: (event.target.value === "Accepted" ? "None" : "largerDetails")
+        });
     }
 
     handleTypeChange(event) {
@@ -134,7 +138,7 @@ export default class DetailsCreationForm extends React.Component {
             SupervisorID: SupervisorID,
             Status: Status,
             Type: event.target.value,
-            Severity: Severity,
+            Severity: (event.target.value === "Normal" ? "" : Severity),
             Description: Description,
             Link: Link
         }
@@ -150,17 +154,6 @@ export default class DetailsCreationForm extends React.Component {
                 Status: Status,
                 Type: Type,
                 Severity: event.target.value,
-                Description: Description,
-                Link: Link
-            }
-            this.setState({Detail: tempDetail});
-        } else {
-            let tempDetail = {
-                EvaluationID: EvaluationID,
-                SupervisorID: SupervisorID,
-                Status: Status,
-                Type: Type,
-                Severity: Severity,
                 Description: Description,
                 Link: Link
             }

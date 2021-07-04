@@ -8,20 +8,11 @@ export default class ProfilePage extends React.Component {
         this.state = {
             redirect: null
         }
-        this.goBack = this.goBack.bind(this);
     }
 
     render() {
-        if((this.props.loggedIn + "") === "false") {
-            this.setState({
-                redirect: <Redirect to = "/" />
-            });
-        }
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.goBack}>
-                    Back
-                </button>
                 <h1>This is My Profile Page</h1>
                 <Switch>
                     {this.state.redirect}
@@ -30,10 +21,16 @@ export default class ProfilePage extends React.Component {
         );
     }
 
-    goBack() {
-        this.setState({
-            redirect: <Redirect exact to = "/UserView" />
-        });
+    componentDidMount() {
+        if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/");
+            this.props.history[0]("/UserView");
+            this.props.history[0]("/UserView/MyProfile");
+            this.setState({
+                redirect: <Redirect to = "/" />
+            });
+        }
+        this.props.history[3]("/UserView/MyProfile");
     }
 
 }

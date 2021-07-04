@@ -2,7 +2,7 @@ import React from 'react';
 import {Switch, Redirect} from 'react-router-dom';
 import DetailsCreationForm from '../Components/DetailsCreationForm';
 
-export default class DetailsEditPage extends React.Component {
+export default class CreateDetailsPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -54,6 +54,7 @@ export default class DetailsEditPage extends React.Component {
                 redirect: <Redirect to = "/" />
             });
         }
+        this.props.history[3]("/UserView/Details/CreateDetails");
     }
 
 }

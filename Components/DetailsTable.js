@@ -1,4 +1,5 @@
 import React from 'react';
+//import '../Styles/Table.css';
 
 export default class DetailsTable extends React.Component {
 
@@ -13,25 +14,29 @@ export default class DetailsTable extends React.Component {
 
     render() {
         return(
-            <table>
-                <tbody>
-                    {this.renderTableHeader()}
-                    {this.renderTableData()}
-                </tbody>
-            </table>
+            <div>
+            {/*<div class = "table-wrapper">*/}
+                <table>
+                {/*<table class = "fl-table">*/}
+                    <tbody>
+                        {this.renderTableHeader()}
+                        {this.renderTableData()}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 
     renderTableHeader() {
         return (
             <tr>
-                <th style = {{textAlign: "center"}}>Evaluation ID</th>
-                <th style = {{textAlign: "center"}}>Supervisor</th>
-                <th style = {{textAlign: "center"}}>Status</th>
-                <th style = {{textAlign: "center"}}>Type</th>
-                <th style = {{textAlign: "center"}}>Severity</th>
-                <th style = {{textAlign: "center"}}>Description</th>
-                <th style = {{textAlign: "center"}}>Link</th>
+                <th>Evaluation ID</th>
+                <th>Supervisor</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Severity</th>
+                <th>Description</th>
+                <th>Link</th>
             </tr>
         );
     }
@@ -49,13 +54,13 @@ export default class DetailsTable extends React.Component {
             } = Detail;
             return (
                 <tr key = {index}>
-                    <td style = {{textAlign: "center"}}>{Evaluation_ID}</td>
-                    <td id = "Supervisor" style = {{textAlign: "center"}}>{First_Name + " " + Last_Name}</td>
-                    <td style = {{textAlign: "center"}}>{Status}</td>
-                    <td style = {{textAlign: "center"}}>{Type}</td>
-                    <td style = {{textAlign: "center"}}>{Severity}</td>
-                    <td style = {{textAlign: "center"}}>{Description}</td>
-                    <td style = {{textAlign: "center"}}>{Link}</td>
+                    <td>{Evaluation_ID}</td>
+                    <td id = "Supervisor">{First_Name + " " + Last_Name}</td>
+                    <td>{Status}</td>
+                    <td>{Type}</td>
+                    <td>{Severity}</td>
+                    <td>{Description}</td>
+                    <td>{Link}</td>
                 </tr>
             );
         });

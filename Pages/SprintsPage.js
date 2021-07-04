@@ -1,24 +1,23 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
-import MyEvaluationsTable from '../Components/MyEvaluationsTable'
+import SprintsTable from '../Components/SprintsTable'
 
-export default class MyEvaluationsPage extends React.Component {
+export default class SprintsPage extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             redirect: null,
-            Evaluations: [],
+            Sprints: [],
             ready: "notYet"
         }
-        this.goToDetails = this.goToDetails.bind(this);
     }
 
     render() {
         return (
             <div style = {this.props.style}>
-                {(this.state.ready === "true") && <MyEvaluationsTable Evaluations = {this.state.Evaluations} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} />}
-                {(this.state.ready === "false") && <h1>No Evaluations yet</h1>}
+                {(this.state.ready === "true") && <SprintsTable Sprints = {this.state.Sprints} />}
+                {(this.state.ready === "false") && <h1>No Sprints yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
                 <Switch>
                     {this.state.redirect}
@@ -31,31 +30,31 @@ export default class MyEvaluationsPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/MyEvaluations");
+            this.props.history[0]("/UserView/Sprints");
             this.setState({
                 redirect: <Redirect to = "/" />
             });
         }
-        this.props.history[3]("/UserView/MyEvaluations");
-        let tempEvaluations = [];
-        const response = await fetch(`/API/getMyEvaluations/${this.props.ID}`);
+        this.props.history[3]("/UserView/Sprints");
+        let tempSprints = [];
+        const response = await fetch(`/API/getSprints`);
         if(response) {
             const body = await response.json();
-            if(body.Evaluations) {
-                tempEvaluations = body.Evaluations;
+            if(body.Sprints) {
+                tempSprints = body.Sprints;
             }
         }
         this.setState({
-            Evaluations: (tempEvaluations[0] ? tempEvaluations : []),
-            ready: (tempEvaluations[0] ? "true" : "false")
+            Sprints: (tempSprints[0] ? tempSprints : []),
+            ready: (tempSprints[0] ? "true" : "false")
         });
     }
     
-    goToDetails() {
-        this.props.history[0]("/UserView/MyEvaluations")
+    /*goToDetails() {
+        this.props.history[0]("/UserView/Sprints")
         this.setState({
             redirect: <Redirect to = "/UserView/Details" />
         });
-    }
+    }*/
 
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import {Redirect, Switch} from 'react-router';
 import UserTable from '../Components/UserTable';
 
-export default class User extends React.Component {
+export default class UsersPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -17,10 +17,10 @@ export default class User extends React.Component {
     render() {
         return (
             <div style = {this.props.style}>
-                {(this.state.ready === "true") && <User Users = {this.state.Users} style = {this.props.style} />}
-                {(this.state.ready === "false") && <h1>No Details Listed</h1>}
+                {(this.state.ready === "true") && <UserTable Users = {this.state.Users} style = {this.props.style} />}
+                {(this.state.ready === "false") && <h1>No Users Listed</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
-                <button onClick = {this.goToUsers} class = 'addUser'>
+                <button onClick = {this.goToUsers} class = 'addDetail'>
                     Add User
                 </button>
                 <Switch>
@@ -33,7 +33,7 @@ export default class User extends React.Component {
     goToUsers() {
         this.props.history[0]("/UserView/Users");
         this.setState({
-            redirect: <Redirect exact to = {`/UserView/Users/DetailsEdit`} />
+            redirect: <Redirect exact to = {`/UserView/Users/CreateUser`} />
         });
     }
 
@@ -46,16 +46,17 @@ export default class User extends React.Component {
                 redirect: <Redirect to = "/" />
             });
         }
-        let tempDetails = [];
+        this.props.history[3]("/UserView/Users");
+        let tempUsers = [];
         const response = await fetch(`/API/getUsers`);
         if(response) {
             const body = await response.json();
             if(body.Users) {
-                tempDetails = body.Users;
+                tempUsers = body.Users;
             }
         }
         this.setState({
-           Users: (tempUsers[0] ? tempUsers : []),
+            Users: (tempUsers[0] ? tempUsers : []),
             ready: (tempUsers[0] ? "true" : "false")
         });
     }

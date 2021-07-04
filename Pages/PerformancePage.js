@@ -1,28 +1,23 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
+import PerformanceTable from '../Components/PerformanceTable';
 
 export default class PerformancePage extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            redirect: null
-        }
-        this.goBack = this.goBack.bind(this);
+            redirect: null,
+            ready: "notYet"
+        };
     }
 
     render() {
-        if((this.props.loggedIn + "") === "false") {
-            this.setState({
-                redirect: <Redirect to = "/" />
-            });
-        }
         return (
             <div style = {this.props.style}>
-                <button onClick = {this.goBack}>
-                    Back
-                </button>
-                <h1>This is My Performance Page</h1>
+                {(this.state.ready === "true") && <PerformanceTable TotalEvaluations = {this.state.TotalEvaluations} PreviousEvaluation = {this.state.PreviousEvaluation} style = {this.props.style} />}
+                {(this.state.ready === "false") && <h1>Not Evaluated Yet</h1>}
+                {(this.state.ready === "notYet") && <h1>Loading</h1>}
                 <Switch>
                     {this.state.redirect}
                 </Switch>
@@ -30,9 +25,30 @@ export default class PerformancePage extends React.Component {
         );
     }
 
-    goBack() {
+    async componentDidMount() {
+        if((this.props.loggedIn + "") === "false") {
+            this.props.history[0]("/");
+            this.props.history[0]("/UserView");
+            this.props.history[0]("/UserView/Performance");
+            this.setState({
+                redirect: <Redirect to = "/" />
+            });
+        }
+        this.props.history[3]("/UserView/Performance");
+        let tempTotalEvaluations = [];
+        let tempPreviousEvaluation = {};
+        const response = await fetch(`/API/getMyPerformance/${parseInt(this.props.UserID)}`);
+        if(response) {
+            const body = await response.json();
+            if(body.Evaluations) {
+                tempTotalEvaluations = body.Evaluations.TotalEvaluations;
+                tempPreviousEvaluation = body.Evaluations.PreviousEvaluation;
+            }
+        }
         this.setState({
-            redirect: <Redirect exact to = "/UserView" />
+            TotalEvaluations: (tempTotalEvaluations[0] ? tempTotalEvaluations : []),
+            PreviousEvaluation: (tempPreviousEvaluation ? tempPreviousEvaluation : []),
+            ready: (tempTotalEvaluations[0] && tempPreviousEvaluation ? "true" : "false")
         });
     }
 
