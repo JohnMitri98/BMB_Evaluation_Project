@@ -15,12 +15,12 @@ export default class EvaluationsTable extends React.Component {
         this.renderTableData = this.renderTableData.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.calculateGrade = this.calculateGrade.bind(this);
-        this.incrementDB = this.incrementDB.bind(this);
-        this.handleInc = this.handleInc.bind(this);
-        this.handleIncG = this.handleIncG.bind(this);
-        this.decrementDB = this.decrementDB.bind(this);
-        this.handleDec = this.handleDec.bind(this);
-        this.handleDecG = this.handleDecG.bind(this);
+        //this.incrementDB = this.incrementDB.bind(this);
+        //this.handleInc = this.handleInc.bind(this);
+        //this.handleIncG = this.handleIncG.bind(this);
+        //this.decrementDB = this.decrementDB.bind(this);
+        //this.handleDec = this.handleDec.bind(this);
+        //this.handleDecG = this.handleDecG.bind(this);
         this.handleDataChange = this.handleDataChange.bind(this);
         this.submitUpdate = this.submitUpdate.bind(this);
         this.state = {
@@ -217,7 +217,7 @@ export default class EvaluationsTable extends React.Component {
         });
     }
     
-    async incrementDB(ID, Field, Grade, Decimal) {
+    /*async incrementDB(ID, Field, Grade, Decimal) {
         this.setState({});
         this.props.refreshPage();
         let tempObj = {
@@ -245,9 +245,9 @@ export default class EvaluationsTable extends React.Component {
             },
             body: JSON.stringify(tempObj2)
         });
-    }
+    }*/
 
-    async decrementDB(ID, Field, Grade, Decimal) {
+    /*async decrementDB(ID, Field, Grade, Decimal) {
         this.setState({});
         this.props.refreshPage();
         let tempObj = {
@@ -275,34 +275,34 @@ export default class EvaluationsTable extends React.Component {
             },
             body: JSON.stringify(tempObj2)
         });
-    }
+    }*/
 
-    async handleInc(Evaluation, Field) {
+    /*async handleInc(Evaluation, Field) {
         let tempGrade = this.calculateGrade(Evaluation);
         Evaluation[Field]++;
         await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
+    }*/
 
-    async handleDec(Evaluation, Field) {
+    /*async handleDec(Evaluation, Field) {
         if(Evaluation[Field] > 0) {
             Evaluation[Field]--;
             let tempGrade = this.calculateGrade(Evaluation);
             await this.decrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
         }
-    }
+    }*/
 
-    async handleIncG(Evaluation, Field) {
+    /*async handleIncG(Evaluation, Field) {
         Evaluation[Field]++;
         let tempGrade = this.calculateGrade(Evaluation);
         await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }
+    }*/
 
-    async handleDecG(Evaluation, Field) {
+    /*async handleDecG(Evaluation, Field) {
         if(Evaluation[Field] > 0) {
             Evaluation[Field]--;
             let tempGrade = this.calculateGrade(Evaluation);
             await this.decrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
         }
-    }
+    }*/
 
 }
