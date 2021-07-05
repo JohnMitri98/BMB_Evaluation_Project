@@ -71,6 +71,7 @@ input.tableInput {
     width: 50px;
     margin-left: 0px;
     padding: 10px;
+    background: #ffffff;
 }
 
 input[type=submit] {

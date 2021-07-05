@@ -439,10 +439,6 @@ async function insertRoleColumn(ColumnName) {
 
 async function updateEvaluation(Change, Grade, Field, EvaluationID) {
     const pool = new sql.ConnectionPool(sqlConfig);
-    console.log("Change: ", Decrypt(Change));
-    console.log("Field: ", Decrypt(Field));
-    console.log("Grade: ", Decrypt(Grade));
-    console.log("ID: ", Decrypt(EvaluationID));
     const poolConnect = pool.connect();
     await poolConnect;
     try {
