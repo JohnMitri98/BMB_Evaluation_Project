@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Encrypt} from '../Encryption/Encryptor';
-var _ = require('lodash');
 
 let ss = 1;
 let sa = 2;
