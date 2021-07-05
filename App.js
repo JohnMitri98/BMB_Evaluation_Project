@@ -241,18 +241,12 @@ export default class App extends React.Component {
     }
 
     setPreviousPage(page) {
-        let tempPageHistory = this.state.previousPageHistory;
-        tempPageHistory.push(page);
-        this.setState({
-            previousPageHistory: tempPageHistory
-        });
+        this.state.previousPageHistory.push(page);
     }
 
     async goBack() {
-        let tempHistory = this.state.previousPageHistory;
-        let redirectPath = tempHistory.pop();
+        let redirectPath = this.state.previousPageHistory.pop();
         await this.setState({
-            previousPageHistory: tempHistory,
             redirect: <Redirect exact to = {redirectPath + ""} />
         });
         await this.setState({

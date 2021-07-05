@@ -437,6 +437,23 @@ async function insertRoleColumn(ColumnName) {
     pool.close();
 }
 
+async function updateEvaluation(Change, Grade, Field, EvaluationID) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    console.log("Change: ", Decrypt(Change));
+    console.log("Field: ", Decrypt(Field));
+    console.log("Grade: ", Decrypt(Grade));
+    console.log("ID: ", Decrypt(EvaluationID));
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Update dbo.Evaluations set ${Decrypt(Field) + ""} = ${Decrypt(Change)}, Grade = ${Decrypt(Grade)} where ID = ${Decrypt(EvaluationID)};`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -527,6 +544,11 @@ router.post('/insertRole', async function(req, res) {
 
 router.post('/insertRoleColumn', async function(req, res) {
     await insertRoleColumn(req.body.ColumnName);
+    res.send("Done");
+});
+
+router.post('/updateEvaluation', async function(req, res) {
+    await updateEvaluation(req.body.Change, req.body.Grade, req.body.Field, req.body.EvaluationID);
     res.send("Done");
 });
 

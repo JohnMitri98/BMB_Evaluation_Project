@@ -67,6 +67,12 @@ input {
     position: relative;
 }
 
+input.tableInput {
+    width: 50px;
+    margin-left: 0px;
+    padding: 10px;
+}
+
 input[type=submit] {
 	width: 150px;
     margin-top: 40px;

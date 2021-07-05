@@ -37,7 +37,7 @@ export default class EvaluationsPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Evaluations");
+            await this.props.history[0]("/UserView/Evaluations");
             this.setState({
                 Redirect: <Redirect to = "/" />
             });
