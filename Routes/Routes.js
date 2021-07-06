@@ -99,9 +99,9 @@ async function getSprintEvaluationsDone(Evaluator, Admin) {
     try {
         const request = pool.request();
         if(Decrypt(Admin) === "true") {
-            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID group by Start_Date, s.ID order by Start_Date;`);
+            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID group by Start_Date, s.ID order by Start_Date Desc;`);
         } else {
-            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${Decrypt(Evaluator)} group by Start_Date, s.ID order by Start_Date;`);
+            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${Decrypt(Evaluator)} group by Start_Date, s.ID order by Start_Date Desc;`);
         }
         
         result.recordset.forEach(result => {
