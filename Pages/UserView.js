@@ -29,7 +29,7 @@ export default class UserView extends React.Component {
         );
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             await this.props.history[0]("/UserView");
