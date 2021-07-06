@@ -1,0 +1,129 @@
+body {
+	font-family: 'Source Sans Pro', sans-serif;
+	padding: 0;
+	margin: 0;
+	background-image: url('fs.jpg');
+    background-repeat: no-repeat;
+	background-position: right right;
+	background-size: cover;
+	animation-name: example;
+    animation-duration: 4s;
+}
+
+p {
+    font-weight: 500;
+    color: rgb(202, 126, 196);
+    opacity: 0.7;
+    font-size: 3rem;
+    margin-bottom: 60px;
+    text-shadow: 2px 2px 4px rgba(15, 66, 206, 0.2);
+}
+
+.container {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+}
+
+input {
+    background: transparent;
+    width: 200px;
+    padding: 1em;
+    margin-bottom: 2em;
+    border: none;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    border-radius: 5000px;
+    box-shadow: 4px 4px 60px rgba(0,0,0,0.2);
+    color: rgb(202, 126, 196);
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.drop {
+    background: white;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    box-shadow: 10px 10px 60px -8px rgba(0,0,0,0.2);
+    position: absolute;
+    transition: all 0.2s ease;
+}
+
+div {
+	color:rgb(10, 10, 12);
+	font-size:50px;
+	right:2px;
+}
+
+label {
+	color:rgb(122, 122, 134);
+	font-size: 50px;
+	tab-size: 50px;
+	width:300px;
+    display: inline-block;
+}
+ 
+form {
+	background:rgba(134, 147, 206, 0.3);
+	padding: 4em ;
+	margin: 7rem;
+	margin-left: 15em;
+	height: 130px;
+	border-radius: 25px;
+	border-right: 1px solid rgba(255,255,255,0.3);
+	border-top: 1px solid rgba(255,255,255,0.3);
+	backdrop-filter: blur(10px);
+	box-shadow: 20px 20px 40px -6px rgba(0,0,0,0.2);
+	transition: all 0.2s ease-in-out;
+	overflow: hidden;
+	position: relative;
+}
+
+::placeholder {
+	font-family: Montserrat, sans-serif;
+	font-weight: 300;
+	color: rgb(202, 126, 196);
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+input {
+    display: block;
+    width: 100%;
+    margin-bottom: 35px;
+    height: 45px;
+    border-radius: 20px;
+    border: none;
+    background: #f2f2f2;
+    padding: 9px;
+    font-size: 14px;
+    position: relative;
+}
+
+input[type=submit] {
+	width: 100%;
+	margin-bottom: 5px;
+	border: none;
+	background: #ffffff;
+	padding: 30px;
+	font-size: 14px;
+	text-align: 30px;
+}
+
+table {
+    border: 1px solid rgb(131, 127, 127);
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}

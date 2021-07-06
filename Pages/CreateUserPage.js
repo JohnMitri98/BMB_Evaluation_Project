@@ -15,6 +15,8 @@ export default class CreateUserPage extends React.Component {
             Roles: []
         }
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.searchManagerName = this.searchManagerName.bind(this);
+        this.searchRoleName = this.searchRoleName.bind(this);
     }
 
     render() {
@@ -105,6 +107,26 @@ export default class CreateUserPage extends React.Component {
             Roles: tempRoles,
             Ready: "true"
         });
+    }
+
+    searchManagerName(ManagerID, UserArray) {
+        let tempReturn = "";
+        UserArray.forEach(user => {
+            if(user.ID === ManagerID) {
+                tempReturn = user.First_Name + " " + user.Last_Name;
+            }
+        });
+        return tempReturn;
+    }
+
+    searchRoleName(RoleID, RoleArray) {
+        let tempReturn = "";
+        RoleArray.forEach(role => {
+            if(role.ID === RoleID) {
+                tempReturn = role.Name + "";
+            }
+        });
+        return tempReturn;
     }
 
 }

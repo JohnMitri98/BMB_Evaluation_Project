@@ -17,6 +17,8 @@ import SprintsPage from './Pages/SprintsPage';
 import CreateSprintPage from './Pages/CreateSprintPage';
 import RolesPage from './Pages/RolesPage';
 import './Styles/Test.css';
+import img1 from './Styles/img.jpg';
+import img2 from './Styles/fs.jpg';
 
 const initialState = {
     correct: null,
@@ -67,6 +69,11 @@ export default class App extends React.Component {
         }
         if((this.state.correct + "") === "false") {
             warning = <h1>Incorrect Username or Password</h1>
+        }
+        if(this.state.loggedIn + "" === "true") {
+            document.body.style.backgroundImage = `url(${img1})`;
+        } else {
+            document.body.style.backgroundImage = `url(${img2})`;
         }
         let history = [this.setPreviousPage, this.goBack, this.state.previousPageHistory, this.setCurrentPage];
 

@@ -2,8 +2,12 @@ body {
 	font-family: 'Source Sans Pro', sans-serif;
 	padding: 0;
 	margin: 0;
-	background-image: url('img.jpg');
+	background-image: url('fs.jpg');
     background-size: cover;
+}
+body.standard {
+    background-image: url('img.jpg');
+	background-image: url('fs.jpg');
 }
 
 h1 {
@@ -14,6 +18,12 @@ h1 {
 div {
 	color:rgb(10, 10, 12);
 	font-size:18px;
+}
+
+div.Login {
+	color:rgb(10, 10, 12);
+	font-size:50px;
+	right:2px;
 }
 
 div.extraWidth {
@@ -27,6 +37,14 @@ label {
 	tab-size: 22px;
 	width: auto;
     margin-top: 20px;
+    display: inline-block;
+}
+
+label.Login {
+	color:rgb(122, 122, 134);
+	font-size: 50px;
+	tab-size: 50px;
+	width:300px;
     display: inline-block;
 }
 
@@ -53,7 +71,26 @@ form.largerDetails {
 form.Evaluation {
     height: 700px;
 }
-	 
+
+form.Login {
+    display: inline-table;
+	background:rgba(134, 147, 206, 0.3);
+	padding: 4em;
+    padding-top: 1em;
+	margin: 7rem;
+	margin-left: 45em;
+    width: 200px;
+	height: 130px;
+	border-radius: 25px;
+	border-right: 1px solid rgba(255,255,255,0.3);
+	border-top: 1px solid rgba(255,255,255,0.3);
+	backdrop-filter: blur(10px);
+	box-shadow: 20px 20px 40px -6px rgba(0,0,0,0.2);
+	transition: all 0.2s ease-in-out;
+	overflow: hidden;
+	position: relative;
+}
+
 input {
     width: auto;
     margin-bottom: 0px;
@@ -84,6 +121,35 @@ input[type=submit] {
 	font-size: 18px;
     position: relative;
 	text-align: 50px;
+}
+
+input.Login {
+    display: block;
+    background: #f2f2f2 transparent;
+    font-size: 14px;
+    width: 200px;
+    padding: 1em;
+    margin-bottom: 2em;
+    margin-left: 0px;
+    border: none;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    border-radius: 5000px;
+    box-shadow: 4px 4px 60px rgba(0,0,0,0.2);
+    color: rgb(202, 126, 196);
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+p {
+    font-weight: 500;
+    color: rgb(202, 126, 196);
+    opacity: 0.7;
+    font-size: 3rem;
+    margin-bottom: 60px;
+    text-shadow: 2px 2px 4px rgba(15, 66, 206, 0.2);
 }
 
 select {
