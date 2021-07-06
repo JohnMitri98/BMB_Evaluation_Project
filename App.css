@@ -13,10 +13,7 @@ body {
   animation-duration: 4s;
   
 	}
-	@keyframes p {
-		from {background-color: red;}
-		to {background-color: yellow;}
-	  }
+	
 
 	p {
 		font-weight: 500;
@@ -27,37 +24,30 @@ body {
 		margin-bottom: 60px;
 		text-shadow: 2px 2px 4px rgba(15, 66, 206, 0.2);
 	  }
-	  .container {
+	.container {
 		position: absolute;
 		transform: translate(-50%,-50%);
 		top: 50%;
 		left: 50%;
 	  }
 	  input {
-		background: transparent;
+		
 		width: 200px;
+		
 		padding: 1em;
 		margin-bottom: 2em;
 		border: none;
 		border-left: 1px solid white;
 		border-top: 1px solid white;
 		border-radius: 5000px;
-		
+		background: #f2f2f2;
 		box-shadow: 4px 4px 60px rgba(0,0,0,0.2);
 		color: rgb(202, 126, 196);
 		font-family: Montserrat, sans-serif;
 		font-weight: 500;
 		transition: all 0.2s ease-in-out;
 		text-shadow: 2px 2px 4px rgba(0,0,0,0.2);}
-		.drop {
-			background: white;
-			backdrop-filter: blur(10px);
-			border-radius: 10px;
-			border-left: 1px solid white;
-			border-top: 1px solid white;
-			box-shadow: 10px 10px 60px -8px rgba(0,0,0,0.2);
-			position: absolute;
-			transition: all 0.2s ease;}
+		
 div{
 	color:rgb(10, 10, 12);
 	font-size:50px;
@@ -74,11 +64,95 @@ label{
   
 
  }
+ #mySidenav a {
+	position: absolute; /* Position them relative to the browser window */
+	/*left: -170px; /* Position them outside of the screen */
+	transition: 0.3s; /* Add transition on hover */
+	padding: 15px; /* 15px padding */
+	/*width: 150px; /* Set a specific width */
+	text-decoration: none; /* Remove underline */
+	font-size: 20px; /* Increase font size */
+	color: white; /* White text color */
+	border-radius: 0 5px 5px 0; /* Rounded corners on the top right and bottom right side */
+
+	
+  }
+
+  #mySidenav b {
+	  margin-right: 50px;
+  }
   
+  #mySidenav a:hover {
+	left: 0; /* On mouse-over, make the elements appear as they should */
+  }
+  
+  /* The about link: 20px from the top with a green background */
+  #Homes  {
+	top: 20px;
+	width: auto;
+	left: -105px;
+	background-color: #8e62f34b; /* Blue */
+  }
+  #Homes ::selection{
+	  background:green;
+	  color:yellow;
+  }
+
+  #Back  {
+	top: 80px;
+	background-color: #0476aa;
+	text-align: right;
+	width: auto;
+	left:-100px;
+  }
+  
+  #Evaluations {
+	top: 140px;
+	width: auto;
+	left: -162px;
+	background-color: #2d0885; /* Blue */
+	
+  }
+  
+  #MyEvaluations {
+	top: 200px;
+	width: auto;
+	left: -190px;
+	background-color: #9e36f4; /* Red */
+  }
+  
+  #MyPerformance {
+	top: 260px;
+	width: auto;
+	left: -197px;
+	background-color: #555 /* Light Black */
+  }
+  #Sprint {
+	top: 320px;
+	width: auto;
+	left: -105px;
+	background-color: rgb(88, 4, 84) /* Light Black */
+  }
+  #Users {
+	top: 380px;
+	width: auto;
+	left: -90px;
+	background-color: rgb(182, 145, 224) 
+  }
  
- form {
+  #SignOut {
+	top: 440px;
+	width: auto;
+	left: -128px;
+	background-color: rgb(155, 9, 65) 
+  }
+
+
+ 
+ form.Login {
 	background:rgba(134, 147, 206, 0.3);
 	padding: 4em ;
+	padding-top:3em;
 	margin: 7rem;
 	margin-left: 15em;
 	height: 130px;
@@ -87,44 +161,18 @@ label{
 	border-top: 1px solid rgba(255,255,255,0.3);
 	backdrop-filter: blur(10px);
 	box-shadow: 20px 20px 40px -6px rgba(0,0,0,0.2);
-	
-	
-	
 	transition: all 0.2s ease-in-out;
-
 	overflow: hidden;
 	position: relative;
-
-	
- }
+}
  ::placeholder {
 	font-family: Montserrat, sans-serif;
 	font-weight: 300;
 	color: rgb(202, 126, 196);
 	text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
   }
-	input {
-		display: block;
-		width: 100%;
-		margin-bottom: 35px;
-		height: 45px;
-		border-radius: 20px;
-		border: none;
-		background: #f2f2f2;
-		padding: 9px;
-		font-size: 14px;
-		position: relative;
-		}
-input[type=submit]{
-	width: 100%;
-	margin-bottom: 5px;
-	border: none;
-	background: #ffffff;
-	padding: 30px;
-	font-size: 14px;
-	text-align: 30px;
 	
-		}
+
 		 table{
 		border: 1px solid rgb(131, 127, 127);
 	  }

@@ -14,9 +14,11 @@ export default class LoginForm extends React.Component {
     }
 
     render() {
+        const container = { height: 1300 }
         return (
-            
-            <form onSubmit={this.handleSubmit}><div class="container">
+            <form>
+            <form onSubmit={this.handleSubmit} class="Login"><div class="container">
+                
                 <div style = {this.props.style}>
                     <p>Login</p>
                     <div>
@@ -32,9 +34,24 @@ export default class LoginForm extends React.Component {
                     </div>
                     <input type="button" value="Sign in" onSubmit = {this.onSubmit}/>
                 </div></div>
-            </form>
-        )
-    }
+    
+        
+            </form >
+            <div id="mySidenav" class="sidenav">
+                
+        <a href="#" id="Homes"><b>Home</b></a>
+        <a href="#" id="Back"><b>Back</b></a>
+        <a href="#" id="Evaluations"><b>Evaluations</b></a>
+        <a href="#" id="MyEvaluations"><b>MyEvaluations</b></a>
+        <a href="#" id="MyPerformance"><b>MyPerformance</b></a>
+        <a href="#" id="Sprint"><b>Sprint</b></a>
+        <a href="#" id="Users"><b>User</b></a>
+        <a href="#" id="SignOut"><b>Sign Out</b></a>
+      </div>  
+             </form>
+        ) 
+     
+    }  
 
     async handleSubmit(e) {
         e.preventDefault();
