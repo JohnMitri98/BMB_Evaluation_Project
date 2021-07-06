@@ -21,6 +21,7 @@ import './Styles/Test.css';
 import img1 from './Styles/img.jpg';
 import img2 from './Styles/fs.jpg';
 import img3 from './Styles/img3.jpg';
+import img4 from './Styles/img4.jpg';
 
 const initialState = {
     correct: null,
@@ -75,7 +76,7 @@ export default class App extends React.Component {
             warning = <h1>Incorrect Username or Password</h1>
         }
         if(this.state.loggedIn + "" === "true") {
-            document.body.style.backgroundImage = `url(${img3})`;
+            document.body.style.backgroundImage = `url(${img4})`;
         } else {
             document.body.style.backgroundImage = `url(${img2})`;
         }
