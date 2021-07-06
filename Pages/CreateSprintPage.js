@@ -45,11 +45,11 @@ export default class CreateSprintPage extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Sprints");
+            await this.props.history[0]("/UserView/Sprints");
             this.setState({
                 redirect: <Redirect to = "/" />
             });

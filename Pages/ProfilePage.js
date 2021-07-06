@@ -21,11 +21,11 @@ export default class ProfilePage extends React.Component {
         );
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/MyProfile");
+            await this.props.history[0]("/UserView/MyProfile");
             this.setState({
                 redirect: <Redirect to = "/" />
             });

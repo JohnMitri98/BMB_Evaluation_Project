@@ -44,7 +44,7 @@ export default class UsersPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Users");
+            await this.props.history[0]("/UserView/Users");
             this.setState({
                 redirect: <Redirect to = "/" />
             });

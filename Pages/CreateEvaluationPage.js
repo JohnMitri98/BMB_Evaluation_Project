@@ -55,7 +55,7 @@ export default class CreateEvaluationPage extends React.Component {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
             this.props.history[0]("/UserView/Evaluations");
-            this.props.history[0]("/UserView/Evaluations/CreateEvaluation");
+            await this.props.history[0]("/UserView/Evaluations/CreateEvaluation");
             this.setState({
                 Redirect: <Redirect to = "/" />
             });

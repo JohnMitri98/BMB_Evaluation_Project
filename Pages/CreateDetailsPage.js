@@ -45,11 +45,11 @@ export default class CreateDetailsPage extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Evaluations");
+            await this.props.history[0]("/UserView/Evaluations");
             this.setState({
                 redirect: <Redirect to = "/" />
             });

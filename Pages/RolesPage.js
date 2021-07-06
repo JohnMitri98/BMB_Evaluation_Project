@@ -34,7 +34,7 @@ export default class RolesPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Roles");
+            await this.props.history[0]("/UserView/Roles");
             this.setState({
                 redirect: <Redirect to = "/" />
             });

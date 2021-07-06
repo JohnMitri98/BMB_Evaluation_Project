@@ -32,7 +32,7 @@ export default class UserView extends React.Component {
     componentDidMount() {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
-            this.props.history[0]("/UserView");
+            await this.props.history[0]("/UserView");
             this.setState({
                 redirect: <Redirect to = "/" />
             });
