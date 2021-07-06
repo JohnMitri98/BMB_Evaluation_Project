@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect, Switch} from 'react-router-dom';
-import EvaluationsTable from '../Components/EvaluationsTable';
+import SprintEvaluationsTable from '../Components/SprintEvaluationsTable';
 import {Encrypt} from '../Encryption/Encryptor';
 import {Decrypt} from '../Encryption/Decryptor';
 
@@ -10,12 +10,11 @@ export default class EvaluationsPage extends React.Component {
         super(props);
         this.state = {
             Redirect: null,
-            Evaluations: [],
+            SprintEvaluations: [],
             Subordinates: [],
-            Ready: "notYet",
-            LastSprint: null
+            Ready: "notYet"
         }
-        this.goToDetails = this.goToDetails.bind(this);
+        this.goToEvaluations = this.goToEvaluations.bind(this);
         this.goToEvaluate = this.goToEvaluate.bind(this);
         this.refreshPage = this.refreshPage.bind(this);
     }
@@ -23,7 +22,7 @@ export default class EvaluationsPage extends React.Component {
     render() {
         return (
             <div style = {this.props.style}>
-                {(this.state.Ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} lastSprint = {this.state.LastSprint} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} refreshPage = {this.refreshPage} />}
+                {(this.state.Ready === "true") && <SprintEvaluationsTable SprintEvaluations = {this.state.SprintEvaluations} onEvaluationsButton = {[this.props.onEvaluationsButton, this.goToEvaluations]} refreshPage = {this.refreshPage} />}
                 {(this.state.Ready === "false") && <h1>No Evaluations made yet</h1>}
                 {(this.state.Ready === "notYet") && <h1>Loading</h1>}
                 {(this.state.Subordinates[0] && <button onClick = {this.goToEvaluate} class = "addDetail">Evaluate</button>)}
@@ -43,16 +42,14 @@ export default class EvaluationsPage extends React.Component {
                 Redirect: <Redirect to = "/" />
             });
         }
-        this.props.history[3]("/UserView/SprintEvaluations/Evaluations");
-        let tempEvaluations = [];
+        this.props.history[3]("/UserView/SprintEvaluations");
+        let tempSprintEvaluations = [];
         let tempSubordinates = [];
-        let tempSprint = {};
         let tempObj = {
             UserID: Encrypt(this.props.ID),
-            SprintID: Encrypt(this.props.SprintID),
             Admin: Encrypt((this.props.role === "Admin") + "")
         };
-        var response = await fetch(`/API/getEvaluationsDone`, {
+        var response = await fetch(`/API/getSprintEvaluationsDone`, {
             method: 'SEARCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,13 +58,12 @@ export default class EvaluationsPage extends React.Component {
         });
         if(response) {
             const body = await response.json();
-            if(body.Evaluations) {
-                tempEvaluations = body.Evaluations;
-                tempEvaluations.forEach(evaluation => {
-                    for(const [key, value] of Object.entries(evaluation)) {
-                        evaluation[key] = Decrypt(value);
+            if(body.SprintEvaluations) {
+                tempSprintEvaluations = body.SprintEvaluations;
+                tempSprintEvaluations.forEach(sprintEvaluation => {
+                    for(const [key, value] of Object.entries(sprintEvaluation)) {
+                        sprintEvaluation[key] = Decrypt(value);
                     }
-                    evaluation.showAll = false;
                 });
             }
         }
@@ -93,30 +89,22 @@ export default class EvaluationsPage extends React.Component {
                 });
             }
         }
-        response = await fetch(`/API/getLastSprint`);
-        if(response) {
-            const body = await response.json();
-            if(body.Start_Date) {
-                tempSprint = Decrypt(body.Start_Date);
-            }
-        }
         this.setState({
-            Evaluations: (tempEvaluations[0] ? tempEvaluations : []),
+            SprintEvaluations: (tempSprintEvaluations[0] ? tempSprintEvaluations : []),
             Subordinates: (tempSubordinates[0] ? tempSubordinates : []),
-            LastSprint: tempSprint,
-            Ready: (tempEvaluations[0] ? "true" : "false")
+            Ready: (tempSprintEvaluations[0] ? "true" : "false")
         });
     }
 
-    goToDetails() {
-        this.props.history[0]("/UserView/SprintEvaluations/Evaluations");
+    goToEvaluations() {
+        this.props.history[0]("/UserView/SprintEvaluations");
         this.setState({
-            Redirect: <Redirect to = "/UserView/Details" />
+            Redirect: <Redirect to = "/UserView/SprintEvaluations/Evaluations" />
         });
     }
 
     goToEvaluate() {
-        this.props.history[0]("/UserView/SprintEvaluations/Evaluations");
+        this.props.history[0]("/UserView/SprintEvaluations");
         this.setState({
             Redirect: <Redirect to = "/UserView/SprintEvaluations/Evaluations/CreateEvaluation" />
         });

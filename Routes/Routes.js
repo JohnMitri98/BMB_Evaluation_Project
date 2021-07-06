@@ -62,7 +62,7 @@ async function checkLogin(Username, Password) {
     return JSON.stringify(tempObj);
 }
 
-async function getEvaluationsDone(Evaluator, Admin) {
+async function getEvaluationsDone(Evaluator, Admin, SprintID) {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
     let tempResult = [];
@@ -70,9 +70,9 @@ async function getEvaluationsDone(Evaluator, Admin) {
     try {
         const request = pool.request();
         if(Decrypt(Admin) === "true") {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
         } else {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${Decrypt(Evaluator)} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID;`);
+            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${Decrypt(Evaluator)} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
         }
         
         result.recordset.forEach(result => {
@@ -87,6 +87,35 @@ async function getEvaluationsDone(Evaluator, Admin) {
     pool.close();
     let tempObj = {
         Evaluations: tempResult
+    };
+    return JSON.stringify(tempObj);
+}
+
+async function getSprintEvaluationsDone(Evaluator, Admin) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = [];
+    await poolConnect;
+    try {
+        const request = pool.request();
+        if(Decrypt(Admin) === "true") {
+            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID group by Start_Date, s.ID order by Start_Date;`);
+        } else {
+            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${Decrypt(Evaluator)} group by Start_Date, s.ID order by Start_Date;`);
+        }
+        
+        result.recordset.forEach(result => {
+            for(const [key, value] of Object.entries(result)) {
+                result[key] = Encrypt(value);
+            }
+            tempResult.push(result);
+        });
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    let tempObj = {
+        SprintEvaluations: tempResult
     };
     return JSON.stringify(tempObj);
 }
@@ -231,7 +260,7 @@ async function getMyEvaluations(EvaluatedID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(EvaluatedID)} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID;`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(EvaluatedID)} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID order by Start_Date;`);
         result.recordset.forEach(result => {
             for(const [key, value] of Object.entries(result)) {
                 result[key] = Encrypt(value);
@@ -450,6 +479,22 @@ async function updateEvaluation(Change, Grade, Field, EvaluationID) {
     pool.close();
 }
 
+async function getLastSprint() {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    let tempResult = {};
+    await poolConnect;
+    try {
+        const request = pool.request();
+        var result = await request.query(`Select Start_Date from dbo.Sprints order by Start_Date Desc;`)
+        tempResult.Start_Date = Encrypt(result.recordset[0].Start_Date);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+    return JSON.stringify(tempResult);
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -477,7 +522,11 @@ router.search('/getDetails', async function(req, res) {
 });
 
 router.search('/getEvaluationsDone', async function(req, res) {
-    res.send(await getEvaluationsDone(req.body.UserID, req.body.Admin));
+    res.send(await getEvaluationsDone(req.body.UserID, req.body.Admin, req.body.SprintID));
+});
+
+router.search('/getSprintEvaluationsDone', async function(req, res) {
+    res.send(await getSprintEvaluationsDone(req.body.UserID, req.body.Admin));
 });
 
 router.search('/getMyPerformance', async function(req, res) {
@@ -546,6 +595,10 @@ router.post('/insertRoleColumn', async function(req, res) {
 router.post('/updateEvaluation', async function(req, res) {
     await updateEvaluation(req.body.Change, req.body.Grade, req.body.Field, req.body.EvaluationID);
     res.send("Done");
+});
+
+router.get('/getLastSprint', async function(req, res) {
+    res.send(await getLastSprint());
 });
 
 module.exports = router;

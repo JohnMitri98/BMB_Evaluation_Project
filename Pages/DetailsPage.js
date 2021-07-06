@@ -45,7 +45,7 @@ export default class DetailsPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            await this.props.history[0]("/UserView/Evaluations");
+            await this.props.history[0]("/UserView/SprintEvaluations");
             this.setState({
                 redirect: <Redirect to = "/" />
             });

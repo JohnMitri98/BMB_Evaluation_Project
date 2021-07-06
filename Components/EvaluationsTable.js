@@ -86,86 +86,86 @@ export default class EvaluationsTable extends React.Component {
                     <td>
                         {new Date(Start_Date).toDateString()}
                     </td>
-                    <td>
-                        {/*{Nb_Features_Taken}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Features_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Taken} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Features_Taken", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Features_Taken")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_Features_Completed}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Features_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Completed} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Features_Completed", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Features_Completed")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_Bugs_Taken}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Bugs_Taken")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Taken} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Bugs_Taken", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Bugs_Taken")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_Bugs_Completed}
-                        <Link onClick={() => this.handleInc(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDec(Evaluation, "Nb_Bugs_Completed")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Completed} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Bugs_Completed", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Bugs_Completed")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_PR}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_PR} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_PR_Rejected}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR_Rejected")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_PR_Rejected} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR_Rejected", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR_Rejected")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_PR_Severe}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR_Severe")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_PR_Severe} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR_Severe", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR_Severe")} class = "tableInput" />
-                    </td>
-                    <td>
-                        {/*{Nb_PR_Abandoned}
-                        <Link onClick={() => this.handleIncG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            +
-                        </Link>
-                        <Link onClick={() => this.handleDecG(Evaluation, "Nb_PR_Abandoned")} style={{ textDecoration: 'none', paddingLeft: 5 }}>
-                            -
-                        </Link>*/}
-                        <input type = "text" pattern = "[0-9]*" value = {Nb_PR_Abandoned} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR_Abandoned", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR_Abandoned")} class = "tableInput" />
-                    </td>
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_Features_Taken}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Taken} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Features_Taken", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Features_Taken")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_Features_Completed}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Completed} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Features_Completed", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Features_Completed")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_Bugs_Taken}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Taken} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Bugs_Taken", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Bugs_Taken")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_Bugs_Completed}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Completed} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_Bugs_Completed", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_Bugs_Completed")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_PR}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_PR} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_PR_Rejected}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_PR_Rejected} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR_Rejected", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR_Rejected")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_PR_Severe}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_PR_Severe} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR_Severe", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR_Severe")} class = "tableInput" />
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") !== (Start_Date + "")) &&
+                        <td>
+                            {Nb_PR_Abandoned}
+                        </td>
+                    }
+                    {((this.props.lastSprint + "") === (Start_Date + "")) &&
+                        <td>
+                            <input type = "text" pattern = "[0-9]*" value = {Nb_PR_Abandoned} onChange = {(event) => this.handleDataChange(Evaluation, "Nb_PR_Abandoned", event)} onBlur = {() => this.submitUpdate(Evaluation, "Nb_PR_Abandoned")} class = "tableInput" />
+                        </td>
+                    }
                     <td>
                         {parseFloat(Grade).toFixed(2)}
                     </td>
@@ -215,93 +215,5 @@ export default class EvaluationsTable extends React.Component {
             body: JSON.stringify(tempObj)
         });
     }
-    
-    /*async incrementDB(ID, Field, Grade, Decimal) {
-        this.setState({});
-        this.props.refreshPage();
-        let tempObj = {
-            EvaluationID: Encrypt(ID),
-            Field: Encrypt(Field)
-        };
-        await fetch(`/API/incrementEvaluation`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tempObj)
-        });
-        let tempObj2 = {
-            Grade: {
-                ID: Encrypt(ID),
-                param1: Encrypt(Grade),
-                param2: Encrypt(Decimal)
-            }
-        };
-        await fetch(`/API/changeGrade`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tempObj2)
-        });
-    }*/
-
-    /*async decrementDB(ID, Field, Grade, Decimal) {
-        this.setState({});
-        this.props.refreshPage();
-        let tempObj = {
-            EvaluationID: Encrypt(ID),
-            Field: Encrypt(Field)
-        };
-        await fetch(`/API/decrementEvaluation`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tempObj)
-        });
-        let tempObj2 = {
-            Grade: {
-                ID: Encrypt(ID),
-                param1: Encrypt(Grade),
-                param2: Encrypt(Decimal)
-            }
-        };
-        await fetch(`/API/changeGrade`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tempObj2)
-        });
-    }*/
-
-    /*async handleInc(Evaluation, Field) {
-        let tempGrade = this.calculateGrade(Evaluation);
-        Evaluation[Field]++;
-        await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }*/
-
-    /*async handleDec(Evaluation, Field) {
-        if(Evaluation[Field] > 0) {
-            Evaluation[Field]--;
-            let tempGrade = this.calculateGrade(Evaluation);
-            await this.decrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-        }
-    }*/
-
-    /*async handleIncG(Evaluation, Field) {
-        Evaluation[Field]++;
-        let tempGrade = this.calculateGrade(Evaluation);
-        await this.incrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-    }*/
-
-    /*async handleDecG(Evaluation, Field) {
-        if(Evaluation[Field] > 0) {
-            Evaluation[Field]--;
-            let tempGrade = this.calculateGrade(Evaluation);
-            await this.decrementDB(Evaluation.ID, Field, Math.floor(tempGrade), Math.floor(100 * (tempGrade - Math.floor(tempGrade))));
-        }
-    }*/
 
 }

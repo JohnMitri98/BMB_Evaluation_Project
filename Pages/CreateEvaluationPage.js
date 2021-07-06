@@ -54,13 +54,14 @@ export default class CreateEvaluationPage extends React.Component {
         if((this.props.loggedIn + "") === "false") {
             this.props.history[0]("/");
             this.props.history[0]("/UserView");
-            this.props.history[0]("/UserView/Evaluations");
-            await this.props.history[0]("/UserView/Evaluations/CreateEvaluation");
+            this.props.history[0]("/UserView/SprintEvaluations");
+            this.props.history[0]("/UserView/SprintEvaluations/Evaluations");
+            await this.props.history[0]("/UserView/SprintEvaluations/Evaluations/CreateEvaluation");
             this.setState({
                 Redirect: <Redirect to = "/" />
             });
         }
-        this.props.history[3]("/UserView/Evaluations/CreateEvaluation");
+        this.props.history[3]("/UserView/SprintEvaluations/Evaluations/CreateEvaluation");
         let tempSubordinates = [];
         let tempSprints = [];
         let tempObj = {

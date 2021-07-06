@@ -1,12 +1,6 @@
 import React from 'react';
 //import "../Styles/Table.css";
 
-
-let ss = 1;
-let sa = 2;
-let st = 0.2;
-
-
 export default class PerformanceTable extends React.Component {
 
     constructor(props) {
@@ -87,7 +81,9 @@ export default class PerformanceTable extends React.Component {
             TotalNBPR: 0,
             TotalNBPRR: 0,
             TotalNBPRS: 0,
-            TotalNBPRA: 0
+            TotalNBPRA: 0,
+            Grade: 0,
+            EvaluationCount: 0
         };
         this.props.TotalEvaluations.map((Evaluation, index) => {
             const {Nb_Features_Taken,
@@ -97,7 +93,8 @@ export default class PerformanceTable extends React.Component {
                 Nb_PR,
                 Nb_PR_Rejected,
                 Nb_PR_Severe,
-                Nb_PR_Abandoned
+                Nb_PR_Abandoned,
+                Grade
             } = Evaluation;
             totalEvaluations.TotalNBFT += parseInt(Nb_Features_Taken);
             totalEvaluations.TotalNBFC += parseInt(Nb_Features_Completed);
@@ -107,9 +104,11 @@ export default class PerformanceTable extends React.Component {
             totalEvaluations.TotalNBPRR += parseInt(Nb_PR_Rejected);
             totalEvaluations.TotalNBPRS += parseInt(Nb_PR_Severe);
             totalEvaluations.TotalNBPRA += parseInt(Nb_PR_Abandoned);
+            totalEvaluations.Grade += parseFloat(Grade);
+            totalEvaluations.EvaluationCount++;
             return "yo";
         });
-        let Grade = Math.floor(((totalEvaluations.TotalNBPRR / totalEvaluations.TotalNBPR * 100) + (totalEvaluations.TotalNBPRS * ss) + (totalEvaluations.TotalNBPRA * sa) - (totalEvaluations.TotalNBPR * st)) * 100) / 100;
+        let Grade = (totalEvaluations.Grade / totalEvaluations.EvaluationCount).toFixed(2);
         return (
             <tr>
                 <td>{totalEvaluations.TotalNBFT}</td>

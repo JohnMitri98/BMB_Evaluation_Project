@@ -41,13 +41,13 @@ export default class RolesTable extends React.Component {
                     <input type = "text" value = {this.state.RoleText + ""} onChange = {this.handleNewRoleChange}/>
                     <input type = "submit" value = "Add Role" onClick = {this.addRole} />
                 </div>
-                <div>
+                {/*<div>
                     <label>
                         New Column: 
                     </label>
                     <input type = "text" pattern = "([A-Z]|[a-z]|_)*" value = {this.state.ColumnNameText + ""} onChange = {this.handleNewColumnChange}/>
                     <input type = "submit" value = "Add Column" onClick = {this.addColumn} />
-                </div>
+                </div>*/}
                 <div>
                     <h1>{this.state.warning}</h1>
                 </div>
