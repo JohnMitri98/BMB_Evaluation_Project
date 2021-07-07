@@ -77,10 +77,10 @@ export default class App extends React.Component {
         }
         if(this.state.loggedIn + "" === "true") {
             document.body.style.backgroundImage = `url(${img4})`;
-            document.body.style.backgroundSize = `100% 385%`;
+            //document.body.style.backgroundSize = `100% 385%`;
         } else {
             document.body.style.backgroundImage = `url(${img2})`;
-            document.body.style.backgroundSize = `100% 100%`;
+            //document.body.style.backgroundSize = `100% 100%`;
         }
         let history = [this.setPreviousPage, this.goBack, this.state.previousPageHistory, this.setCurrentPage];
 

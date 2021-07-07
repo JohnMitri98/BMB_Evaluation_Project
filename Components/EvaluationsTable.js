@@ -46,6 +46,7 @@ export default class EvaluationsTable extends React.Component {
     renderTableHeader() {
         return (
             <tr>
+                <th>Evaluator</th>
                 <th>Evaluated</th>
                 <th>Sprint Start Date</th>
                 <th>Features Taken</th>
@@ -65,8 +66,10 @@ export default class EvaluationsTable extends React.Component {
     renderTableData() {
         return this.state.Evaluations.map((Evaluation, index) => {
             const {ID,
-                First_Name,
-                Last_Name,
+                Evaluator_First_Name,
+                Evaluator_Last_Name,
+                Evaluated_First_Name,
+                Evaluated_Last_Name,
                 Nb_Features_Taken,
                 Nb_Features_Completed,
                 Nb_Bugs_Taken,
@@ -81,9 +84,12 @@ export default class EvaluationsTable extends React.Component {
             return (
                 <tr key = {index}>
                     <td id = "Name" style = {{fontWeight: "bold"}}>
-                        {First_Name + " " + Last_Name}
+                        {Evaluator_First_Name + " " + Evaluator_Last_Name}
                     </td>
-                    <td>
+                    <td style = {{fontWeight: "bold"}}>
+                        {Evaluated_First_Name + " " + Evaluated_Last_Name}
+                    </td>
+                    <td style = {{fontSize: 12}}>
                         {new Date(Start_Date).toDateString()}
                     </td>
                     {((this.props.lastSprint + "") !== (Start_Date + "")) &&

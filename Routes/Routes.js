@@ -70,17 +70,38 @@ async function getEvaluationsDone(Evaluator, Admin, SprintID) {
     try {
         const request = pool.request();
         if(Decrypt(Admin) === "true") {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
+            var result = await request.query(`select u1.First_Name as Evaluator_First_Name, u1.Last_Name as Evaluator_Last_Name, u2.First_Name as Evaluated_First_Name, u2.Last_Name as Evaluated_Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u1, dbo.Users u2, dbo.Sprints s where e.Evaluator_ID = u1.ID AND e.Evaluated_ID = u2.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
+            result.recordset.forEach(result => {
+                for(const [key, value] of Object.entries(result)) {
+                    result[key] = Encrypt(value);
+                }
+                tempResult.push(result);
+            });
         } else {
-            var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${Decrypt(Evaluator)} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
-        }
-        
-        result.recordset.forEach(result => {
-            for(const [key, value] of Object.entries(result)) {
-                result[key] = Encrypt(value);
+            let allUserIDs = await getManagerSubordinateIDs(Decrypt(Evaluator));
+            allUserIDs = allUserIDs.userIDs;
+            allUserIDs = allUserIDs.map((userID) => {return parseInt(Decrypt(userID))});
+            for(const userID of allUserIDs) {
+                var result = await request.query(`select u1.First_Name as Evaluator_First_Name, u1.Last_Name as Evaluator_Last_Name, u2.First_Name as Evaluated_First_Name, u2.Last_Name as Evaluated_Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u1, dbo.Users u2, dbo.Sprints s where e.Evaluator_ID = ${userID} AND e.Evaluator_ID = u1.ID AND e.Evaluated_ID = u2.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
+                result.recordset.forEach(result => {
+                    for(const [key, value] of Object.entries(result)) {
+                        result[key] = Encrypt(value);
+                    }
+                    tempResult.push(result);
+                });
             }
-            tempResult.push(result);
-        });
+            /*await allUserIDs.forEach(userID => async function(userID) {
+                console.log("Test");
+                //console.log(userID, " ", Decrypt(SprintID));
+                var result = request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${userID} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
+                result.recordset.forEach(result => {
+                    for(const [key, value] of Object.entries(result)) {
+                        result[key] = Encrypt(value);
+                    }
+                    tempResult.push(result);
+                });
+            });*/
+        }
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -363,7 +384,7 @@ async function getUsers() {
     let tempObj = {
         Users: tempResult
     };
-    return JSON.stringify(tempObj);
+    return tempObj;
 }
 
 async function insertSprint(Sprint) {
@@ -495,6 +516,43 @@ async function getLastSprint() {
     return JSON.stringify(tempResult);
 }
 
+async function getManagerSubordinateIDs(ManagerID) {
+    let allUsers = await getUsers();
+    allUsers = allUsers.Users;
+    await allUsers.forEach(user => {
+        for(const [key, value] of Object.entries(user)) {
+            user[key] = Decrypt(value);
+        }
+    });
+    let searchIDs = [parseInt(ManagerID)];
+    let tempResult = await recursiveSubordinateSearch(ManagerID, allUsers);
+    tempResult.forEach(userID => {
+        searchIDs.push(parseInt(userID));
+    });
+    let tempObj = {
+        userIDs: searchIDs.map((userID) => {return (Encrypt(userID))})
+    };
+    return tempObj;
+}
+
+function recursiveSubordinateSearch(UserID, UserArray) {
+    let tempUserArray = [];
+    UserArray.forEach(user => {
+        if(user.Manager == UserID) {
+            UserArray.forEach(tempUser => {
+                if(tempUser.Manager == user.ID) {
+                    tempUserArray.push(user.ID);
+                    let tempResult = recursiveSubordinateSearch(user.ID, UserArray);
+                    tempResult.forEach(userID => {
+                        tempUserArray.push(userID);
+                    });
+                }
+            });
+        }
+    });
+    return tempUserArray;
+}
+
 router.get('/', function(req, res) {
     res.send("API is working properly");
 });
@@ -561,7 +619,7 @@ router.post('/insertUser', async function(req, res) {
 });
 
 router.get('/getUsers', async function(req, res) {
-    res.send(await getUsers());
+    res.send(await JSON.stringify(getUsers()));
 });
 
 router.post('/insertSprint', async function(req, res) {
@@ -599,6 +657,10 @@ router.post('/updateEvaluation', async function(req, res) {
 
 router.get('/getLastSprint', async function(req, res) {
     res.send(await getLastSprint());
+});
+
+router.search('/getManagerSubordinateIDs', async function(req, res) {
+    res.send(await JSON.stringify(getManagerSubordinateIDs(req.body.ManagerID)));
 });
 
 module.exports = router;
