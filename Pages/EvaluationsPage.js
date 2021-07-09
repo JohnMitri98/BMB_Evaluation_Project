@@ -26,7 +26,7 @@ export default class EvaluationsPage extends React.Component {
                 {(this.state.Ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} lastSprint = {this.state.LastSprint} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} refreshPage = {this.refreshPage} />}
                 {(this.state.Ready === "false") && <h1>No Evaluations made yet</h1>}
                 {(this.state.Ready === "notYet") && <h1>Loading</h1>}
-                {(this.state.Subordinates[0] && <button onClick = {this.goToEvaluate} class = "addDetail">Evaluate</button>)}
+                {((this.state.Subordinates[0] ||(this.props.role.Evaluation_View + "" === true)) && <button onClick = {this.goToEvaluate} class = "addDetail">Evaluate</button>)}
                 <Switch>
                     {this.state.Redirect}
                 </Switch>
@@ -50,7 +50,7 @@ export default class EvaluationsPage extends React.Component {
         let tempObj = {
             UserID: Encrypt(this.props.ID),
             SprintID: Encrypt(this.props.SprintID),
-            Admin: Encrypt((this.props.role === "Admin") + "")
+            Admin: Encrypt(((this.props.role.Name === "Admin") || (this.props.role.Name === "Evaluator")) + "")
         };
         var response = await fetch(`/API/getEvaluationsDone`, {
             method: 'SEARCH',
@@ -73,7 +73,7 @@ export default class EvaluationsPage extends React.Component {
         }
         let tempObj2 = {
             ManagerID: Encrypt(this.props.ID),
-            Admin: Encrypt((this.props.role === "Admin") + "")
+            Admin: Encrypt(((this.props.role.Name === "Admin") || (this.props.role.Name === "Evaluator")) + "")
         };
         response = await fetch(`/API/getSubordinates`, {
             method: 'SEARCH',
@@ -128,7 +128,7 @@ export default class EvaluationsPage extends React.Component {
         let tempSprint = {};
         let tempObj = {
             UserID: Encrypt(this.props.ID),
-            Admin: Encrypt((this.props.role === "Admin") + "")
+            Admin: Encrypt(((this.props.role.Name === "Admin") || (this.props.role.Name === "Evaluator")) + "")
         };
         var response = await fetch(`/API/getEvaluationsDone`, {
             method: 'SEARCH',
@@ -151,7 +151,7 @@ export default class EvaluationsPage extends React.Component {
         }
         let tempObj2 = {
             ManagerID: Encrypt(this.props.ID),
-            Admin: Encrypt((this.props.role === "Admin") + "")
+            Admin: Encrypt(((this.props.role.Name === "Admin") || (this.props.role.Name === "Evaluator")) + "")
         };
         response = await fetch(`/API/getSubordinates`, {
             method: 'SEARCH',

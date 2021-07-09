@@ -32,9 +32,8 @@ const initialState = {
     roles: {
         Name: "",
         Evaluation_View: null,
-        Details_View: null,
+        Sprint_View: null,
         User_Edit_View: null,
-        User_Performance_View: null,
         Roles_View: null
     },
     EvaluationID: 0,
@@ -119,6 +118,7 @@ export default class App extends React.Component {
                                     </button>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Sprints") &&
+                                    (this.state.roles.Sprint_View + "" === "true") && 
                                     <button onClick = {() => this.redirectView("/UserView/Sprints")} class = "signOut">
                                         <div class = "extraWidth">
                                             Sprints
@@ -147,8 +147,8 @@ export default class App extends React.Component {
                                         </div>
                                     </button>
                                 }
-                                {(this.state.roles.Roles_View + "" === "true") && 
-                                    (this.state.CurrentPage !== "/UserView/Roles") && 
+                                {(this.state.CurrentPage !== "/UserView/Roles") && 
+                                    (this.state.roles.Roles_View + "" === "true") && 
                                     <button onClick = {() => this.redirectView("/UserView/Roles")} class = "signOut">
                                         <div class = "extraWidth">
                                             Roles
@@ -183,10 +183,10 @@ export default class App extends React.Component {
                                 <CreateUserPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
                             </Route>
                             <Route exact path = "/UserView/SprintEvaluations">
-                                <SprintEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} role = {this.state.roles.Name} onEvaluationsButton = {this.setSprintIdForEvaluations} history = {history} />
+                                <SprintEvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} ID = {this.state.UserID} role = {this.state.roles} onEvaluationsButton = {this.setSprintIdForEvaluations} history = {history} />
                             </Route>
                             <Route exact path = "/UserView/SprintEvaluations/Evaluations">
-                                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} SprintID = {this.state.SprintID} ID = {this.state.UserID} role = {this.state.roles.Name} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
+                                <EvaluationsPage style = {divStyle} loggedIn = {this.state.loggedIn} SprintID = {this.state.SprintID} ID = {this.state.UserID} role = {this.state.roles} onDetailsButton = {this.setEvaluationIdForDetails} history = {history} />
                             </Route>
                             <Route exact path = "/UserView/SprintEvaluations/Evaluations/CreateEvaluation">
                                 <CreateEvaluationPage style = {divStyle} loggedIn = {this.state.loggedIn} EvaluatorID = {this.state.UserID} role = {this.state.roles.Name} history = {history} />
