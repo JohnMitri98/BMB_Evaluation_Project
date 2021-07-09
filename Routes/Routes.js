@@ -1,7 +1,5 @@
 var express = require("express");
 var router = express.Router();
-//var bodyParser = require('body-parser');
-//var jsonParser = bodyParser.json();
 var sql = require('mssql');
 const {Encrypt} = require('../Encryption/Encryptor');
 const {Decrypt} = require('../Encryption/Decryptor');
@@ -120,9 +118,9 @@ async function getSprintEvaluationsDone(Evaluator, Admin) {
     try {
         const request = pool.request();
         if(Decrypt(Admin) === "true") {
-            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID group by Start_Date, s.ID order by Start_Date Desc;`);
+            var result = await request.query(`select s.ID, s.Name, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID group by Start_Date, s.ID, s.Name order by Start_Date Desc;`);
         } else {
-            var result = await request.query(`select s.ID, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${Decrypt(Evaluator)} group by Start_Date, s.ID order by Start_Date Desc;`);
+            var result = await request.query(`select s.ID, s.Name, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${Decrypt(Evaluator)} group by Start_Date, s.ID, s.Name order by Start_Date Desc;`);
         }
         
         result.recordset.forEach(result => {
@@ -215,7 +213,7 @@ async function getMyPerformance(UserID) {
     }
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(UserID)} AND e.Sprint_ID = (Select Max(a.SprintID) from (Select s.ID as SprintID, s.Start_Date, e.* from dbo.Sprints s, dbo.Evaluations e where e.Sprint_ID = s.ID) a where a.Start_Date = (Select Max(b.Start_Date) from (Select s.ID as SprintID, s.Start_Date, e.* from dbo.Sprints s, dbo.Evaluations e where e.Sprint_ID = s.ID AND e.Evaluated_ID = ${Decrypt(UserID)}) b)) AND u.ID = e.Evaluator_ID AND e.Sprint_ID = s.ID;`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date, s.Name from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(UserID)} AND e.Sprint_ID = (Select Max(a.SprintID) from (Select s.ID as SprintID, s.Start_Date, e.* from dbo.Sprints s, dbo.Evaluations e where e.Sprint_ID = s.ID) a where a.Start_Date = (Select Max(b.Start_Date) from (Select s.ID as SprintID, s.Start_Date, e.* from dbo.Sprints s, dbo.Evaluations e where e.Sprint_ID = s.ID AND e.Evaluated_ID = ${Decrypt(UserID)}) b)) AND u.ID = e.Evaluator_ID AND e.Sprint_ID = s.ID;`);
         result.recordset.forEach(result => {
             for(const [key, value] of Object.entries(result)) {
                 result[key] = Encrypt(value);
@@ -281,7 +279,7 @@ async function getMyEvaluations(EvaluatedID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(EvaluatedID)} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID order by Start_Date;`);
+        var result = await request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date, s.Name from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(EvaluatedID)} AND e.Evaluator_ID = u.ID AND e.Sprint_ID = s.ID order by Start_Date;`);
         result.recordset.forEach(result => {
             for(const [key, value] of Object.entries(result)) {
                 result[key] = Encrypt(value);
@@ -393,7 +391,7 @@ async function insertSprint(Sprint) {
     await poolConnect;
     try {
         const request = pool.request();
-        await request.query(`Insert into dbo.Sprints (Start_Date, End_Date) values ('${new Date(Decrypt(Sprint.StartDate)).getFullYear()}-${new Date(Decrypt(Sprint.StartDate)).getMonth()}-${new Date(Decrypt(Sprint.StartDate)).getDate()}', '${new Date(Decrypt(Sprint.EndDate)).getFullYear()}-${new Date(Decrypt(Sprint.EndDate)).getMonth() + 1}-${new Date(Decrypt(Sprint.EndDate)).getDate()}');`);
+        await request.query(`Insert into dbo.Sprints (Name, Start_Date, End_Date) values ('${Decrypt(Sprint.Name)}', '${new Date(Decrypt(Sprint.StartDate)).getFullYear()}-${new Date(Decrypt(Sprint.StartDate)).getMonth()}-${new Date(Decrypt(Sprint.StartDate)).getDate()}', '${new Date(Decrypt(Sprint.EndDate)).getFullYear()}-${new Date(Decrypt(Sprint.EndDate)).getMonth() + 1}-${new Date(Decrypt(Sprint.EndDate)).getDate()}');`);
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -420,7 +418,7 @@ async function getColumnNames(Name) {
     pool.close();
     let tempObj = {
         Columns: tempResult
-    }
+    };
     return JSON.stringify(tempObj);
 }
 
@@ -444,7 +442,7 @@ async function getRoles() {
     pool.close();
     let tempObj = {
         Roles: tempResult
-    }
+    };
     return JSON.stringify(tempObj);
 }
 
@@ -507,8 +505,12 @@ async function getLastSprint() {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`Select Start_Date from dbo.Sprints order by Start_Date Desc;`)
-        tempResult.Start_Date = Encrypt(result.recordset[0].Start_Date);
+        var result = await request.query(`Select Start_Date, End_Date from dbo.Sprints order by Start_Date Desc;`)
+        //tempResult.Start_Date = Encrypt(result.recordset[0].Start_Date);
+        tempResult = {
+            Start_Date: Encrypt(result.recordset[0].Start_Date),
+            End_Date: Encrypt(result.recordset[0].End_Date)
+        };
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -619,7 +621,8 @@ router.post('/insertUser', async function(req, res) {
 });
 
 router.get('/getUsers', async function(req, res) {
-    res.send(await JSON.stringify(getUsers()));
+    let users = await getUsers();
+    res.send(await JSON.stringify(users));
 });
 
 router.post('/insertSprint', async function(req, res) {

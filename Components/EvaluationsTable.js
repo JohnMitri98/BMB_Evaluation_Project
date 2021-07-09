@@ -14,16 +14,9 @@ export default class EvaluationsTable extends React.Component {
         this.renderTableData = this.renderTableData.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.calculateGrade = this.calculateGrade.bind(this);
-        //this.incrementDB = this.incrementDB.bind(this);
-        //this.handleInc = this.handleInc.bind(this);
-        //this.handleIncG = this.handleIncG.bind(this);
-        //this.decrementDB = this.decrementDB.bind(this);
-        //this.handleDec = this.handleDec.bind(this);
-        //this.handleDecG = this.handleDecG.bind(this);
         this.handleDataChange = this.handleDataChange.bind(this);
         this.submitUpdate = this.submitUpdate.bind(this);
         this.state = {
-            redirect: null,
             Evaluations: this.props.Evaluations
         };
     }
@@ -48,7 +41,6 @@ export default class EvaluationsTable extends React.Component {
             <tr>
                 <th>Evaluator</th>
                 <th>Evaluated</th>
-                <th>Sprint Start Date</th>
                 <th>Features Taken</th>
                 <th>Features Completed</th>
                 <th>Bugs Taken</th>
@@ -88,9 +80,6 @@ export default class EvaluationsTable extends React.Component {
                     </td>
                     <td style = {{fontWeight: "bold"}}>
                         {Evaluated_First_Name + " " + Evaluated_Last_Name}
-                    </td>
-                    <td style = {{fontSize: 12}}>
-                        {new Date(Start_Date).toDateString()}
                     </td>
                     {((this.props.lastSprint + "") !== (Start_Date + "")) &&
                         <td>

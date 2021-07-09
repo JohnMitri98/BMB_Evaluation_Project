@@ -7,7 +7,6 @@ export default class RolesTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: null,
             Roles: this.props.Roles,
             ColumnNames: this.props.ColumnNames,
             RoleText: "",

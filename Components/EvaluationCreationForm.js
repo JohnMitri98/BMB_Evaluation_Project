@@ -98,6 +98,21 @@ export default class EvaluationCreationForm extends React.Component {
         e.preventDefault();
         let {EvaluatorID, EvaluatedID, SprintID, Nb_Features_Taken, Nb_Features_Completed, Nb_Bugs_Taken, Nb_Bugs_Completed, Nb_PR, Nb_PRR, Nb_PRS, Nb_PRA} = this.state.Evaluation;
         if(Nb_Features_Taken === "" || Nb_Features_Completed === "" || Nb_Bugs_Taken === "" || Nb_Bugs_Completed === "" || Nb_PR === "" || Nb_PRR === "" || Nb_PRS === "" || Nb_PRA === "") {
+            this.setState({
+                Evaluation: {
+                    EvaluatorID: this.props.EvaluatorID,
+                    EvaluatedID: this.props.Subordinates[0].ID,
+                    SprintID: this.props.Sprints[0].ID,
+                    Nb_Features_Taken: "",
+                    Nb_Features_Completed: "",
+                    Nb_Bugs_Taken: "",
+                    Nb_Bugs_Completed: "",
+                    Nb_PR: "",
+                    Nb_PRR: "",
+                    Nb_PRS: "",
+                    Nb_PRA: ""
+                }
+            });
             this.props.onSubmit(false);
         } else {
             let tempGrade = this.calculateGrade(this.state.Evaluation);

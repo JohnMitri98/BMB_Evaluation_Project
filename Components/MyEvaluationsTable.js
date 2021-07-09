@@ -12,9 +12,6 @@ export default class MyEvaluationsTable extends React.Component {
         this.renderTableData = this.renderTableData.bind(this);
         this.handleDetails = this.handleDetails.bind(this);
         this.calculateGrade = this.calculateGrade.bind(this);
-        this.state = {
-            redirect: null
-        };
     }
 
     render() {
@@ -37,6 +34,7 @@ export default class MyEvaluationsTable extends React.Component {
             <tr>
                 <th>Evaluator</th>
                 <th>Sprint Start Date</th>
+                <th>Sprint Name</th>
                 <th>Features Taken</th>
                 <th>Features Completed</th>
                 <th>Bugs Taken</th>
@@ -65,7 +63,8 @@ export default class MyEvaluationsTable extends React.Component {
                 Nb_PR_Severe,
                 Nb_PR_Abandoned,
                 Grade,
-                Start_Date
+                Start_Date,
+                Name
             } = Evaluation;
             return (
                 <tr key = {index}>
@@ -74,6 +73,9 @@ export default class MyEvaluationsTable extends React.Component {
                     </td>
                     <td>
                         {new Date(Start_Date).toDateString()}
+                    </td>
+                    <td>
+                        {Name + ""}
                     </td>
                     <td>
                         {Nb_Features_Taken}

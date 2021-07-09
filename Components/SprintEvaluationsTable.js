@@ -1,10 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Encrypt} from '../Encryption/Encryptor';
-
-let ss = 1;
-let sa = 2;
-let st = 0.2;
 
 export default class EvaluationsTable extends React.Component {
 
@@ -14,7 +8,6 @@ export default class EvaluationsTable extends React.Component {
         this.renderTableData = this.renderTableData.bind(this);
         this.handleEvaluations = this.handleEvaluations.bind(this);
         this.state = {
-            redirect: null,
             SprintEvaluations: this.props.SprintEvaluations
         };
     }
@@ -38,6 +31,7 @@ export default class EvaluationsTable extends React.Component {
         return (
             <tr>
                 <th>Sprint Start Date</th>
+                <th>Sprint Name</th>
                 <th>Total Evaluations</th>
                 <th>Evaluations</th>
             </tr>
@@ -48,12 +42,16 @@ export default class EvaluationsTable extends React.Component {
         return this.state.SprintEvaluations.map((SprintEvaluation, index) => {
             const {ID,
                 Start_Date,
+                Name,
                 Total_Evaluations
             } = SprintEvaluation;
             return (
                 <tr key = {index}>
                     <td>
                         {new Date(Start_Date).toDateString()}
+                    </td>
+                    <td>
+                        {Name + ""}
                     </td>
                     <td>
                         {Total_Evaluations + ""}

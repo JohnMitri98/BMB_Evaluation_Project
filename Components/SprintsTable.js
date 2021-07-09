@@ -6,9 +6,6 @@ export default class SprintsTable extends React.Component {
         super(props);
         this.renderTableHeader = this.renderTableHeader.bind(this);
         this.renderTableData = this.renderTableData.bind(this);
-        this.state = {
-            redirect: null
-        };
     }
 
     render() {
@@ -29,7 +26,7 @@ export default class SprintsTable extends React.Component {
     renderTableHeader() {
         return (
             <tr>
-                <th>Sprint ID</th>
+                <th>Name</th>
                 <th>Start Date</th>
                 <th>End Date</th>
             </tr>
@@ -38,14 +35,14 @@ export default class SprintsTable extends React.Component {
 
     renderTableData() {
         return this.props.Sprints.map((Sprint, index) => {
-            const {ID,
+            const {Name,
                 Start_Date,
                 End_Date
             } = Sprint;
             return (
                 <tr key = {index}>
-                    <td id = "ID" style = {{fontWeight: "bold"}}>
-                        {ID}
+                    <td id = "Name" style = {{fontWeight: "bold"}}>
+                        {Name}
                     </td>
                     <td>
                         {new Date(Start_Date).toDateString()}

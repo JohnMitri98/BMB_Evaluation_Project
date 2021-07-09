@@ -9,31 +9,39 @@ export default class SprintCreationForm extends React.Component {
         super(props);
         this.state = {
             Sprint: {
+                Name: "",
                 StartDate: "",
-                EndDate: ""
+                EndDate: "",
             }
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
     }
     
     render() {
-        let {StartDate, EndDate} = this.state.Sprint;
+        let {Name, StartDate, EndDate} = this.state.Sprint;
         return (
             <form onSubmit={this.handleSubmit} class = {this.state.formClass}>
                 <div style = {this.props.style}>
                     <div>
                         <label>
-                            Start Date:
-                            <DatePicker selected = {StartDate} value = {StartDate} onChange = {(date) => this.handleStartDateChange(date)} />
+                            Name: 
                         </label>
+                        <input type = "text" value = {Name} onChange = {this.handleNameChange} />
+                    </div>
+                    <div>
+                        <label>
+                            Start Date:
+                        </label>
+                        <DatePicker selected = {StartDate} value = {StartDate} onChange = {(date) => this.handleStartDateChange(date)} />
                     </div>
                     <div>
                         <label>
                             End Date: 
-                            <DatePicker selected = {EndDate} value = {EndDate} onChange = {(date) => this.handleEndDateChange(date)} />
                         </label>
+                        <DatePicker selected = {EndDate} value = {EndDate} onChange = {(date) => this.handleEndDateChange(date)} />
                     </div>
                     <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>
                 </div>
@@ -43,10 +51,11 @@ export default class SprintCreationForm extends React.Component {
 
     async handleSubmit(e) {
         e.preventDefault();
-        let {StartDate, EndDate} = this.state.Sprint;
-        if(!StartDate || !EndDate || (StartDate === "") || (EndDate === "")) {
+        let {Name, StartDate, EndDate} = this.state.Sprint;
+        if(!StartDate || !EndDate || !Name || (StartDate === "") || (EndDate === "") || (Name === "") || (new Date(StartDate) >= new Date(EndDate)) ||(new Date(StartDate) < new Date(this.props.lastSprint.endDate))) {
             this.setState({
                 Sprint: {
+                    Name: "",
                     StartDate: "",
                     EndDate: ""
                 }
@@ -55,6 +64,7 @@ export default class SprintCreationForm extends React.Component {
         } else {
             let tempObj = {
                 Sprint: {
+                    Name: Encrypt(Name),
                     StartDate: Encrypt(StartDate),
                     EndDate: Encrypt(EndDate)
                 }
@@ -71,8 +81,9 @@ export default class SprintCreationForm extends React.Component {
     };
 
     handleStartDateChange(date) {
-        let {EndDate} = this.state.Sprint;
+        let {Name, EndDate} = this.state.Sprint;
         let tempObj = {
+            Name: Name,
             StartDate: date,
             EndDate: EndDate
         };
@@ -82,10 +93,23 @@ export default class SprintCreationForm extends React.Component {
     }
 
     handleEndDateChange(date) {
-        let {StartDate} = this.state.Sprint;
+        let {Name, StartDate} = this.state.Sprint;
         let tempObj = {
+            Name: Name,
             StartDate: StartDate,
             EndDate: date
+        };
+        this.setState({
+            Sprint: tempObj
+        });
+    }
+
+    handleNameChange(event) {
+        let {StartDate, EndDate} = this.state.Sprint;
+        let tempObj = {
+            Name: event.target.value,
+            StartDate: StartDate,
+            EndDate: EndDate
         };
         this.setState({
             Sprint: tempObj

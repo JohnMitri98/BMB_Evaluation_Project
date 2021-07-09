@@ -1,6 +1,7 @@
 import React from 'react';
 import {Switch, Redirect} from 'react-router-dom';
 import SprintCreationForm from '../Components/SprintCreationForm';
+import {Decrypt} from '../Encryption/Decryptor';
 
 export default class CreateSprintPage extends React.Component {
 
@@ -8,7 +9,8 @@ export default class CreateSprintPage extends React.Component {
         super(props);
         this.state = {
             redirect: null,
-            Correct: "notYet"
+            Correct: "notYet",
+            LastSprint: null
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -21,7 +23,11 @@ export default class CreateSprintPage extends React.Component {
         return (
             <div style = {this.props.style}>
                 <h1>This is the Sprint Creation Page</h1>
-                <SprintCreationForm style = {this.props.style} onSubmit = {this.handleSubmit} />
+                {this.state.LastSprint ? 
+                    <SprintCreationForm style = {this.props.style} lastSprint = {this.state.LastSprint} onSubmit = {this.handleSubmit} />
+                    :
+                    <h1>Loading</h1>
+                }
                 {warning && 
                     <h1>{warning}</h1>
                 }
@@ -55,6 +61,20 @@ export default class CreateSprintPage extends React.Component {
             });
         }
         this.props.history[3]("/UserView/Sprints/CreateSprint");
+        let tempSprint = {};
+        const response = await fetch('/API/getLastSprint');
+        if(response) {
+            const body = await response.json();
+            if(body.Start_Date && body.End_Date) {
+                tempSprint = {
+                    startDate: Decrypt(body.Start_Date),
+                    endDate: Decrypt(body.End_Date)
+                };
+            }
+        }
+        this.setState({
+            LastSprint: tempSprint
+        });
     }
 
 }

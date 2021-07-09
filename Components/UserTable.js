@@ -6,9 +6,6 @@ export default class UserTable extends React.Component {
         super(props);
         this.renderTableHeader = this.renderTableHeader.bind(this);
         this.renderTableData = this.renderTableData.bind(this);
-        this.state = {
-            redirect: null
-        };
     }
 
     render() {
