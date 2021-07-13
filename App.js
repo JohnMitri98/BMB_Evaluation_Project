@@ -95,7 +95,8 @@ export default class App extends React.Component {
                                     </div>
                                 </button>
                                 {(this.state.CurrentPage !== "/") && 
-                                    (this.state.CurrentPage !== "/UserView") && 
+                                    /*(this.state.CurrentPage !== "/UserView") &&*/ 
+                                    this.state.previousPageHistory.length > 1 &&
                                     <button onClick = {this.goBack} class = "signOut">
                                         <div class = "extraWidth">
                                             Back

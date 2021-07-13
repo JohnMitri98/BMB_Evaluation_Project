@@ -9,6 +9,7 @@ export default class UsersPage extends React.Component {
         super(props);
         this.state = {
             redirect: null,
+            Roles: [],
             Users: [],
             ready: "notYet"
         }
@@ -20,7 +21,7 @@ export default class UsersPage extends React.Component {
     render() {
         return (
             <div style = {this.props.style}>
-                {(this.state.ready === "true") && <UserTable Users = {this.state.Users} style = {this.props.style} />}
+                {(this.state.ready === "true") && <UserTable Users = {this.state.Users} Roles = {this.state.Roles} style = {this.props.style} />}
                 {(this.state.ready === "false") && <h1>No Users Listed</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}
                 <button onClick = {this.goToUsers} class = 'addDetail'>
@@ -84,14 +85,15 @@ export default class UsersPage extends React.Component {
                     if(user.Manager) {
                         user.ManagerName = this.searchManagerName(user.Manager, tempUsers);
                     }
-                    if(user.Roles_ID) {
+                    /*if(user.Roles_ID) {
                         user.Roles_ID = this.searchRoleName(user.Roles_ID, tempRoles)
-                    }
+                    }*/
                 });
             }
         }
         this.setState({
             Users: (tempUsers[0] ? tempUsers : []),
+            Roles: (tempRoles[0] ? tempRoles : []),
             ready: (tempUsers[0] ? "true" : "false")
         });
     }

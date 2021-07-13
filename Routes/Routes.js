@@ -498,6 +498,19 @@ async function updateEvaluation(Change, Grade, Field, EvaluationID) {
     pool.close();
 }
 
+async function updateUser(Change, Field, UserID) {
+    const pool = new sql.ConnectionPool(sqlConfig);
+    const poolConnect = pool.connect();
+    await poolConnect;
+    try {
+        const request = pool.request();
+        await request.query(`Update dbo.Users set ${Decrypt(Field) + ""} = ${(Decrypt(Change) !== "") ? Decrypt(Change) : "NULL"} where ID = ${Decrypt(UserID)};`);
+    } catch(err) {
+        console.error('SQL error', err);
+    }
+    pool.close();
+}
+
 async function getLastSprint() {
     const pool = new sql.ConnectionPool(sqlConfig);
     const poolConnect = pool.connect();
@@ -655,6 +668,11 @@ router.post('/insertRoleColumn', async function(req, res) {
 
 router.post('/updateEvaluation', async function(req, res) {
     await updateEvaluation(req.body.Change, req.body.Grade, req.body.Field, req.body.EvaluationID);
+    res.send("Done");
+});
+
+router.post('/updateUser', async function(req, res) {
+    await updateUser(req.body.Change, req.body.Field, req.body.UserID);
     res.send("Done");
 });
 

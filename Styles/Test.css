@@ -172,6 +172,10 @@ select {
     border-radius: 4px;
 }
 
+select.tableSelect {
+    margin-bottom: 0px;
+}
+
 select.date {
     width: 350px;
 }
