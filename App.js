@@ -83,13 +83,13 @@ export default class App extends React.Component {
             //document.body.style.backgroundSize = `100% 100%`;
         }
 
-        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/Users") && (this.state.roles.User_Edit_View + "" !== "true")) {
+        if((this.state.loggedIn + "" === "true") && ((this.state.CurrentPage === "/UserView/Users") || (this.state.CurrentPage === "/UserView/Users/CreateUser")) && (this.state.roles.User_Edit_View + "" !== "true")) {
             this.backToHome();
         }
-        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/Sprints") && (this.state.roles.Sprint_View + "" !== "true")) {
+        if((this.state.loggedIn + "" === "true") && ((this.state.CurrentPage === "/UserView/Sprints") || (this.state.CurrentPage === "/UserView/Sprints/CreateSprint")) && (this.state.roles.Sprint_View + "" !== "true")) {
             this.backToHome();
         }
-        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/SprintEvaluations") && (this.state.roles.Evaluation_View + "" !== "true")) {
+        if((this.state.loggedIn + "" === "true") && ((this.state.CurrentPage === "/UserView/SprintEvaluations") || (this.state.CurrentPage === "/UserView/SprintEvaluations/Evaluations") || (this.state.CurrentPage === "/UserView/SprintEvaluations/Evaluations/CreateEvaluation") || (this.state.CurrentPage === "/UserView/Details") || (this.state.CurrentPage === "/UserView/Details/CreateDetails")) && (this.state.roles.Evaluation_View + "" !== "true")) {
             this.backToHome();
         }
         if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/Roles") && (this.state.roles.Roles_View + "" !== "true")) {
