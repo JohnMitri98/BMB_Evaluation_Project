@@ -64,6 +64,7 @@ export default class App extends React.Component {
         this.setPreviousPage = this.setPreviousPage.bind(this);
         this.goBack = this.goBack.bind(this);
         this.setCurrentPage = this.setCurrentPage.bind(this);
+        this.backToHome = this.backToHome.bind(this);
     }
 
     render() {
@@ -81,6 +82,20 @@ export default class App extends React.Component {
             document.body.style.backgroundImage = `url(${img2})`;
             //document.body.style.backgroundSize = `100% 100%`;
         }
+
+        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/Users") && (this.state.roles.User_Edit_View + "" !== "true")) {
+            this.backToHome();
+        }
+        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/Sprints") && (this.state.roles.Sprint_View + "" !== "true")) {
+            this.backToHome();
+        }
+        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/SprintEvaluations") && (this.state.roles.Evaluation_View + "" !== "true")) {
+            this.backToHome();
+        }
+        if((this.state.loggedIn + "" === "true") && (this.state.CurrentPage === "/UserView/Roles") && (this.state.roles.Roles_View + "" !== "true")) {
+            this.backToHome();
+        }
+
         let history = [this.setPreviousPage, this.goBack, this.state.previousPageHistory, this.setCurrentPage];
 
         return (
@@ -257,6 +272,17 @@ export default class App extends React.Component {
             this.setState(initialState);
             this.setState({correct: false});
         }
+    }
+
+    async backToHome() {
+        await this.setCurrentPage("/UserView");
+        await this.setState({
+            redirect: <Redirect exact to = {"/UserView"} />,
+            previousPageHistory: ["/"]
+        });
+        await this.setState({
+            redirect: null
+        });
     }
 
     setPreviousPage(page) {
