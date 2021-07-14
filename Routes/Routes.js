@@ -201,7 +201,7 @@ async function getMyPerformance(UserID) {
     await poolConnect;
     try {
         const request = pool.request();
-        var result = await request.query(`select * from dbo.Evaluations where Evaluated_ID = ${Decrypt(UserID)};`);
+        var result = await request.query(`select e.*, s.Start_Date from dbo.Evaluations e, dbo.Sprints s where e.Evaluated_ID = ${Decrypt(UserID)} AND e.Sprint_ID = s.ID;`);
         result.recordset.forEach(result => {
             for(const [key, value] of Object.entries(result)) {
                 result[key] = Encrypt(value);

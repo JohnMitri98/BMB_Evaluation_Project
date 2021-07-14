@@ -1,10 +1,29 @@
 import React from 'react';
 //import "../Styles/Table.css";
+import {Bar, Pie} from 'react-chartjs-2';
+
+const options = {
+    plugins: {
+        legend: {
+        display: false,
+        }
+    }
+};
+
+const pieBGColors = [("#" + Math.floor(Math.random()*16777215).toString(16)).toUpperCase(), ("#" + Math.floor(Math.random()*16777215).toString(16)).toUpperCase(), ("#" + Math.floor(Math.random()*16777215).toString(16)).toUpperCase()];
 
 export default class PerformanceTable extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            Grades: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Grade}),
+            Labels: this.props.TotalEvaluations.map((Evaluation) => {return new Date(Evaluation.Start_Date).toDateString()}),
+            PR: this.props.TotalEvaluations.map((Evaluation) =>{return Evaluation.Nb_PR}),
+            PRR: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Rejected}),
+            PRS: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Severe}),
+            PRA: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Abandoned})
+        };
         this.renderTotalTableHeader = this.renderTotalTableHeader.bind(this);
         this.renderPreviousTableHeader = this.renderPreviousTableHeader.bind(this);
         this.renderTotalTableData = this.renderTotalTableData.bind(this);
@@ -33,6 +52,24 @@ export default class PerformanceTable extends React.Component {
                             {this.renderPreviousTableData()}
                         </tbody>
                     </table>
+                </div>
+                <div style = {this.props.style}>
+                    <h1>Grades Graph: </h1>
+                    <div style = {{width: "750px", height: "auto", marginBottom: "50px"}}>
+                        <Bar data = {{labels: this.state.Labels, datasets: [{backgroundColor: "rgba(0, 105, 209, 0.6)", borderColor: "rgba(0, 0, 0, 1)", borderWidth: "2", data: this.state.Grades}]}} options = {options} style = {{backgroundColor: "rgba(255, 255, 255, 0.7)"}} />
+                    </div>
+                    <div style = {{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                        {this.state.PR.map((PR, index) => {
+                            return (
+                                <div style = {this.props.style}>
+                                    <h1 style = {{marginTop: "0px"}}>{this.state.Labels[index]}</h1>
+                                    <div style = {{width: "300px", height: "auto", marginBottom: "50px"}}>
+                                        <Pie data = {{labels: ["PRR", "PRS", "PRA"], datasets: [{label: "PR", backgroundColor: pieBGColors, data: [this.state.PRR[index], this.state.PRS[index], this.state.PRA[index]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         );
