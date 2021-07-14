@@ -1,19 +1,21 @@
 import React from 'react';
 //import "../Styles/Table.css";
 import {Bar, Pie} from 'react-chartjs-2';
+import "chartjs-plugin-datalabels";
 
 const options = {
     plugins: {
         legend: {
-        display: false,
+            display: false,
         }
+        
     }
 };
 
-let pieBGColors = [];
-for(let i = 0; i < 5; i++) {
+let pieBGColors = ["rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(0, 0, 155)"];
+/*for(let i = 0; i < 5; i++) {
     pieBGColors.push("rgb(" + Math.floor(Math.random() * 256) + ", " + Math.floor(Math.random() * 256) + ", " + Math.floor(Math.random() * 256) + ")");
-}
+}*/
 
 export default class PerformanceTable extends React.Component {
 
@@ -25,12 +27,14 @@ export default class PerformanceTable extends React.Component {
             PR: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR}),
             PRR: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Rejected}),
             PRS: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Severe}),
-            PRA: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Abandoned})
+            PRA: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Abandoned}),
+            selectedIndex: 0
         };
         this.renderTotalTableHeader = this.renderTotalTableHeader.bind(this);
         this.renderPreviousTableHeader = this.renderPreviousTableHeader.bind(this);
         this.renderTotalTableData = this.renderTotalTableData.bind(this);
         this.renderPreviousTableData = this.renderPreviousTableData.bind(this);
+        this.changeSelected = this.changeSelected.bind(this);
     }
 
     render() {
@@ -41,42 +45,51 @@ export default class PerformanceTable extends React.Component {
                 <div>
                     {/*<table class = "fl-table">*/}
                     <table>
-                        <tbody>
+                        <thead>
                             {this.renderTotalTableHeader()}
+                        </thead>
+                        <tbody>
                             {this.renderTotalTableData()}
                         </tbody>
                     </table>
                 </div>
                 <h1>Performance in Last Evaluation: </h1>
                 <div class = "table-wrapper">
-                    <table class = "fl-table">
-                        <tbody>
+                    <table className = "fl-table">
+                        <thead>
                             {this.renderPreviousTableHeader()}
+                        </thead>
+                        <tbody>
                             {this.renderPreviousTableData()}
                         </tbody>
                     </table>
                 </div>
                 <div style = {this.props.style}>
                     <h1>Grades Graph: </h1>
-                    <div style = {{width: "750px", height: "auto", marginBottom: "50px"}}>
+                    <div style = {{width: "750px", height: "auto", marginBottom: "20px"}}>
                         <Bar data = {{labels: this.state.Labels, datasets: [{backgroundColor: "rgba(0, 105, 209, 0.6)", borderColor: "rgba(0, 0, 0, 1)", borderWidth: "2", data: this.state.Grades}]}} options = {options} style = {{backgroundColor: "rgba(255, 255, 255, 0.7)"}} />
                     </div>
+                    <h1>Pull Request Ratios</h1>
+                    <select onChange = {this.changeSelected} style = {{width: "auto"}}>
+                        {this.state.Labels.map((Label, index) => {return <option value = {index}>{Label + ""}</option>})}
+                    </select>
                     <div style = {{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                        {this.state.PR.map((PR, index) => {
-                            return (
-                                <div style = {this.props.style}>
-                                    <h1 style = {{marginTop: "0px"}}>{this.state.Labels[index]}</h1>
-                                    <div style = {{width: "300px", height: "auto", marginBottom: "50px"}}>
-                                        <Pie data = {{labels: ["PRC", "PRR"], datasets: [{label: this.state.Labels[index], backgroundColor: pieBGColors.slice(0, 2), data: [(this.state.PR[index] - (parseInt(this.state.PRR[index]))), this.state.PRR[index]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
-                                        <Pie data = {{labels: ["PRNA", "PRS", "PRA"], datasets: [{label: this.state.Labels[index], backgroundColor: pieBGColors.slice(2), data: [(this.state.PRR[index] - (parseInt(this.state.PRS[index]) + parseInt(this.state.PRA[index]))), this.state.PRS[index], this.state.PRA[index]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
-                                    </div>
-                                </div>
-                            );
-                        })}
+                    <div style = {this.props.style}>
+                        <div style = {{width: "300px", height: "auto", marginBottom: "50px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                            <Pie data = {{labels: ["PRC", "PRR"], datasets: [{label: this.state.Labels[this.state.selectedIndex], backgroundColor: pieBGColors.slice(0, 2), data: [(this.state.PR[this.state.selectedIndex] - (parseInt(this.state.PRR[this.state.selectedIndex]))), this.state.PRR[this.state.selectedIndex]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                            <Pie data = {{labels: ["PRRN", "PRS", "PRA"], datasets: [{label: this.state.Labels[this.state.selectedIndex], backgroundColor: pieBGColors.slice(2), data: [(this.state.PRR[this.state.selectedIndex] - (parseInt(this.state.PRS[this.state.selectedIndex]) + parseInt(this.state.PRA[this.state.selectedIndex]))), this.state.PRS[this.state.selectedIndex], this.state.PRA[this.state.selectedIndex]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    changeSelected(event) {
+        this.setState({
+            selectedIndex: event.target.value
+        });
     }
 
     renderTotalTableHeader() {
@@ -148,7 +161,7 @@ export default class PerformanceTable extends React.Component {
             totalEvaluations.TotalNBPRA += parseInt(Nb_PR_Abandoned);
             totalEvaluations.Grade += parseFloat(Grade);
             totalEvaluations.EvaluationCount++;
-            return "yo";
+            return null;
         });
         let Grade = (totalEvaluations.Grade / totalEvaluations.EvaluationCount).toFixed(2);
         return (
