@@ -10,7 +10,10 @@ const options = {
     }
 };
 
-const pieBGColors = [("#" + Math.floor(Math.random()*16777215).toString(16)).toUpperCase(), ("#" + Math.floor(Math.random()*16777215).toString(16)).toUpperCase(), ("#" + Math.floor(Math.random()*16777215).toString(16)).toUpperCase()];
+let pieBGColors = [];
+for(let i = 0; i < 5; i++) {
+    pieBGColors.push("rgb(" + Math.floor(Math.random() * 256) + ", " + Math.floor(Math.random() * 256) + ", " + Math.floor(Math.random() * 256) + ")");
+}
 
 export default class PerformanceTable extends React.Component {
 
@@ -19,7 +22,7 @@ export default class PerformanceTable extends React.Component {
         this.state = {
             Grades: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Grade}),
             Labels: this.props.TotalEvaluations.map((Evaluation) => {return new Date(Evaluation.Start_Date).toDateString()}),
-            PR: this.props.TotalEvaluations.map((Evaluation) =>{return Evaluation.Nb_PR}),
+            PR: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR}),
             PRR: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Rejected}),
             PRS: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Severe}),
             PRA: this.props.TotalEvaluations.map((Evaluation) => {return Evaluation.Nb_PR_Abandoned})
@@ -64,7 +67,8 @@ export default class PerformanceTable extends React.Component {
                                 <div style = {this.props.style}>
                                     <h1 style = {{marginTop: "0px"}}>{this.state.Labels[index]}</h1>
                                     <div style = {{width: "300px", height: "auto", marginBottom: "50px"}}>
-                                        <Pie data = {{labels: ["PRR", "PRS", "PRA"], datasets: [{label: "PR", backgroundColor: pieBGColors, data: [this.state.PRR[index], this.state.PRS[index], this.state.PRA[index]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                                        <Pie data = {{labels: ["PRC", "PRR"], datasets: [{label: this.state.Labels[index], backgroundColor: pieBGColors.slice(0, 2), data: [(this.state.PR[index] - (parseInt(this.state.PRR[index]))), this.state.PRR[index]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                                        <Pie data = {{labels: ["PRNA", "PRS", "PRA"], datasets: [{label: this.state.Labels[index], backgroundColor: pieBGColors.slice(2), data: [(this.state.PRR[index] - (parseInt(this.state.PRS[index]) + parseInt(this.state.PRA[index]))), this.state.PRS[index], this.state.PRA[index]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
                                     </div>
                                 </div>
                             );
