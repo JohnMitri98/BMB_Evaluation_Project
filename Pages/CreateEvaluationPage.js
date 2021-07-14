@@ -66,7 +66,7 @@ export default class CreateEvaluationPage extends React.Component {
         let tempSprints = [];
         let tempObj = {
             ManagerID: Encrypt(this.props.EvaluatorID),
-            Admin: Encrypt((this.props.role === "Admin") + "")
+            Admin: Encrypt(((this.props.role === "Admin") || (this.props.role === "Evaluator")) + "")
         };
         var response = await fetch(`/API/getSubordinates`, {
             method: 'SEARCH',

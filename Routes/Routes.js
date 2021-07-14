@@ -119,16 +119,26 @@ async function getSprintEvaluationsDone(Evaluator, Admin) {
         const request = pool.request();
         if(Decrypt(Admin) === "true") {
             var result = await request.query(`select s.ID, s.Name, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID group by Start_Date, s.ID, s.Name order by Start_Date Desc;`);
+            result.recordset.forEach(result => {
+                for(const [key, value] of Object.entries(result)) {
+                    result[key] = Encrypt(value);
+                }
+                tempResult.push(result);
+            });
         } else {
-            var result = await request.query(`select s.ID, s.Name, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${Decrypt(Evaluator)} group by Start_Date, s.ID, s.Name order by Start_Date Desc;`);
-        }
-        
-        result.recordset.forEach(result => {
-            for(const [key, value] of Object.entries(result)) {
-                result[key] = Encrypt(value);
+            let allUserIDs = await getManagerSubordinateIDs(Decrypt(Evaluator));
+            allUserIDs = allUserIDs.userIDs;
+            allUserIDs = allUserIDs.map((userID) => {return parseInt(Decrypt(userID))});
+            for(const userID of allUserIDs) {
+                var result = await request.query(`select s.ID, s.Name, s.Start_Date, Count(e.ID) as Total_Evaluations from dbo.Evaluations e, dbo.Sprints s where e.Sprint_ID = s.ID AND e.Evaluator_ID = ${userID} group by Start_Date, s.ID, s.Name order by Start_Date Desc;`);
+                result.recordset.forEach(result => {
+                    for(const [key, value] of Object.entries(result)) {
+                        result[key] = Encrypt(value);
+                    }
+                    tempResult.push(result);
+                });
             }
-            tempResult.push(result);
-        });
+        }
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -547,6 +557,7 @@ async function getManagerSubordinateIDs(ManagerID) {
     let tempObj = {
         userIDs: searchIDs.map((userID) => {return (Encrypt(userID))})
     };
+    console.log("IDs: ", tempObj);
     return tempObj;
 }
 
