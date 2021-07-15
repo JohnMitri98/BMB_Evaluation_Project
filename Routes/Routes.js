@@ -88,17 +88,6 @@ async function getEvaluationsDone(Evaluator, Admin, SprintID) {
                     tempResult.push(result);
                 });
             }
-            /*await allUserIDs.forEach(userID => async function(userID) {
-                console.log("Test");
-                //console.log(userID, " ", Decrypt(SprintID));
-                var result = request.query(`select u.First_Name, u.Last_Name, e.*, s.Start_Date from dbo.Evaluations e, dbo.Users u, dbo.Sprints s where e.Evaluator_ID = ${userID} AND e.Evaluated_ID = u.ID AND e.Sprint_ID = s.ID AND e.Sprint_ID = ${Decrypt(SprintID)} order by s.Start_Date;`);
-                result.recordset.forEach(result => {
-                    for(const [key, value] of Object.entries(result)) {
-                        result[key] = Encrypt(value);
-                    }
-                    tempResult.push(result);
-                });
-            });*/
         }
     } catch(err) {
         console.error('SQL error', err);
@@ -312,18 +301,42 @@ async function getSubordinates(ManagerID, Admin) {
     let tempResult = [];
     await poolConnect;
     try {
-        const request = pool.request();
+        /*const request = pool.request();
+        var result;
         if(Decrypt(Admin) === "true") {
-            var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users;`);
+            result = await request.query(`select ID, First_Name, Last_Name from dbo.Users;`);
         } else {
-            var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users where Manager = ${Decrypt(ManagerID)};`);
+            result = await request.query(`select ID, First_Name, Last_Name from dbo.Users where Manager = ${Decrypt(ManagerID)};`);
         }
         result.recordset.forEach(result => {
             for(const [key, value] of Object.entries(result)) {
                 result[key] = Encrypt(value);
             }
             tempResult.push(result)
-        });
+        });*/
+        const request = pool.request();
+        if(Decrypt(Admin) === "true") {
+            var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users;`);
+            result.recordset.forEach(result => {
+                for(const [key, value] of Object.entries(result)) {
+                    result[key] = Encrypt(value);
+                }
+                tempResult.push(result);
+            });
+        } else {
+            let subordinateIDs = await getSubordinateIDs(Decrypt(ManagerID));
+            subordinateIDs = subordinateIDs.userIDs;
+            subordinateIDs = subordinateIDs.map((userID) => {return parseInt(Decrypt(userID))});
+            for(const userID of subordinateIDs) {
+                var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users where ID = ${userID};`);
+                result.recordset.forEach(result => {
+                    for(const [key, value] of Object.entries(result)) {
+                        result[key] = Encrypt(value);
+                    }
+                    tempResult.push(result);
+                });
+            }
+        }
     } catch(err) {
         console.error('SQL error', err);
     }
@@ -550,6 +563,43 @@ async function getManagerSubordinateIDs(ManagerID) {
         }
     });
     let searchIDs = [parseInt(ManagerID)];
+    let tempResult = await recursiveManagerSearch(ManagerID, allUsers);
+    tempResult.forEach(userID => {
+        searchIDs.push(parseInt(userID));
+    });
+    let tempObj = {
+        userIDs: searchIDs.map((userID) => {return (Encrypt(userID))})
+    };
+    return tempObj;
+}
+
+function recursiveManagerSearch(UserID, UserArray) {
+    let tempUserArray = [];
+    UserArray.forEach(user => {
+        if(user.Manager == UserID) {
+            UserArray.forEach(tempUser => {
+                if(tempUser.Manager == user.ID) {
+                    tempUserArray.push(user.ID);
+                    let tempResult = recursiveManagerSearch(user.ID, UserArray);
+                    tempResult.forEach(userID => {
+                        tempUserArray.push(userID);
+                    });
+                }
+            });
+        }
+    });
+    return tempUserArray;
+}
+
+async function getSubordinateIDs(ManagerID) {
+    let allUsers = await getUsers();
+    allUsers = allUsers.Users;
+    await allUsers.forEach(user => {
+        for(const [key, value] of Object.entries(user)) {
+            user[key] = Decrypt(value);
+        }
+    });
+    let searchIDs = [];
     let tempResult = await recursiveSubordinateSearch(ManagerID, allUsers);
     tempResult.forEach(userID => {
         searchIDs.push(parseInt(userID));
@@ -557,22 +607,17 @@ async function getManagerSubordinateIDs(ManagerID) {
     let tempObj = {
         userIDs: searchIDs.map((userID) => {return (Encrypt(userID))})
     };
-    console.log("IDs: ", tempObj);
     return tempObj;
 }
 
 function recursiveSubordinateSearch(UserID, UserArray) {
     let tempUserArray = [];
     UserArray.forEach(user => {
-        if(user.Manager == UserID) {
-            UserArray.forEach(tempUser => {
-                if(tempUser.Manager == user.ID) {
-                    tempUserArray.push(user.ID);
-                    let tempResult = recursiveSubordinateSearch(user.ID, UserArray);
-                    tempResult.forEach(userID => {
-                        tempUserArray.push(userID);
-                    });
-                }
+        if(UserID == user.Manager) {
+            tempUserArray.push(user.ID);
+            let tempResult = recursiveSubordinateSearch(user.ID, UserArray);
+            tempResult.forEach(result => {
+                tempUserArray.push(result);
             });
         }
     });
