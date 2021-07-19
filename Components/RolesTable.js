@@ -24,7 +24,7 @@ export default class RolesTable extends React.Component {
 
     render() {
         return(
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
             {/*<div class = "table-wrapper">*/}
                 <table>
                 {/*<table class = "fl-table">*/}

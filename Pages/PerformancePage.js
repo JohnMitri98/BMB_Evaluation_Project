@@ -17,7 +17,7 @@ export default class PerformancePage extends React.Component {
 
     render() {
         return (
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 {(this.state.ready === "true") && <PerformanceTable TotalEvaluations = {this.state.TotalEvaluations} PreviousEvaluation = {this.state.PreviousEvaluation} style = {this.props.style} />}
                 {(this.state.ready === "false") && <h1>Not Evaluated Yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}

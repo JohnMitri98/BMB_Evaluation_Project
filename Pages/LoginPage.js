@@ -5,7 +5,7 @@ export default class LoginPage extends React.Component {
 
     render() {
         return(
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 <LoginForm style = {this.props.style} onSubmit = {this.props.onSubmit}/>
             </div>
         );

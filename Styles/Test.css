@@ -27,6 +27,11 @@ a.link :hover {
     color: #d35eeb;
 }
 
+/* Hide the link that should open and close the topnav on small screens */
+a.icon {
+display: none;
+}
+
 h1 {
 	color:rgb(255, 255, 255);
     -webkit-text-stroke: 2px rgb(0, 0, 0);
@@ -72,6 +77,8 @@ div.navBar {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 div.navBar button:first-child{
@@ -80,6 +87,10 @@ div.navBar button:first-child{
 
 div.navBar button:last-child{
     margin-right: 10px;
+}
+div.tableDiv {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 label {
@@ -97,10 +108,6 @@ label.Login {
 	tab-size: 50px;
 	width:300px;
     display: inline-block;
-}
-
-select {
-    margin-left: 15px;
 }
 
 form {
@@ -129,8 +136,9 @@ form.Login {
 	background:rgba(134, 147, 206, 0.3);
 	padding: 4em;
     padding-top: 1em;
-	margin: 7rem;
-	margin-left: 45em;
+    margin-top: 3em;
+    margin-left: 45em;
+    margin-bottom: 3em;
     width: 200px;
 	height: 130px;
 	border-radius: 25px;
@@ -196,7 +204,7 @@ input.Login {
     font-family: Montserrat, sans-serif;
     font-weight: 500;
     transition: all 0.2s ease-in-out;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    -webkit-text-stroke: 0.3px rgb(0, 0, 0);
 }
 
 p {
@@ -212,6 +220,7 @@ select {
     width: 150px;
 	border: none;
 	margin-bottom: 10px;
+    margin-left: 15px;
 	background: #fff5f5;
 	padding: 0px;
 	font-size: 18px;
@@ -271,14 +280,15 @@ nav {
     margin: 0px;
     margin-top: 10px;
     margin-bottom: 20px;
+    margin-left: auto;
 }
 
 table {
     border: 2px solid rgb(99, 96, 96);
     border-collapse: collapse;
     background: linear-gradient(to top right, rgba(255, 60, 60, 0.3), rgba(47, 61, 255, 0.3));
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 th, td {
@@ -298,3 +308,53 @@ th {
 th:last-child, td:last-child { 
     border-right: none;
 }
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    body {
+        font-family: 'Source Sans Pro', sans-serif;
+        padding: 0;
+        margin: 0;
+        background-image: url('MobileLogin.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    form.Login {
+	    margin-left: 5%;
+        margin-right: 5%;
+        margin-top: -10%;
+        display: flex;
+        align-items: center;
+        justify-content:center;
+        height: auto;
+        transform: scale(0.8);
+        overflow: hidden;
+        flex-direction: column;
+        vertical-align: middle;
+    }
+}
+
+/*@media screen and (max-width: 768px) {
+    .navBar a:not(:first-child) {display: none;}
+    .navBar a.icon {
+        float: right;
+        display: block;
+    }
+}*/
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+/*@media screen and (max-width: 768px) {
+    .navBar.responsive {position: relative;}
+    .navBar.responsive a.icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .navBar.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}*/

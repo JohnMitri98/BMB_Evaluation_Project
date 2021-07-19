@@ -23,7 +23,7 @@ export default class EvaluationsTable extends React.Component {
 
     render() {
         return(
-            <div>
+            <div class = "tableDiv">
             {/*<div class = "table-wrapper">*/}
                 <table>
                 {/*<table class = "fl-table">*/}

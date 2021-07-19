@@ -18,7 +18,7 @@ export default class MyEvaluationsPage extends React.Component {
 
     render() {
         return (
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 {(this.state.ready === "true") && <MyEvaluationsTable Evaluations = {this.state.Evaluations} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} />}
                 {(this.state.ready === "false") && <h1>No Evaluations yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}

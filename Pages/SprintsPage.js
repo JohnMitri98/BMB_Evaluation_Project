@@ -17,7 +17,7 @@ export default class SprintsPage extends React.Component {
 
     render() {
         return (
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 {(this.state.ready === "true") && <SprintsTable Sprints = {this.state.Sprints} />}
                 {(this.state.ready === "false") && <h1>No Sprints yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}

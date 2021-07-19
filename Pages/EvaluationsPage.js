@@ -22,7 +22,7 @@ export default class EvaluationsPage extends React.Component {
 
     render() {
         return (
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 {(this.state.Ready === "true") && <EvaluationsTable Evaluations = {this.state.Evaluations} lastSprint = {this.state.LastSprint} onDetailsButton = {[this.props.onDetailsButton, this.goToDetails]} refreshPage = {this.refreshPage} />}
                 {(this.state.Ready === "false") && <h1>No Evaluations made yet</h1>}
                 {(this.state.Ready === "notYet") && <h1>Loading</h1>}

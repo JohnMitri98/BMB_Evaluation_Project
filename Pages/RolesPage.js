@@ -19,7 +19,7 @@ export default class RolesPage extends React.Component {
 
     render() {
         return (
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 {(this.state.ready === "true") && <RolesTable style = {this.props.style} Roles = {this.state.Roles} ColumnNames = {this.state.ColumnNames} />}
                 {(this.state.ready === "false") && <h1>No Roles yet</h1>}
                 {(this.state.ready === "notYet") && <h1>Loading</h1>}

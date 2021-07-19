@@ -22,6 +22,7 @@ import img1 from './Styles/img.jpg';
 import img2 from './Styles/fs.jpg';
 import img3 from './Styles/img3.jpg';
 import img4 from './Styles/img4.jpg';
+import img5 from './Styles/MobileLogin.jpg';
 
 const initialState = {
     correct: null,
@@ -65,6 +66,7 @@ export default class App extends React.Component {
         this.goBack = this.goBack.bind(this);
         this.setCurrentPage = this.setCurrentPage.bind(this);
         this.backToHome = this.backToHome.bind(this);
+        this.testFunction = this.testFunction.bind(this);
     }
 
     render() {
@@ -81,6 +83,9 @@ export default class App extends React.Component {
         } else {
             document.body.style.backgroundImage = `url(${img2})`;
             //document.body.style.backgroundSize = `100% 100%`;
+            if(window.matchMedia("(max-width: 768px)").matches) {
+                document.body.style.backgroundImage = `url(${img5})`
+            }
         }
 
         if((this.state.loggedIn + "" === "true") && ((this.state.CurrentPage === "/UserView/Users") || (this.state.CurrentPage === "/UserView/Users/CreateUser")) && (this.state.roles.User_Edit_View + "" !== "true")) {
@@ -100,10 +105,10 @@ export default class App extends React.Component {
 
         return (
             <Router>
-                <div style = {divStyle}>
+                <div style = {divStyle} class = "tableDiv">
                     {(this.state.loggedIn + "") === "true" &&
                         <nav>
-                            <div class = "navBar">
+                            <div class = "navBar" id = "navBar">
                                 <Link onClick = {this.signOut} class = "link">
                                     <div class = "extraWidthNav">
                                         Sign Out
@@ -183,7 +188,7 @@ export default class App extends React.Component {
                             </div>
                         </nav>
                     }
-                    <div style = {divStyle}>
+                    <div style = {divStyle} class = "tableDiv">
                         <Switch>
                             {this.state.redirect}
                             <Route exact path = "/UserView">
@@ -337,6 +342,17 @@ export default class App extends React.Component {
         this.setState({
             CurrentPage: page
         });
+    }
+
+    async testFunction() {
+        var x = document.getElementById("navBar");
+        if(x) {
+            if (x.className === "navBar") {
+                x.className += " responsive";
+            } else {
+                x.className = "navBar";
+            }
+        }
     }
 
 }

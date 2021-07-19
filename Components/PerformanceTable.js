@@ -39,7 +39,7 @@ export default class PerformanceTable extends React.Component {
 
     render() {
         return(
-            <div style = {this.props.style}>
+            <div style = {this.props.style} class = "tableDiv">
                 <h1>Total Performance: </h1>
                 {/*<div class = "table-wrapper">*/}
                 <div>

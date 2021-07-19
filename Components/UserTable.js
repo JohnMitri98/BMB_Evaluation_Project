@@ -16,12 +16,14 @@ export default class UserTable extends React.Component {
 
     render() {
         return(
-            <table>
-                <tbody>
-                    {this.renderTableHeader()}
-                    {this.renderTableData()}
-                </tbody>
-            </table>
+            <div class = "tableDiv">
+                <table>
+                    <tbody>
+                        {this.renderTableHeader()}
+                        {this.renderTableData()}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 
