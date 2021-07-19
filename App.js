@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, Redirect, Link} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 import UsersPage from './Pages/UsersPage';
@@ -104,72 +104,72 @@ export default class App extends React.Component {
                     {(this.state.loggedIn + "") === "true" &&
                         <nav>
                             <div class = "navBar">
-                                <button onClick = {this.signOut} class = "signOut">
-                                    <div class = "extraWidth">
+                                <Link onClick = {this.signOut} class = "link">
+                                    <div class = "extraWidthNav">
                                         Sign Out
                                     </div>
-                                </button>
+                                </Link>
                                 {(this.state.CurrentPage !== "/") && 
                                     /*(this.state.CurrentPage !== "/UserView") &&*/ 
                                     this.state.previousPageHistory.length > 1 &&
-                                    <button onClick = {this.goBack} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {this.goBack} class = "link">
+                                        <div class = "extraWidthNav">
                                             Back
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView") && 
-                                    <button onClick = {() => this.redirectView("/UserView")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView")} class = "link">
+                                        <div class = "extraWidthNav">
                                             Home
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Users") && 
                                     (this.state.roles.User_Edit_View + "" === "true") && 
-                                    <button onClick = {() => this.redirectView("/UserView/Users")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView/Users")} class = "link">
+                                        <div class = "extraWidthNav">
                                             Users
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Sprints") &&
                                     (this.state.roles.Sprint_View + "" === "true") && 
-                                    <button onClick = {() => this.redirectView("/UserView/Sprints")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView/Sprints")} class = "link">
+                                        <div class = "extraWidthNav">
                                             Sprints
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/SprintEvaluations") &&
                                     (this.state.roles.Evaluation_View + "" === "true") && 
-                                    <button onClick = {() => this.redirectView("/UserView/SprintEvaluations")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView/SprintEvaluations")} class = "link">
+                                        <div class = "extraWidthNav">
                                             Evaluations
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/MyEvaluations") && 
-                                    <button onClick = {() => this.redirectView("/UserView/MyEvaluations")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView/MyEvaluations")} class = "link">
+                                        <div class = "extraWidthNav">
                                             My Evaluations
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Performance") && 
-                                    <button onClick = {() => this.redirectView("/UserView/Performance")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView/Performance")} class = "link">
+                                        <div class = "extraWidthNav">
                                             My Performance
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {(this.state.CurrentPage !== "/UserView/Roles") && 
                                     (this.state.roles.Roles_View + "" === "true") && 
-                                    <button onClick = {() => this.redirectView("/UserView/Roles")} class = "signOut">
-                                        <div class = "extraWidth">
+                                    <Link onClick = {() => this.redirectView("/UserView/Roles")} class = "link">
+                                        <div class = "extraWidthNav">
                                             Roles
                                         </div>
-                                    </button>
+                                    </Link>
                                 }
                                 {/*<li>
                                     <Link to="/" onClick = {this.resetLogin}>Login</Link>
