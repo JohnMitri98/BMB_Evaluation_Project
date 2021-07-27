@@ -63,7 +63,6 @@ export default class App extends React.Component {
         this.goBack = this.goBack.bind(this);
         this.setCurrentPage = this.setCurrentPage.bind(this);
         this.backToHome = this.backToHome.bind(this);
-        this.testFunction = this.testFunction.bind(this);
     }
 
     render() {
