@@ -242,7 +242,7 @@ export default class App extends React.Component {
             await this.setState({
                 redirect: <Redirect to = "/UserView" />
             });
-            this.setState({
+            await this.setState({
                 redirect: null
             });
         } else {
