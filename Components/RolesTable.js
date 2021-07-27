@@ -25,9 +25,7 @@ export default class RolesTable extends React.Component {
     render() {
         return(
             <div style = {this.props.style} class = "tableDiv">
-            {/*<div class = "table-wrapper">*/}
                 <table>
-                {/*<table class = "fl-table">*/}
                     <tbody>
                         {this.renderTableHeader()}
                         {this.renderTableData()}
@@ -40,13 +38,6 @@ export default class RolesTable extends React.Component {
                     <input type = "text" value = {this.state.RoleText + ""} onChange = {this.handleNewRoleChange}/>
                     <input type = "submit" value = "Add Role" onClick = {this.addRole} />
                 </div>
-                {/*<div>
-                    <label>
-                        New Column: 
-                    </label>
-                    <input type = "text" pattern = "([A-Z]|[a-z]|_)*" value = {this.state.ColumnNameText + ""} onChange = {this.handleNewColumnChange}/>
-                    <input type = "submit" value = "Add Column" onClick = {this.addColumn} />
-                </div>*/}
                 <div>
                     <h1>{this.state.warning}</h1>
                 </div>
@@ -179,7 +170,6 @@ export default class RolesTable extends React.Component {
                 ColumnNameText: ""
             });
         } else {
-            //await fetch(`/API/insertRoleColumn/${this.state.ColumnNameText + ""}`);
             let tempObj = {
                 ColumnName: Encrypt(this.state.ColumnNameText + "")
             }

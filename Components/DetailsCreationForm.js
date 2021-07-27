@@ -33,7 +33,6 @@ export default class DetailsCreationForm extends React.Component {
                     <div>
                         <label>
                             Status: 
-                            {/*<input type = "text" value = {Status} onChange = {this.handleStatusChange} />*/}
                             <select onChange = {this.handleStatusChange}>
                                 <option value = "Accepted">Accepted</option>
                                 <option value = "Rejected">Rejected</option>

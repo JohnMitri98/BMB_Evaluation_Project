@@ -14,7 +14,6 @@ export default class RolesPage extends React.Component {
             ColumnNames: [],
             ready: "notYet"
         }
-        //this.goToSprint = this.goToSprint.bind(this);
     }
 
     render() {
@@ -42,13 +41,6 @@ export default class RolesPage extends React.Component {
         this.props.history[3]("/UserView/Roles");
         let tempColumnNames = [];
         let tempRoles = [];
-        //var response = await fetch(`/API/getColumnNames/Roles`);
-        /*if(response) {
-            const body = await response.json();
-            if(body.Columns) {
-                tempColumnNames = body.Columns;
-            }
-        }*/
         let tempObj = {
             Table: Encrypt("Roles")
         };

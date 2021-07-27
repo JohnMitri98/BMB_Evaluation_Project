@@ -1,5 +1,4 @@
 import React from 'react';
-//import "../Styles/Table.css";
 import {Bar, Pie} from 'react-chartjs-2';
 import "chartjs-plugin-datalabels";
 
@@ -13,9 +12,6 @@ const options = {
 };
 
 let pieBGColors = ["rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(0, 0, 155)"];
-/*for(let i = 0; i < 5; i++) {
-    pieBGColors.push("rgb(" + Math.floor(Math.random() * 256) + ", " + Math.floor(Math.random() * 256) + ", " + Math.floor(Math.random() * 256) + ")");
-}*/
 
 export default class PerformanceTable extends React.Component {
 
@@ -41,9 +37,7 @@ export default class PerformanceTable extends React.Component {
         return(
             <div style = {this.props.style} class = "tableDiv">
                 <h1>Total Performance: </h1>
-                {/*<div class = "table-wrapper">*/}
                 <div>
-                    {/*<table class = "fl-table">*/}
                     <table>
                         <thead>
                             {this.renderTotalTableHeader()}
@@ -74,12 +68,12 @@ export default class PerformanceTable extends React.Component {
                         {this.state.Labels.map((Label, index) => {return <option value = {index}>{Label + ""}</option>})}
                     </select>
                     <div style = {{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    <div style = {this.props.style}>
-                        <div style = {{width: "300px", height: "auto", marginBottom: "50px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                            <Pie data = {{labels: ["PRC", "PRR"], datasets: [{label: this.state.Labels[this.state.selectedIndex], backgroundColor: pieBGColors.slice(0, 2), data: [(this.state.PR[this.state.selectedIndex] - (parseInt(this.state.PRR[this.state.selectedIndex]))), this.state.PRR[this.state.selectedIndex]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
-                            <Pie data = {{labels: ["PRRN", "PRS", "PRA"], datasets: [{label: this.state.Labels[this.state.selectedIndex], backgroundColor: pieBGColors.slice(2), data: [(this.state.PRR[this.state.selectedIndex] - (parseInt(this.state.PRS[this.state.selectedIndex]) + parseInt(this.state.PRA[this.state.selectedIndex]))), this.state.PRS[this.state.selectedIndex], this.state.PRA[this.state.selectedIndex]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                        <div style = {this.props.style}>
+                            <div style = {{width: "300px", height: "auto", marginBottom: "50px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                <Pie data = {{labels: ["PRC", "PRR"], datasets: [{label: this.state.Labels[this.state.selectedIndex], backgroundColor: pieBGColors.slice(0, 2), data: [(this.state.PR[this.state.selectedIndex] - (parseInt(this.state.PRR[this.state.selectedIndex]))), this.state.PRR[this.state.selectedIndex]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                                <Pie data = {{labels: ["PRRN", "PRS", "PRA"], datasets: [{label: this.state.Labels[this.state.selectedIndex], backgroundColor: pieBGColors.slice(2), data: [(this.state.PRR[this.state.selectedIndex] - (parseInt(this.state.PRS[this.state.selectedIndex]) + parseInt(this.state.PRA[this.state.selectedIndex]))), this.state.PRS[this.state.selectedIndex], this.state.PRA[this.state.selectedIndex]]}]}} options = {{legend: {display: true, position: 'right'}}}/>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>

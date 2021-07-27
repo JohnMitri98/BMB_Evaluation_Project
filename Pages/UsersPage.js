@@ -85,9 +85,6 @@ export default class UsersPage extends React.Component {
                     if(user.Manager) {
                         user.ManagerName = this.searchManagerName(user.Manager, tempUsers);
                     }
-                    /*if(user.Roles_ID) {
-                        user.Roles_ID = this.searchRoleName(user.Roles_ID, tempRoles)
-                    }*/
                 });
             }
         }

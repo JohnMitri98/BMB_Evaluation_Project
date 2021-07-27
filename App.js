@@ -5,7 +5,6 @@ import LoginPage from './Pages/LoginPage';
 import UserView from './Pages/UserView';
 import UsersPage from './Pages/UsersPage';
 import CreateUserPage from './Pages/CreateUserPage';
-//import AdminView from './Pages/AdminView';
 import EvaluationsPage from './Pages/EvaluationsPage';
 import SprintEvaluationsPage from './Pages/SprintEvaluationsPage';
 import ProfilePage from './Pages/ProfilePage';
@@ -18,9 +17,7 @@ import SprintsPage from './Pages/SprintsPage';
 import CreateSprintPage from './Pages/CreateSprintPage';
 import RolesPage from './Pages/RolesPage';
 import './Styles/Test.css';
-import img1 from './Styles/img.jpg';
 import img2 from './Styles/fs.jpg';
-import img3 from './Styles/img3.jpg';
 import img4 from './Styles/img4.jpg';
 import img5 from './Styles/MobileLogin.jpg';
 
@@ -79,10 +76,8 @@ export default class App extends React.Component {
         }
         if(this.state.loggedIn + "" === "true") {
             document.body.style.backgroundImage = `url(${img4})`;
-            //document.body.style.backgroundSize = `100% 385%`;
         } else {
             document.body.style.backgroundImage = `url(${img2})`;
-            //document.body.style.backgroundSize = `100% 100%`;
             if(window.matchMedia("(max-width: 768px)").matches) {
                 document.body.style.backgroundImage = `url(${img5})`
             }
@@ -115,7 +110,6 @@ export default class App extends React.Component {
                                     </div>
                                 </Link>
                                 {(this.state.CurrentPage !== "/") && 
-                                    /*(this.state.CurrentPage !== "/UserView") &&*/ 
                                     this.state.previousPageHistory.length > 1 &&
                                     <Link onClick = {this.goBack} class = "link">
                                         <div class = "extraWidthNav">
@@ -176,15 +170,6 @@ export default class App extends React.Component {
                                         </div>
                                     </Link>
                                 }
-                                {/*<li>
-                                    <Link to="/" onClick = {this.resetLogin}>Login</Link>
-                                </li>
-                                <li>
-                                    <Link to="/turtles">Turtles</Link>
-                                </li>
-                                <li>
-                                    <Link to="/users">Users</Link>
-                                </li>*/}
                             </div>
                         </nav>
                     }
@@ -194,9 +179,6 @@ export default class App extends React.Component {
                             <Route exact path = "/UserView">
                                 <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} history = {history} />
                             </Route>
-                            {/*<Route exact path="/AdminView">
-                                <AdminView style = {divStyle} loggedIn = {this.state.loggedIn} />
-                            </Route>*/}
                             <Route exact path = "/UserView/Users">
                                 <UsersPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
                             </Route>
@@ -256,11 +238,6 @@ export default class App extends React.Component {
             loggedIn: true,
             roles: Roles
         });
-        /*if((Roles.Name + "") === "Admin") {
-            this.setState({
-            redirect: <Redirect exact from = "/" to = "/AdminView" />
-            });
-        } else {*/
         if(this.state.previousPageHistory.length === 0) {
             this.setPreviousPage("/");
             this.setState({
@@ -272,7 +249,6 @@ export default class App extends React.Component {
         } else {
             this.goBack();
         }
-        //}
         } else {
             this.setState(initialState);
             this.setState({correct: false});

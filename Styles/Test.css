@@ -8,9 +8,7 @@ body {
 	padding: 0;
 	margin: 0;
     background-attachment: fixed;
-    /*background-size: 100% 38%;*/
     background-size: 100% 100%;
-    /*background-size: cover;*/
     background-repeat: no-repeat;
 }
 
@@ -25,11 +23,6 @@ a.link {
 
 a.link :hover {
     color: #d35eeb;
-}
-
-/* Hide the link that should open and close the topnav on small screens */
-a.icon {
-display: none;
 }
 
 h1 {
@@ -344,26 +337,3 @@ th:last-child, td:last-child {
         vertical-align: middle;
     }
 }
-
-/*@media screen and (max-width: 768px) {
-    .navBar a:not(:first-child) {display: none;}
-    .navBar a.icon {
-        float: right;
-        display: block;
-    }
-}*/
-
-/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
-/*@media screen and (max-width: 768px) {
-    .navBar.responsive {position: relative;}
-    .navBar.responsive a.icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-    .navBar.responsive a {
-        float: none;
-        display: block;
-        text-align: left;
-    }
-}*/

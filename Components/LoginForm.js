@@ -21,16 +21,10 @@ export default class LoginForm extends React.Component {
                 <div style = {this.props.style} class = "Login">
                     <p>Login</p>
                     <div class = "Login">
-                        {/*<label class = "Login">
-                            Username:*/}
-                            <input type = "text" value = {this.state.Username} onChange = {this.handleUsernameChange} class = "Login" />
-                        {/*</label>*/}
+                        <input type = "text" value = {this.state.Username} onChange = {this.handleUsernameChange} class = "Login" />
                     </div>
                     <div class = "Login">
-                        {/*<label class = "Login">
-                            Password:*/}
-                            <input type = "password" value = {this.state.Password} onChange = {this.handlePasswordChange} class = "Login" />
-                        {/*</label>*/}
+                        <input type = "password" value = {this.state.Password} onChange = {this.handlePasswordChange} class = "Login" />
                     </div>
                     <input type = "submit" value = "Submit" onSubmit = {this.onSubmit} class = "Login" />
                 </div>
@@ -45,7 +39,6 @@ export default class LoginForm extends React.Component {
         let tempRoles = null;
         let tempUserID = 0;
         if(this.state.Username !== "" && this.state.Password !== "") {
-            //const response = await fetch(`/API/checkLogin/${Encrypt(this.state.Username)}-${Encrypt(this.state.Password)}`);
             let tempObj = {
                 Username: Encrypt(this.state.Username),
                 Password: Encrypt(this.state.Password)
@@ -88,5 +81,4 @@ export default class LoginForm extends React.Component {
     handlePasswordChange(event) {
         this.setState({Password: event.target.value});
     }
-
 }

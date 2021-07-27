@@ -14,14 +14,6 @@ export default class UserView extends React.Component {
         return (
             <div style = {this.props.style}>
                 <h1>This is the Home Page!</h1>
-                {/*((this.props.permissions.Details_View + "") === "true") && 
-                    <button onClick = {() => this.redirectView("/Details")}>
-                        Details
-                    </button>
-                */}
-                {/*<button onClick = {() => this.redirectView("/MyProfile")}>
-                    My Profile
-                </button>*/}
                 <Switch>
                     {this.state.redirect}
                 </Switch>

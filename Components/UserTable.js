@@ -49,21 +49,12 @@ export default class UserTable extends React.Component {
                 Username_Email,
                 Password,
                 Manager,
-                ManagerName,
                 Specialty,
                 Position,
                 Roles_ID
             } = User;
             return (
                 <tr key = {index}>
-                    {/*<td style = {{textAlign: "center"}}>{First_Name}</td>
-                    <td style = {{textAlign: "center"}}>{Last_Name}</td>
-                    <td style = {{textAlign: "center"}}>{Username_Email}</td>
-                    <td style = {{textAlign: "center"}}>{Password}</td>
-                    <td style = {{textAlign: "center"}}>{ManagerName ? ManagerName : ""}</td>
-                    <td style = {{textAlign: "center"}}>{Specialty}</td>
-                    <td style = {{textAlign: "center"}}>{Position}</td>
-                    <td style = {{textAlign: "center"}}>{Roles_ID}</td>*/}
                     <td>
                         <input type = "text" pattern = "([A-Z]|[a-z]|\\s)*" value = {First_Name} onChange = {(event) => this.handleDataChange(User, "First_Name", event)} onBlur = {() => this.submitUpdate(User, "First_Name")} class = "tableInput" style = {{width: "100px", fontSize: "14px"}} />
                     </td>

@@ -301,19 +301,6 @@ async function getSubordinates(ManagerID, Admin) {
     let tempResult = [];
     await poolConnect;
     try {
-        /*const request = pool.request();
-        var result;
-        if(Decrypt(Admin) === "true") {
-            result = await request.query(`select ID, First_Name, Last_Name from dbo.Users;`);
-        } else {
-            result = await request.query(`select ID, First_Name, Last_Name from dbo.Users where Manager = ${Decrypt(ManagerID)};`);
-        }
-        result.recordset.forEach(result => {
-            for(const [key, value] of Object.entries(result)) {
-                result[key] = Encrypt(value);
-            }
-            tempResult.push(result)
-        });*/
         const request = pool.request();
         if(Decrypt(Admin) === "true") {
             var result = await request.query(`select ID, First_Name, Last_Name from dbo.Users;`);
@@ -542,7 +529,6 @@ async function getLastSprint() {
     try {
         const request = pool.request();
         var result = await request.query(`Select Start_Date, End_Date from dbo.Sprints order by Start_Date Desc;`)
-        //tempResult.Start_Date = Encrypt(result.recordset[0].Start_Date);
         tempResult = {
             Start_Date: Encrypt(result.recordset[0].Start_Date),
             End_Date: Encrypt(result.recordset[0].End_Date)

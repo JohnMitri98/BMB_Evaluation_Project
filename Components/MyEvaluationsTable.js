@@ -17,9 +17,7 @@ export default class MyEvaluationsTable extends React.Component {
     render() {
         return(
             <div class = "tableDiv">
-            {/*<div class = "table-wrapper">*/}
                 <table>
-                {/*<table class = "fl-table">*/}
                     <tbody>
                         {this.renderTableHeader()}
                         {this.renderTableData()}
