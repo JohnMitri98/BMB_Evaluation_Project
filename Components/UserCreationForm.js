@@ -19,71 +19,73 @@ export default class UserCreationForm extends React.Component {
             }
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-        this.handleLastNameChange = this.handleLastNameChange.bind(this);
-        this.handleUsernameEmailChange = this.handleUsernameEmailChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleManagerChange = this.handleManagerChange.bind(this);
-        this.handleSpecialtyChange = this.handleSpecialtyChange.bind(this);
-        this.handlePositionChange = this.handlePositionChange.bind(this);
-        this.handleRoleChange = this.handleRoleChange.bind(this);
+        this.handleDataChange = this.handleDataChange.bind(this);
     }
 
     render() {
+        const {First_Name,
+            Last_Name,
+            Username_Email,
+            Password,
+            Manager,
+            Specialty,
+            Position,
+            Roles_ID
+        } = this.state.User;
         return (
-            <form onSubmit = {this.handleSubmit} class = "Evaluation">
+            <form onSubmit = {this.handleSubmit} class = "createUser">
                 <div style = {this.props.style}>
-                <div>
+                    <div>
                         <label>
                            First Name:* 
-                            <input type = "text" value = {this.state.User.First_Name} onChange = {this.handleFirstNameChange} />
+                           <input type = "text" pattern = "([A-Z]|[a-z]|\\s)*" value = {First_Name} onChange = {(event) => this.handleDataChange("First_Name", event)} class = "tableInput" style = {{width: "150px", fontSize: "14px", marginLeft: "10px"}} />
                         </label>
                     </div>
                     <div>
                         <label>
                             Last Name:* 
-                            <input type = "text" value = {this.state.User.Last_Name} onChange = {this.handleLastNameChange} />
+                            <input type = "text" pattern = "([A-Z]|[a-z]|\\s)*" value = {Last_Name} onChange = {(event) => this.handleDataChange("Last_Name", event)} class = "tableInput" style = {{width: "150px", fontSize: "14px", marginLeft: "10px"}} />
                         </label>
                     </div>
                     <div>
                         <label>
                             Username/Email: 
-                            <input type = "text" value = {this.state.User.Username_Email} onChange = {this.handleUsernameEmailChange} />
+                            <input type = "text" pattern = "([A-Z]|[a-z]|[0-9]|_|#|@|$|.)*" value = {Username_Email} onChange = {(event) => this.handleDataChange("Username_Email", event)} class = "tableInput" style = {{width: "150px", fontSize: "14px", marginLeft: "10px"}} />
                         </label>
                     </div>
                     <div>
                         <label>
                             Password: 
-                            <input type = "password" value = {this.state.User.Password} onChange = {this.handlePasswordChange}/>
+                            <input type = "text" pattern = "([A-Z]|[a-z]|[0-9]|_|#|@|$|.)*" value = {Password} onChange = {(event) => this.handleDataChange("Password", event)} class = "tableInput" style = {{width: "150px", fontSize: "14px", marginLeft: "10px"}} />
                         </label>
                     </div>
                     <div>
                         <label>
                             Manager: 
-                            <select onChange = {this.handleManagerChange}>
+                            <select onChange = {(event) => this.handleDataChange("Manager", event)} style = {{width: "auto", fontSize: "16px", marginLeft: "10px"}} class = "tableSelect">
                                 <option value = "">None</option>
-                                {this.props.Users.map(User => <option value = {User.ID}>{User.First_Name + " " + User.Last_Name}</option>)}
+                                {this.props.Users.map(User => <option selected = {(Manager === User.ID) ? "selected" : ""} value = {User.ID}>{User.First_Name + " " + User.Last_Name}</option>)}
                             </select>
                         </label>
                     </div>
                     <div>
                         <label>
                             Specialty: 
-                            <input type = "text" value = {this.state.User.Specialty} onChange = {this.handleSpecialtyChange} />
+                            <input type = "text" value = {Specialty} onChange = {(event) => this.handleDataChange("Specialty", event)} class = "tableInput" style = {{width: "150px", fontSize: "14px", marginLeft: "10px"}} />
                         </label>
                     </div>
                     <div>
                         <label>
                             Position: 
-                            <input type = "text" value = {this.state.User.Position} onChange = {this.handlePositionChange} />
+                            <input type = "text" value = {Position} onChange = {(event) => this.handleDataChange("Position", event)} class = "tableInput" style = {{width: "150px", fontSize: "14px", marginLeft: "10px"}} />
                         </label>
                     </div>
                     <div>
                         <label>
                             Role: 
-                            <select onChange = {this.handleRoleChange}>
+                            <select onChange = {(event) => this.handleDataChange("Roles_ID", event)} style = {{width: "auto", fontSize: "16px", marginLeft: "10px"}} class = "tableSelect">
                                 <option value = "">None</option>
-                                {this.props.Roles.map(Role => <option value = {Role.ID}>{Role.Name + ""}</option>)}
+                                {this.props.Roles.map(Role => <option value = {Role.ID} selected = {(Roles_ID === Role.ID) ? "selected" : ""}>{Role.Name + ""}</option>)}
                             </select>
                         </label>
                     </div>
@@ -125,127 +127,11 @@ export default class UserCreationForm extends React.Component {
         }
     };
 
-    handleFirstNameChange(event) {
-        let {Last_Name, Username_Email, Password, Manager, Specialty, Position, Roles_ID} = this.state.User;
-        let tempUser = {
-            First_Name: event.target.value,
-            Last_Name: Last_Name,
-            Username_Email: Username_Email,
-            Password: Password,
-            Manager: Manager,
-            Specialty: Specialty,
-            Position: Position,
-            Roles_ID: Roles_ID
-        }
-        this.setState({User: tempUser});
-    }
-
-    handleLastNameChange(event) {
-        let {First_Name, Username_Email, Password, Manager, Specialty, Position, Roles_ID} = this.state.User;
-        let tempUser = {
-            First_Name: First_Name,
-            Last_Name: event.target.value,
-            Username_Email: Username_Email,
-            Password: Password,
-            Manager: Manager,
-            Specialty: Specialty,
-            Position: Position,
-            Roles_ID: Roles_ID
-        }
-        this.setState({User: tempUser});
-    }
-
-    handleUsernameEmailChange(event) {
-        let {First_Name, Last_Name, Password, Manager, Specialty, Position, Roles_ID} = this.state.User;
-        let tempUser = {
-            First_Name: First_Name,
-            Last_Name: Last_Name,
-            Username_Email: event.target.value,
-            Password: Password,
-            Manager: Manager,
-            Specialty: Specialty,
-            Position: Position,
-            Roles_ID: Roles_ID
-        }
-        this.setState({User: tempUser});
-    }
-
-    handlePasswordChange(event) {
-        let {First_Name, Last_Name, Username_Email, Manager, Specialty, Position, Roles_ID} = this.state.User;
-        let tempUser = {
-            First_Name: First_Name,
-            Last_Name: Last_Name,
-            Username_Email: Username_Email,
-            Password: event.target.value,
-            Manager: Manager,
-            Specialty: Specialty,
-            Position: Position,
-            Roles_ID: Roles_ID
-        }
-        this.setState({User: tempUser});
-    }
-
-    handleManagerChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Specialty, Position, Roles_ID} = this.state.User;
-        if(event.target.validity.valid) {
-            let tempUser = {
-                First_Name: First_Name,
-                Last_Name: Last_Name,
-                Username_Email: Username_Email,
-                Password: Password,
-                Manager: event.target.value,
-                Specialty: Specialty,
-                Position: Position,
-                Roles_ID: Roles_ID
-            }
-            this.setState({User: tempUser});
+    handleDataChange(Field, Event) {
+        if(Event.target.validity.valid) {
+            this.state.User[Field] = Event.target.value;
+            this.setState({});
         }
     }
-
-    handleSpecialtyChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Manager, Position, Roles_ID} = this.state.User;
-        let tempUser = {
-            First_Name: First_Name,
-            Last_Name: Last_Name,
-            Username_Email: Username_Email,
-            Password: Password,
-            Manager: Manager,
-            Specialty: event.target.value,
-            Position: Position,
-            Roles_ID: Roles_ID
-        }
-        this.setState({User: tempUser});
-    }
-    handlePositionChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Roles_ID} = this.state.User;
-        let tempUser = {
-            First_Name: First_Name,
-            Last_Name: Last_Name,
-            Username_Email: Username_Email,
-            Password: Password,
-            Manager: Manager,
-            Specialty: Specialty,
-            Position: event.target.value,
-            Roles_ID: Roles_ID
-        }
-        this.setState({User: tempUser});
-    }
-    handleRoleChange(event) {
-        let {First_Name, Last_Name, Username_Email, Password, Manager, Specialty, Position} = this.state.User;
-        if(event.target.validity.valid) {
-            let tempUser = {
-                First_Name: First_Name,
-                Last_Name: Last_Name,
-                Username_Email: Username_Email,
-                Password:Password,
-                Manager: Manager,
-                Specialty: Specialty,
-                Position: Position,
-                Roles_ID: event.target.value
-            }
-            this.setState({User: tempUser});
-        }
-    }
-
 
 }

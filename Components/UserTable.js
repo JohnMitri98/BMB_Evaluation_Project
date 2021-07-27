@@ -65,12 +65,12 @@ export default class UserTable extends React.Component {
                         <input type = "text" pattern = "([A-Z]|[a-z]|[0-9]|_|#|@|$|.)*" value = {Username_Email} onChange = {(event) => this.handleDataChange(User, "Username_Email", event)} onBlur = {() => this.submitUpdate(User, "Username_Email")} class = "tableInput" style = {{width: "150px", fontSize: "14px"}} />
                     </td>
                     <td>
-                        <input type = "text" value = {Password} onChange = {(event) => this.handleDataChange(User, "Password", event)} onBlur = {() => this.submitUpdate(User, "Password")} class = "tableInput" style = {{width: "150px", fontSize: "14px"}} />
+                        <input type = "text" pattern = "([A-Z]|[a-z]|[0-9]|_|#|@|$|.)*" value = {Password} onChange = {(event) => this.handleDataChange(User, "Password", event)} onBlur = {() => this.submitUpdate(User, "Password")} class = "tableInput" style = {{width: "150px", fontSize: "14px"}} />
                     </td>
                     <td>
                         <select onChange = {(event) => this.handleDataChange(User, "Manager", event)} style = {{width: "auto", fontSize: "16px"}} class = "tableSelect">
                             <option value = "">None</option>
-                            {this.state.Users.map(User2 => <option selected = {(Manager === User2.ID) ? "selected" : ""} value = {User2.ID} style = {{width: "auto", fontSize: "16px"}}>{User2.First_Name + " " + User2.Last_Name}</option>)}
+                            {this.state.Users.map(User2 => <option selected = {(Manager === User2.ID) ? "selected" : ""} value = {User2.ID}>{User2.First_Name + " " + User2.Last_Name}</option>)}
                         </select>
                     </td>
                     <td>

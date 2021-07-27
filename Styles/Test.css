@@ -128,6 +128,10 @@ form.largerDetails {
     height: 430px;
 }
 
+form.createUser {
+    height: 500px;
+}
+
 form.Evaluation {
     height: 700px;
 }
@@ -159,7 +163,7 @@ input {
     height: auto;
     border-radius: 20px;
     border: 1px solid rgb(94, 90, 90);
-    background: #f2f2f2;
+    background: rgba(255, 255, 255, 0.6);
     padding: 10px;
     font-size: 18px;
     position: relative;
