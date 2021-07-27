@@ -46,7 +46,7 @@ export default class EvaluationCreationForm extends React.Component {
                 <div style = {this.props.style}>
                     <label>
                         Evaluatee: 
-                        <select onChange = {this.handleEvaluatedChange}>
+                        <select onChange = {this.handleEvaluatedChange} class = "date">
                             {this.props.Subordinates.map(subordinate => <option value = {subordinate.ID}>{subordinate.First_Name + " " + subordinate.Last_Name}</option>)}
                         </select>
                     </label>
@@ -57,19 +57,19 @@ export default class EvaluationCreationForm extends React.Component {
                         </select>
                     </label>
                     <label>
-                        # Features T:* 
+                        # Features Taken:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Taken} onChange = {this.handleFTChange}/>
                     </label>
                     <label>
-                        # Features C:* 
+                        # Features Completed:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Features_Completed} onChange = {this.handleFCChange}/>
                     </label>
                     <label>
-                        # Bugs T:* 
+                        # Bugs Taken:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Taken} onChange = {this.handleBTChange}/>
                     </label>
                     <label>
-                        # Bugs C:* 
+                        # Bugs Completed:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_Bugs_Completed} onChange = {this.handleBCChange}/>
                     </label>
                     <label>
@@ -77,15 +77,15 @@ export default class EvaluationCreationForm extends React.Component {
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PR} onChange = {this.handlePRChange}/>
                     </label>
                     <label>
-                        # Pull Requests R:* 
+                        # Pull Requests Rejected:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRR} onChange = {this.handlePRRChange}/>
                     </label>
                     <label>
-                        # Pull Requests S:* 
+                        # Pull Requests Severe:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRS} onChange = {this.handlePRSChange}/>
                     </label>
                     <label>
-                        # Pull Requests A:* 
+                        # Pull Requests Abandoned:* 
                         <input type = "text" pattern = "[0-9]*" value = {Nb_PRA} onChange = {this.handlePRAChange}/>
                     </label>
                     <input type = "submit" value = "Submit" onSubmit = {this.onSubmit}/>
