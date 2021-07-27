@@ -230,24 +230,24 @@ export default class App extends React.Component {
 
     async checkLogin(Correct, Username, Roles, UserID) {
         if(Correct === "true") {
-        this.setState({
-            correct: true,
-            User: Username,
-            UserID: parseInt(UserID),
-            loggedIn: true,
-            roles: Roles
-        });
-        if(this.state.previousPageHistory.length === 0) {
-            this.setPreviousPage("/");
-            await this.setState({
-                redirect: <Redirect to = "/UserView" />
+            this.setState({
+                correct: true,
+                User: Username,
+                UserID: parseInt(UserID),
+                loggedIn: true,
+                roles: Roles
             });
-            await this.setState({
-                redirect: null
-            });
-        } else {
-            this.goBack();
-        }
+            if(this.state.previousPageHistory.length === 0) {
+                this.setPreviousPage("/");
+                await this.setState({
+                    redirect: <Redirect to = "/UserView" />
+                });
+                await this.setState({
+                    redirect: null
+                });
+            } else {
+                this.goBack();
+            }
         } else {
             this.setState(initialState);
             this.setState({correct: false});
