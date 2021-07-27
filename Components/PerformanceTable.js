@@ -11,7 +11,7 @@ const options = {
     }
 };
 
-let pieBGColors = ["rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(0, 0, 155)"];
+let pieBGColors = ["rgb(0, 220, 0)", "rgb(230, 0, 0)", "rgb(235, 235, 0)", "rgb(235, 0, 196)", "rgb(0, 0, 155)"];
 
 export default class PerformanceTable extends React.Component {
 
