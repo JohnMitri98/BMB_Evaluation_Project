@@ -105,7 +105,7 @@ export default class App extends React.Component {
 
         return (
             <Router>
-                <div style = {divStyle} class = "tableDiv">
+                <div class = "navDiv">
                     {(this.state.loggedIn + "") === "true" &&
                         <nav>
                             <div class = "navBar" id = "navBar">
