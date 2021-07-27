@@ -176,7 +176,7 @@ export default class App extends React.Component {
                         <Switch>
                             {this.state.redirect}
                             <Route exact path = "/UserView">
-                                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} permissions = {this.state.roles} history = {history} />
+                                <UserView style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
                             </Route>
                             <Route exact path = "/UserView/Users">
                                 <UsersPage style = {divStyle} loggedIn = {this.state.loggedIn} history = {history} />
