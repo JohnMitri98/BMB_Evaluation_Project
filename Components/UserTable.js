@@ -68,9 +68,9 @@ export default class UserTable extends React.Component {
                         <input type = "text" value = {Password} onChange = {(event) => this.handleDataChange(User, "Password", event)} onBlur = {() => this.submitUpdate(User, "Password")} class = "tableInput" style = {{width: "150px", fontSize: "14px"}} />
                     </td>
                     <td>
-                        <select onChange = {(event) => this.handleDataChange(User, "Manager", event)} style = {{width: "150px", fontSize: "16px"}} class = "tableSelect">
-                            <option value = "" style = {{width: "150px", fontSize: "16px"}}>None</option>
-                            {this.state.Users.map(User2 => <option selected = {(Manager === User2.ID) ? "selected" : ""} value = {User2.ID} style = {{width: "150px", fontSize: "16px"}}>{User2.First_Name + " " + User2.Last_Name}</option>)}
+                        <select onChange = {(event) => this.handleDataChange(User, "Manager", event)} style = {{width: "auto", fontSize: "16px"}} class = "tableSelect">
+                            <option value = "">None</option>
+                            {this.state.Users.map(User2 => <option selected = {(Manager === User2.ID) ? "selected" : ""} value = {User2.ID} style = {{width: "auto", fontSize: "16px"}}>{User2.First_Name + " " + User2.Last_Name}</option>)}
                         </select>
                     </td>
                     <td>
@@ -80,7 +80,7 @@ export default class UserTable extends React.Component {
                         <input type = "text" value = {Position} onChange = {(event) => this.handleDataChange(User, "Position", event)} onBlur = {() => this.submitUpdate(User, "Position")} class = "tableInput" style = {{width: "100px", fontSize: "14px"}} />
                     </td>
                     <td>
-                        <select onChange = {(event) => this.handleDataChange(User, "Roles_ID", event)} style = {{width: "150px", fontSize: "16px"}} class = "tableSelect">
+                        <select onChange = {(event) => this.handleDataChange(User, "Roles_ID", event)} style = {{width: "auto", fontSize: "16px"}} class = "tableSelect">
                             <option value = "">None</option>
                             {this.props.Roles.map(Role => <option value = {Role.ID} selected = {(Roles_ID === Role.ID) ? "selected" : ""}>{Role.Name + ""}</option>)}
                         </select>

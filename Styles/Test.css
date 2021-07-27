@@ -232,6 +232,7 @@ select {
 }
 
 select.tableSelect {
+    width: auto;
     margin-bottom: 0px;
 }
 
