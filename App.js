@@ -320,17 +320,6 @@ export default class App extends React.Component {
         });
     }
 
-    async testFunction() {
-        var x = document.getElementById("navBar");
-        if(x) {
-            if (x.className === "navBar") {
-                x.className += " responsive";
-            } else {
-                x.className = "navBar";
-            }
-        }
-    }
-
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
