@@ -14,8 +14,6 @@ export default class UsersPage extends React.Component {
             ready: "notYet"
         }
         this.goToUsers = this.goToUsers.bind(this);
-        this.searchManagerName = this.searchManagerName.bind(this);
-        this.searchRoleName = this.searchRoleName.bind(this);
     }
 
     render() {
@@ -81,11 +79,6 @@ export default class UsersPage extends React.Component {
                         user[key] = Decrypt(value);
                     }
                 });
-                tempUsers.forEach(user => {
-                    if(user.Manager) {
-                        user.ManagerName = this.searchManagerName(user.Manager, tempUsers);
-                    }
-                });
             }
         }
         this.setState({
@@ -93,22 +86,6 @@ export default class UsersPage extends React.Component {
             Roles: (tempRoles[0] ? tempRoles : []),
             ready: (tempUsers[0] ? "true" : "false")
         });
-    }
-
-    searchManagerName(ManagerID, UserArray) {
-        for(var i = 0; i < UserArray.length; i++) {
-            if(UserArray[i].ID === ManagerID) {
-                return (UserArray[i].First_Name + " " + UserArray[i].Last_Name);
-            }
-        }
-    }
-
-    searchRoleName(RoleID, RoleArray) {
-        for(var i = 0; i < RoleArray.length; i++) {
-            if(RoleArray[i].ID === RoleID) {
-                return (RoleArray[i].Name + "");
-            }
-        }
     }
 
 }
