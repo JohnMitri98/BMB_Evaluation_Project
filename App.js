@@ -239,7 +239,7 @@ export default class App extends React.Component {
         });
         if(this.state.previousPageHistory.length === 0) {
             this.setPreviousPage("/");
-            this.setState({
+            await this.setState({
                 redirect: <Redirect to = "/UserView" />
             });
             this.setState({
